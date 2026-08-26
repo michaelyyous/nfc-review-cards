@@ -468,6 +468,72 @@ p { margin: 0; letter-spacing: -0.003em; }
 .prod__body { padding: var(--s-6); display: flex; flex-direction: column; gap: var(--s-3); flex: 1; }
 .prod__foot { margin-top: auto; padding-top: var(--s-4); }
 
+/* ---------- Order form ---------- */
+.order__grid { display: grid; gap: var(--s-10); align-items: start; }
+@media (min-width: 900px) { .order__grid { grid-template-columns: 1fr 22rem; } }
+
+.ofield { border: 0; padding: 0; margin: 0; }
+.ofield legend { padding: 0; margin-bottom: var(--s-2); }
+
+.inp {
+  width: 100%; margin-top: var(--s-1);
+  padding: .68rem .85rem; font: inherit; font-size: .95rem;
+  color: var(--text); background: var(--surface-card);
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
+  transition: border-color var(--t-fast) var(--ease-out), box-shadow var(--t-fast) var(--ease-out);
+}
+.inp:focus { outline: none; border-color: var(--g-blue); box-shadow: 0 0 0 3px rgba(66,133,244,.18); }
+.inp[aria-invalid="true"] { border-color: var(--g-red); }
+textarea.inp { resize: vertical; min-height: 5rem; }
+
+.qty { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-3); }
+.qty__preset {
+  padding: .5rem .9rem; border-radius: var(--r-full);
+  font-size: .88rem; font-weight: 560; font-variant-numeric: tabular-nums;
+  background: var(--surface-card); color: var(--text-soft);
+  box-shadow: inset 0 0 0 1px var(--hairline);
+  transition: transform var(--t-fast) var(--ease-out), background var(--t-fast) var(--ease-out), color var(--t-fast) var(--ease-out);
+}
+.qty__preset:hover { color: var(--text); background: var(--surface-sunk); }
+.qty__preset:active { transform: scale(.95); }
+.qty__preset.is-on { background: var(--text); color: var(--surface); box-shadow: none; }
+
+.opt {
+  display: flex; gap: var(--s-3); align-items: flex-start;
+  padding: var(--s-4); border-radius: var(--r-md); cursor: pointer;
+  background: var(--surface-card); box-shadow: inset 0 0 0 1px var(--hairline);
+  transition: box-shadow var(--t-fast) var(--ease-out), background var(--t-fast) var(--ease-out);
+}
+.opt:hover { background: var(--surface-sunk); }
+.opt:has(input:checked) { box-shadow: inset 0 0 0 2px var(--text); }
+.opt input { margin-top: .25rem; accent-color: var(--text); flex: none; }
+
+.order__sum { position: sticky; top: 84px; }
+.sumbox {
+  background: var(--surface-card); border: 1px solid var(--hairline);
+  border-radius: 22px; padding: var(--s-6);
+}
+.sumbox h3 { margin-bottom: var(--s-4); }
+.sumrow {
+  display: flex; justify-content: space-between; gap: var(--s-4);
+  padding-block: var(--s-2); font-size: .93rem; color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+}
+.sumrow--total {
+  font-size: 1.28rem; font-weight: 640; letter-spacing: -.02em;
+  color: var(--text); padding-top: var(--s-4);
+}
+.formnote {
+  margin-top: var(--s-5); padding: var(--s-4);
+  border-radius: var(--r-md); font-size: .9rem;
+  background: color-mix(in srgb, var(--green) 12%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--green) 30%, transparent);
+}
+.formnote--err {
+  background: color-mix(in srgb, var(--g-red) 12%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--g-red) 32%, transparent);
+}
+
 /* ---------- Trust row ---------- */
 .trust {
   display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-8);

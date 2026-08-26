@@ -30,6 +30,8 @@ def kr(n):
     return f"{n:,}".replace(",", ".")
 
 # ---------------------------------------------------------------- nav
+ORDER = "bestil.html"
+
 NAV = [
     ("anmeldelseskort.html", "Anmeldelseskort"),
     ("saadan-virker-det.html", "Sådan virker det"),
@@ -165,7 +167,7 @@ def topbar(current, depth=0, onhero=False):
     <nav class="nav" aria-label="Hovedmenu">%s</nav>
     <div class="topbar__cta">
       <a class="btn btn--ghost btn--sm" href="%skontakt.html">Kontakt</a>
-      <a class="btn btn--sm" href="%sanmeldelseskort.html">Bestil</a>
+      <a class="btn btn--sm" href="%sbestil.html">Bestil</a>
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -217,7 +219,7 @@ def footer(depth=0):
     </div>
   </div>
 </footer>
-<script src="%sassets/app.js?v=11"></script>
+<script src="%sassets/app.js?v=12"></script>
 </body>
 </html>""" % ((up, LOGO) + (up,) * 12 + (up,))
 
@@ -294,7 +296,7 @@ home_hero = """
       <div class="stack-6" data-reveal="80">
         <p class="lede">De fleste tilfredse kunder giver aldrig en anmeldelse. Ikke fordi de ikke vil — men fordi de skal finde din side, logge ind og skrive. Kortet fjerner alle tre trin.</p>
         <div class="row">
-          <a class="btn btn--lg" href="anmeldelseskort.html">Bestil — fra %d kr</a>
+          <a class="btn btn--lg" href="bestil.html">Bestil — fra %d kr</a>
           <a class="btn btn--ghost btn--lg" href="saadan-virker-det.html">Sådan virker det</a>
         </div>
         <p class="tiny">Sendes 1–2 hverdage · Gratis programmering · 14 dages fortrydelsesret</p>
@@ -394,7 +396,7 @@ home_products = """
           <div class="prod__foot stack">
             <div class="row"><span class="badge">På lager</span></div>
             <p><strong style="font-size:1.2rem">Fra %d kr</strong><br><span class="small">ned til %d kr pr. kort</span></p>
-            <a class="btn" href="anmeldelseskort.html">Bestil — fra %d kr %s</a>
+            <a class="btn" href="bestil.html">Bestil — fra %d kr %s</a>
           </div>
         </div>
       </div>
@@ -444,7 +446,7 @@ home_prices = """
           <p class="stat__note" style="margin-top:var(--s-3);color:var(--green);font-weight:560">%d kr lavere pr. kort ved 500 stk.</p>
         </div>
         <p class="small">Fragt 39 kr, gratis over 299 kr. <a href="maengderabat.html" style="text-decoration:underline">Over 500 kort?</a></p>
-        <div><a class="btn btn--lg" href="anmeldelseskort.html">Bestil 3 kort — %d kr %s</a></div>
+        <div><a class="btn btn--lg" href="bestil.html">Bestil 3 kort — %d kr %s</a></div>
       </div>
       <div data-reveal="120">
         %s
@@ -571,7 +573,7 @@ home_guides = """
 home_sticky = """
 <div class="stickybar" data-stickybar>
   <p>Flere anmeldelser — fra %d kr · intet abonnement, ingen app</p>
-  <a class="btn btn--sm" href="anmeldelseskort.html">Bestil</a>
+  <a class="btn btn--sm" href="bestil.html">Bestil</a>
 </div>""" % P1
 
 page("index.html",
@@ -617,7 +619,7 @@ produkt = """
           </div>
           %s
         </div>
-        <a class="btn btn--lg" href="kontakt.html">Bestil — %d kr</a>
+        <a class="btn btn--lg" href="bestil.html">Bestil — %d kr</a>
         <p class="tiny">Fragt 39 kr, gratis over 299 kr · Sendes 1–2 hverdage · 14 dages fortrydelsesret · 2 års reklamationsret</p>
       </div>
     </div>
@@ -1203,6 +1205,105 @@ page("privatlivspolitik.html", "Privatlivspolitik — {brand}",
      "Hvilke personoplysninger vi behandler, hvorfor, hvor længe, og hvilke rettigheder du har.", privat)
 
 
+# ================================================================ BESTIL
+qty_btns = "".join(
+    '<button type="button" class="qty__preset%s" data-qty-set="%d">%d</button>'
+    % (" is-on" if q == 10 else "", q, q) for q, _ in TIERS)
+
+bestil = hero(
+    "Bestil", "Bestil anmeldelseskort",
+    "Vælg antal, udfyld felterne, og send. Du får en ordrebekræftelse med betalingsoplysninger — vi trækker ingen penge her på siden.",
+) + """
+<section class="section--tight">
+  <div class="wrap">
+    <form class="order" data-order data-tiers='%s' novalidate>
+      <div class="order__grid">
+
+        <div class="stack-8">
+          <fieldset class="ofield">
+            <legend class="eyebrow">1 · Antal</legend>
+            <div class="qty" role="group" aria-label="Vælg antal">%s</div>
+            <label class="small" for="qty" style="display:block;margin-top:var(--s-4)">Eller skriv et antal</label>
+            <input id="qty" name="antal" type="number" min="1" max="5000" value="10" class="inp" data-qty>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">2 · Programmering</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="programmering" value="Programmeret af jer" checked data-prog>
+                <span><strong>Programmér dem for mig</strong><br><span class="small">Gratis. Jeg sender linket nedenfor.</span></span></label>
+              <label class="opt"><input type="radio" name="programmering" value="Blanke, jeg gør det selv" data-prog>
+                <span><strong>Send dem blanke</strong><br><span class="small">Jeg programmerer selv med en gratis app.</span></span></label>
+            </div>
+            <div data-link-wrap style="margin-top:var(--s-4)">
+              <label class="small" for="glink">Link til din Google-anmeldelsesside</label>
+              <input id="glink" name="google_link" type="url" class="inp" placeholder="https://g.page/r/…/review" data-glink>
+              <p class="tiny" style="margin-top:var(--s-2)">Find det under <em>Anmeldelser → Få flere anmeldelser</em> på din Google-virksomhedsprofil. Er du i tvivl, så lad feltet stå tomt — vi hjælper.</p>
+            </div>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">3 · Dine oplysninger</legend>
+            <div class="grid grid-2" style="gap:var(--s-4);margin-top:var(--s-3)">
+              <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" required></div>
+              <div><label class="small" for="cvrf">CVR <span class="tiny">(valgfrit)</span></label><input id="cvrf" name="cvr" class="inp" inputmode="numeric"></div>
+              <div><label class="small" for="navn">Navn</label><input id="navn" name="navn" class="inp" required></div>
+              <div><label class="small" for="mail">E-mail</label><input id="mail" name="email" type="email" class="inp" required></div>
+              <div><label class="small" for="tlf">Telefon <span class="tiny">(valgfrit)</span></label><input id="tlf" name="telefon" type="tel" class="inp"></div>
+              <div><label class="small" for="adr">Leveringsadresse</label><input id="adr" name="adresse" class="inp" required></div>
+            </div>
+            <label class="small" for="besked" style="display:block;margin-top:var(--s-4)">Besked <span class="tiny">(valgfrit)</span></label>
+            <textarea id="besked" name="besked" rows="3" class="inp"></textarea>
+          </fieldset>
+        </div>
+
+        <aside class="order__sum">
+          <div class="sumbox">
+            <h3>Din ordre</h3>
+            <div class="sumrow"><span data-sum-qty>10</span> kort à <span data-sum-unit>129</span> kr</div>
+            <div class="sumrow"><span>Fragt</span><span data-sum-ship>39</span></div>
+            <hr class="hairline">
+            <div class="sumrow sumrow--total"><span>I alt</span><span><span data-sum-total>1.329</span> kr</span></div>
+            <p class="tiny" data-sum-ex>heraf moms — kr · ekskl. moms — kr</p>
+            <p class="tiny" data-sum-save style="color:var(--green);font-weight:560"></p>
+            <button class="btn btn--lg" type="submit" style="width:100%%;margin-top:var(--s-5)">Send bestilling</button>
+            <p class="tiny" style="margin-top:var(--s-3)">Der trækkes ingen penge nu. Du får en bekræftelse med betalingsoplysninger.</p>
+            <p class="tiny" style="margin-top:var(--s-4)">14 dages fortrydelsesret · 2 års reklamationsret · Sendes 1–2 hverdage</p>
+          </div>
+        </aside>
+
+      </div>
+    </form>
+  </div>
+</section>""" % (TIERS_JSON, qty_btns)
+
+page(ORDER, "Bestil anmeldelseskort — {brand}",
+     "Bestil NFC-anmeldelseskort. Vælg antal, se prisen med det samme, og send bestillingen. Ingen betaling på siden.",
+     bestil)
+
+
 print("Byggede %d sider:" % len(PAGES))
 for p in PAGES:
     print("  " + p)
+
+
+# ================================================================ SEO + 404
+BASE = "https://nfc-review-cards-weld.vercel.app"
+urls = "".join(
+    '  <url><loc>%s/%s</loc></url>\n' % (BASE, p.replace("index.html", "").replace(".html", ""))
+    for p in PAGES)
+(ROOT / "sitemap.xml").write_text(
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls,
+    encoding="utf-8")
+
+(ROOT / "robots.txt").write_text(
+    "User-agent: *\nAllow: /\n\nSitemap: %s/sitemap.xml\n" % BASE, encoding="utf-8")
+
+page("404.html", "Siden findes ikke — {brand}", "Siden kunne ikke findes.",
+     hero("404", "Den side findes ikke",
+          "Linket er enten forkert, eller også er siden flyttet. Prøv en af disse i stedet.",
+          '<a class="btn btn--lg" href="anmeldelseskort.html">Se kortet</a>'
+          '<a class="btn btn--ghost btn--lg" href="index.html">Til forsiden</a>'))
+
+print("\nsitemap.xml (%d urls) + robots.txt + 404.html" % len(PAGES))

@@ -12,6 +12,7 @@ const BRAND = {
 };
 
 document.documentElement.classList.add('js');
+window.BRAND = BRAND;
 
 /* ---------- Brand injection ---------- */
 (() => {
@@ -416,6 +417,136 @@ function projectMomentum(velocity, decelerationRate = 0.998) {
   }, { passive: true });
   addEventListener('resize', update, { passive: true });
   update();
+})();
+
+/* ---------- Order form ------------------------------------------------------
+   Interim ordering flow until Shopify checkout is wired up. Takes no payment —
+   it composes the order and hands it to the customer's mail client, so it
+   works with no backend and no account. Swap ORDER_ENDPOINT below for a POST
+   URL (Shopify, Formspree, whatever) and it submits there instead.
+--------------------------------------------------------------------------- */
+const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
+
+(() => {
+  const form = document.querySelector('[data-order]');
+  if (!form) return;
+
+  const TIERS = JSON.parse(form.dataset.tiers);
+  const SHIP = 39, FREE_SHIP = 299, VAT = 0.25;
+
+  const qtyInput = form.querySelector('[data-qty]');
+  const presets  = form.querySelectorAll('[data-qty-set]');
+  const linkWrap = form.querySelector('[data-link-wrap]');
+  const glink    = form.querySelector('[data-glink]');
+
+  const out = {
+    qty:   form.querySelector('[data-sum-qty]'),
+    unit:  form.querySelector('[data-sum-unit]'),
+    ship:  form.querySelector('[data-sum-ship]'),
+    total: form.querySelector('[data-sum-total]'),
+    ex:    form.querySelector('[data-sum-ex]'),
+    save:  form.querySelector('[data-sum-save]'),
+  };
+
+  const kr = n => n.toLocaleString('da-DK', { maximumFractionDigits: 2 });
+  const unitFor = q => TIERS.reduce((acc, t) => (q >= t.min ? t.price : acc), TIERS[0].price);
+  const clampQty = () => Math.max(1, Math.min(5000, Number(qtyInput.value) || 1));
+
+  function render() {
+    const q = clampQty();
+    const unit = unitFor(q);
+    const goods = unit * q;
+    const ship = goods >= FREE_SHIP ? 0 : SHIP;
+    const total = goods + ship;
+
+    out.qty.textContent = q;
+    out.unit.textContent = kr(unit);
+    out.ship.textContent = ship === 0 ? 'Gratis' : kr(ship) + ' kr';
+    out.total.textContent = kr(total);
+    out.ex.textContent = `heraf moms ${kr(total - total / (1 + VAT))} kr · ekskl. moms ${kr(total / (1 + VAT))} kr`;
+
+    const saved = (TIERS[0].price - unit) * q;
+    out.save.textContent = saved > 0 ? `Du sparer ${kr(saved)} kr i forhold til enkeltstykspris` : '';
+
+    presets.forEach(b => b.classList.toggle('is-on', Number(b.dataset.qtySet) === q));
+  }
+
+  qtyInput.addEventListener('input', render);
+  presets.forEach(b => b.addEventListener('click', () => { qtyInput.value = b.dataset.qtySet; render(); }));
+
+  // The link field only matters if we're doing the programming.
+  form.querySelectorAll('[data-prog]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const needsLink = form.querySelector('[data-prog]:checked').value.startsWith('Programmeret');
+      linkWrap.hidden = !needsLink;
+    });
+  });
+
+  function note(msg, isError) {
+    form.querySelector('.formnote')?.remove();
+    const el = document.createElement('p');
+    el.className = 'formnote' + (isError ? ' formnote--err' : '');
+    el.setAttribute('role', isError ? 'alert' : 'status');
+    el.textContent = msg;
+    form.querySelector('.sumbox').appendChild(el);
+    el.scrollIntoView({ block: 'nearest' });
+  }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+
+    // Validate inline rather than on submit-and-bounce.
+    const required = [...form.querySelectorAll('[required]')];
+    const missing = required.filter(f => !f.value.trim() || (f.type === 'email' && !f.checkValidity()));
+    required.forEach(f => f.setAttribute('aria-invalid', String(missing.includes(f))));
+    if (missing.length) {
+      missing[0].focus();
+      note('Udfyld de markerede felter, så sender vi bestillingen.', true);
+      return;
+    }
+
+    const q = clampQty(), unit = unitFor(q);
+    const goods = unit * q, ship = goods >= FREE_SHIP ? 0 : SHIP;
+    const d = Object.fromEntries(new FormData(form).entries());
+
+    const lines = [
+      `Antal:            ${q} stk.`,
+      `Pris pr. stk.:    ${kr(unit)} kr`,
+      `Varer i alt:      ${kr(goods)} kr`,
+      `Fragt:            ${ship === 0 ? 'Gratis' : kr(ship) + ' kr'}`,
+      `I ALT:            ${kr(goods + ship)} kr inkl. moms`,
+      '',
+      `Programmering:    ${d.programmering}`,
+      d.google_link ? `Google-link:      ${d.google_link}` : null,
+      '',
+      `Virksomhed:       ${d.virksomhed}`,
+      d.cvr ? `CVR:              ${d.cvr}` : null,
+      `Navn:             ${d.navn}`,
+      `E-mail:           ${d.email}`,
+      d.telefon ? `Telefon:          ${d.telefon}` : null,
+      `Adresse:          ${d.adresse}`,
+      d.besked ? `\nBesked:\n${d.besked}` : null,
+    ].filter(Boolean).join('\n');
+
+    if (ORDER_ENDPOINT) {
+      fetch(ORDER_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...d, antal: q, pris_pr_stk: unit, i_alt: goods + ship }),
+      })
+        .then(r => r.ok ? note('Tak — din bestilling er sendt. Du får en bekræftelse på mail.')
+                        : note('Noget gik galt. Prøv igen, eller skriv til os direkte.', true))
+        .catch(() => note('Kunne ikke sende. Tjek forbindelsen, eller skriv til os direkte.', true));
+      return;
+    }
+
+    const to = (window.BRAND && window.BRAND.email) || '';
+    location.href = `mailto:${to}?subject=${encodeURIComponent('Bestilling — ' + q + ' anmeldelseskort')}&body=${encodeURIComponent(lines)}`;
+    note('Din mailklient åbner med bestillingen. Tryk send, så vender vi tilbage med en bekræftelse.');
+  });
+
+  linkWrap.hidden = false;
+  render();
 })();
 
 /* ---------- Sticky bottom CTA — appears once the hero is behind you ---------- */

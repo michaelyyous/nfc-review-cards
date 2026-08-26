@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nfc-review-cards-weld.vercel.app/sitemap.xml
