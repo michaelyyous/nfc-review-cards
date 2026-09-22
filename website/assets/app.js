@@ -620,6 +620,77 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
   }, { passive: true });
 })();
 
+/* ---------- Cookie consent -------------------------------------------------
+   Danish/EU rules in short: nothing non-essential may load before consent,
+   refusing must be exactly as easy as accepting, and the choice must be
+   withdrawable. So there is no "accept" styled as the obvious button and no
+   pre-ticked anything — both options are the same size and weight.
+
+   The site currently sets NO cookies at all. This gates whatever gets added
+   later (Meta pixel, Google Analytics); drop the loader into runTracking().
+--------------------------------------------------------------------------- */
+const CONSENT_KEY = 'samtykke-v1';
+
+function consentState() {
+  try { return localStorage.getItem(CONSENT_KEY); } catch (_) { return null; }
+}
+
+function runTracking() {
+  // Loads only after an explicit "accepter". Nothing here yet.
+  if (window.__trackingLoaded) return;
+  window.__trackingLoaded = true;
+}
+
+(() => {
+  const setConsent = v => {
+    try { localStorage.setItem(CONSENT_KEY, v); } catch (_) {}
+    if (v === 'accepteret') runTracking();
+  };
+
+  if (consentState() === 'accepteret') runTracking();
+
+  function build() {
+    if (document.querySelector('.cookie')) return;
+    const el = document.createElement('div');
+    el.className = 'cookie';
+    el.setAttribute('role', 'dialog');
+    el.setAttribute('aria-label', 'Samtykke til cookies');
+    el.innerHTML = `
+      <div class="cookie__in">
+        <div class="cookie__txt">
+          <strong>Cookies</strong>
+          <p>Vi bruger kun de cookies der er nødvendige for at siden virker. Vil du også tillade cookies til statistik og markedsføring, kan du acceptere her. Du kan altid ændre dit valg.</p>
+        </div>
+        <div class="cookie__btns">
+          <button type="button" class="btn btn--ghost btn--sm" data-consent="afvist">Afvis</button>
+          <button type="button" class="btn btn--sm" data-consent="accepteret">Accepter</button>
+        </div>
+        <a class="cookie__link" href="${location.pathname.includes('/guides/') ? '../' : ''}cookiepolitik.html">Læs cookiepolitikken</a>
+      </div>`;
+    document.body.appendChild(el);
+    requestAnimationFrame(() => { el.dataset.show = 'true'; });
+
+    el.querySelectorAll('[data-consent]').forEach(b => {
+      b.addEventListener('click', () => {
+        setConsent(b.dataset.consent);
+        el.dataset.show = 'false';
+        setTimeout(() => el.remove(), 320);
+      });
+    });
+  }
+
+  if (!consentState()) build();
+
+  // Footer link so the choice can be withdrawn later.
+  document.querySelectorAll('[data-consent-reopen]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      try { localStorage.removeItem(CONSENT_KEY); } catch (_) {}
+      build();
+    });
+  });
+})();
+
 /* ---------- Year ---------- */
 document.querySelectorAll('[data-year]').forEach(el => {
   el.textContent = String(new Date().getFullYear());

@@ -32,6 +32,17 @@ def kr(n):
 
 # ---------------------------------------------------------------- nav
 ORDER = "bestil.html"
+BASE_URL = "https://nfc-review-cards-weld.vercel.app"
+
+ORG_LD = {
+    "@context": "https://schema.org",
+    "@type": "OnlineStore",
+    "name": "{brand}",
+    "url": BASE_URL,
+    "areaServed": "DK",
+    "currenciesAccepted": "DKK",
+    "paymentAccepted": "Dankort, Visa, Mastercard, MobilePay, Apple Pay, Google Pay, Klarna, Faktura",
+}
 
 NAV = [
     ("anmeldelseskort.html", "Anmeldelseskort"),
@@ -132,7 +143,7 @@ CARD_3D = """<div class="stage">
 </div>""" % (card_face(False), card_face(True))
 
 
-def head(title, desc, depth=0):
+def head(title, desc, depth=0, canon="", jsonld="{}"):
     up = "../" * depth
     return """<!doctype html>
 <html lang="da">
@@ -147,10 +158,15 @@ def head(title, desc, depth=0):
 <meta property="og:description" content="%s">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="da_DK">
+<meta property="og:image" content="%s/assets/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="%sassets/styles.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%%2317181A'/><path d='M16 8.5l2.06 4.36 4.69.69-3.4 3.4.81 4.79L16 19.47l-4.16 2.27.8-4.79-3.39-3.4 4.69-.69L16 8.5z' fill='%%23F5B301'/></svg>">
+<link rel="canonical" href="%s">
+<script type="application/ld+json">%s</script>
 </head>
-<body>""" % (title, desc, title, desc, up)
+<body>
+<a class="skip" href="#indhold">Spring til indhold</a>""" % (title, desc, title, desc, BASE_URL, up, canon, jsonld)
 
 
 def topbar(current, depth=0, onhero=False):
@@ -173,7 +189,7 @@ def topbar(current, depth=0, onhero=False):
     </div>
   </div>
 </header>
-<main>""" % (up, LOGO, links, up, up)
+<main id="indhold">""" % (up, LOGO, links, up, up)
 
 
 def footer(depth=0):
@@ -211,6 +227,8 @@ def footer(depth=0):
           <li><a href="%shandelsbetingelser.html">Handelsbetingelser</a></li>
           <li><a href="%sfortrydelsesret.html">Fortrydelsesret</a></li>
           <li><a href="%sprivatlivspolitik.html">Privatlivspolitik</a></li>
+          <li><a href="%scookiepolitik.html">Cookiepolitik</a></li>
+          <li><a href="#" data-consent-reopen>Cookieindstillinger</a></li>
         </ul>
       </div>
     </div>
@@ -223,7 +241,7 @@ def footer(depth=0):
 </footer>
 <script src="%sassets/app.js?v=13"></script>
 </body>
-</html>""" % ((up, LOGO) + (up,) * 12 + (PAYMENTS, up))
+</html>""" % ((up, LOGO) + (up,) * 13 + (PAYMENTS, up))
 
 
 PAYMENTS = """
@@ -234,7 +252,7 @@ PAYMENTS = """
 
 PAGES = []
 
-def page(path, title, desc, body, current=None, depth=0, hero=None):
+def page(path, title, desc, body, current=None, depth=0, hero=None, jsonld=None):
     """hero: markup for a contained hero block that the nav sits on top of.
     When given, the nav renders transparent over it and <main> opens after."""
     if hero:
@@ -243,7 +261,10 @@ def page(path, title, desc, body, current=None, depth=0, hero=None):
                   + hero + "</div><main>")
     else:
         chrome = topbar(current or path, depth)
-    html = head(title, desc, depth) + chrome + body + footer(depth)
+    import json as _json
+    canon = BASE_URL + "/" + path.replace("index.html", "").replace(".html", "")
+    ld = _json.dumps(jsonld or ORG_LD, ensure_ascii=False, separators=(",", ":"))
+    html = head(title, desc, depth, canon, ld) + chrome + body + footer(depth)
     out = ROOT / path
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html, encoding="utf-8")
@@ -669,10 +690,27 @@ produkt = """
     acc([FAQ_ALL[0], FAQ_ALL[2], FAQ_ALL[6], FAQ_ALL[11]]),
 )
 
+PRODUCT_LD = {
+    "@context": "https://schema.org", "@type": "Product",
+    "name": "Google-anmeldelseskort med NFC",
+    "description": "NFC-kort i kreditkortstoerrelse med NTAG215-chip. Kunden laegger telefonen paa, og din Google-anmeldelsesside aabner.",
+    "brand": {"@type": "Brand", "name": "{brand}"},
+    "material": "PVC",
+    "offers": {
+        "@type": "AggregateOffer", "priceCurrency": "DKK",
+        "lowPrice": str(TIERS[-1][1]), "highPrice": str(P1),
+        "offerCount": str(len(TIERS)), "availability": "https://schema.org/InStock",
+        "hasMerchantReturnPolicy": {"@type": "MerchantReturnPolicy",
+            "applicableCountry": "DK",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 14},
+    },
+}
+
 page("anmeldelseskort.html",
      "Google-anmeldelseskort med NFC — {brand}",
      "NFC-kort i kreditkortstørrelse med NTAG215-chip. Kunden lægger telefonen på, og din Google-anmeldelsesside åbner. Fra %d kr inkl. moms." % P1,
-     produkt)
+     produkt, jsonld=PRODUCT_LD)
 
 
 # ================================================================ SÅDAN VIRKER DET
@@ -914,9 +952,14 @@ faq_page = hero(
   <div class="wrap"><div style="max-width:46rem" data-reveal>%s</div></div>
 </section>""" % acc(FAQ_ALL)
 
+FAQ_LD = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+    {"@type": "Question", "name": q,
+     "acceptedAnswer": {"@type": "Answer", "text": " ".join(a).replace("<em>", "").replace("</em>", "")}}
+    for q, a in FAQ_ALL]}
+
 page("faq.html", "Spørgsmål og svar om anmeldelseskort — {brand}",
      "Svar på de mest stillede spørgsmål om NFC-anmeldelseskort: telefonkompatibilitet, programmering, levering, holdbarhed og Googles regler.",
-     faq_page)
+     faq_page, jsonld=FAQ_LD)
 
 
 # ================================================================ OM OS
@@ -1216,6 +1259,35 @@ page("privatlivspolitik.html", "Privatlivspolitik — {brand}",
      "Hvilke personoplysninger vi behandler, hvorfor, hvor længe, og hvilke rettigheder du har.", privat)
 
 
+cookiepol = hero("Cookies", "Cookiepolitik",
+    "Hvilke cookies vi bruger, hvorfor, og hvordan du ændrer dit valg.") + """
+<section class="section--tight">
+  <div class="wrap"><div class="prose small" data-reveal>
+    <h2>Hvad en cookie er</h2>
+    <p>En cookie er en lille tekstfil, som gemmes i din browser. Den bruges til at få en hjemmeside til at fungere, og kan også bruges til at måle hvordan siden bliver brugt, eller til markedsføring.</p>
+
+    <h2>Hvad vi bruger lige nu</h2>
+    <p>Dette website sætter <strong>ingen cookies til statistik eller markedsføring</strong>.</p>
+    <p>Vi gemmer én ting lokalt i din browser: dit svar på cookiebanneret, så vi ikke spørger igen hver gang du åbner en side. Det ligger i browserens <em>localStorage</em> under navnet <code>samtykke-v1</code>, sendes aldrig til os, og kan slettes når som helst.</p>
+    <p>Tilføjer vi senere statistik eller annoncemåling — for eksempel Google Analytics eller et Meta-pixel — bliver det først indlæst hvis du aktivt har trykket accepter. Vi opdaterer denne side når det sker.</p>
+
+    <h2>Dit valg</h2>
+    <p>Du kan altid ombestemme dig. Klik <a href="#" data-consent-reopen>Cookieindstillinger</a>, så kommer banneret frem igen, og du kan vælge forfra.</p>
+    <p>Du kan også slette cookies og lokale data direkte i din browsers indstillinger.</p>
+
+    <h2>Samtykke</h2>
+    <p>Efter de danske cookieregler må vi kun sætte cookies der ikke er strengt nødvendige, hvis du har givet samtykke først. Derfor er der ingen forudkrydsede felter, og <em>Afvis</em> er lige så let at trykke på som <em>Accepter</em>.</p>
+
+    <h2>Kontakt</h2>
+    <p>Spørgsmål til det her? Skriv til <a data-email href="#">support@…</a>.</p>
+    <p class="tiny">Senest opdateret <span data-year>2026</span>.</p>
+  </div></div>
+</section>"""
+
+page("cookiepolitik.html", "Cookiepolitik — {brand}",
+     "Hvilke cookies dette website bruger, hvorfor, og hvordan du ændrer dit samtykke.", cookiepol)
+
+
 # ================================================================ BESTIL
 qty_btns = "".join(
     '<button type="button" class="qty__preset%s" data-qty-set="%d">%d</button>'
@@ -1267,12 +1339,12 @@ bestil = hero(
           <fieldset class="ofield">
             <legend class="eyebrow">4 · Dine oplysninger</legend>
             <div class="grid grid-2" style="gap:var(--s-4);margin-top:var(--s-3)">
-              <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" required></div>
-              <div><label class="small" for="cvrf">CVR <span class="tiny">(valgfrit)</span></label><input id="cvrf" name="cvr" class="inp" inputmode="numeric"></div>
-              <div><label class="small" for="navn">Navn</label><input id="navn" name="navn" class="inp" required></div>
-              <div><label class="small" for="mail">E-mail</label><input id="mail" name="email" type="email" class="inp" required></div>
-              <div><label class="small" for="tlf">Telefon <span class="tiny">(valgfrit)</span></label><input id="tlf" name="telefon" type="tel" class="inp"></div>
-              <div><label class="small" for="adr">Leveringsadresse</label><input id="adr" name="adresse" class="inp" required></div>
+              <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" autocomplete="organization" required></div>
+              <div><label class="small" for="cvrf">CVR <span class="tiny">(valgfrit)</span></label><input id="cvrf" name="cvr" class="inp" inputmode="numeric" autocomplete="off"></div>
+              <div><label class="small" for="navn">Navn</label><input id="navn" name="navn" class="inp" autocomplete="name" required></div>
+              <div><label class="small" for="mail">E-mail</label><input id="mail" name="email" type="email" class="inp" autocomplete="email" inputmode="email" required></div>
+              <div><label class="small" for="tlf">Telefon <span class="tiny">(valgfrit)</span></label><input id="tlf" name="telefon" type="tel" class="inp" autocomplete="tel" inputmode="tel"></div>
+              <div><label class="small" for="adr">Leveringsadresse</label><input id="adr" name="adresse" class="inp" autocomplete="street-address" required></div>
             </div>
             <label class="small" for="besked" style="display:block;margin-top:var(--s-4)">Besked <span class="tiny">(valgfrit)</span></label>
             <textarea id="besked" name="besked" rows="3" class="inp"></textarea>
