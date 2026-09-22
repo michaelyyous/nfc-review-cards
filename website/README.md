@@ -68,14 +68,56 @@ Priserne er **inkl. moms** (lovkrav ved salg til forbrugere). Ændrer du dem, op
 | `fortrydelsesret.html` | Fortrydelsesret + standardformular |
 | `privatlivspolitik.html` | Privatlivspolitik |
 
+## Shopify
+
+Shopify er kasseapparat, ikke butik. Sitet bliver hvor det er; `/bestil` afleverer kurven videre.
+
+Udfyld to felter i `assets/app.js`:
+
+```js
+const SHOPIFY = {
+  domain: '',        // dit-shop.myshopify.com
+  variantId: '',     // tallet sidst i variantens URL i Shopify-admin
+};
+```
+
+Så skifter bestillingsformularen automatisk fra mail-flow til rigtig checkout. Den bygger et cart-permalink:
+
+```
+/cart/VARIANT:ANTAL?attributes[Google-link]=…&attributes[Levering]=…
+```
+
+Google-linket, programmeringsvalget, virksomhed, CVR og leveringsmetode følger med som cart attributes, så de lander på ordren i Shopify.
+
+**Mængderabatten sættes op i Shopify** under *Rabatter → Automatisk rabat* — ikke som separate varianter. Pristrappen i `build.py` skal matche dem, ellers viser sitet én pris og checkout en anden.
+
+## Cookies
+
+Banneret er bygget efter reglen, ikke efter branchekutymen: **Afvis og Accepter er præcis samme størrelse og vægt** (målt 179×38 begge), intet ikke-nødvendigt indlæses før samtykke, og valget kan trækkes tilbage via *Cookieindstillinger* i footeren.
+
+Sitet sætter i dag **ingen cookies**. Det eneste der gemmes er selve samtykkevalget i `localStorage` under `samtykke-v1`.
+
+Tilføjer du statistik eller et Meta-pixel, skal loaderen ind i `runTracking()` i `app.js` — den kaldes kun efter et aktivt accepter. Husk at opdatere `cookiepolitik.html` samtidig, for den beskriver lige nu korrekt at der intet er.
+
 ## 🔴 Skal gøres før lancering
 
-- [ ] **Firmanavn, CVR og e-mail** i `assets/app.js`
-- [ ] **Kundeudtalelser på forsiden.** Sektionen er bygget færdig men står tom med vilje. Indsæt rigtige citater fra rigtige kunder, med deres accept. Opdigtede anmeldelser er forbudt efter markedsføringslovens bilag 1 nr. 23c — det er en per se-overtrædelse, hvor der ikke skal bevises skade på nogen.
-- [ ] **Betalingsløsning.** Der er ingen kurv eller checkout endnu — "Bestil"-knapperne peger på kontaktsiden. Skal det være rigtig webshop, er Shopify eller lignende næste skridt.
-- [ ] **Producentansvar registreret** (elektronik + emballage) — 14 dages frist før første salg. Se `../research/TJEKLISTE-OPSTART.md`
-- [ ] **GPSR-oplysninger på produktsiden**: producentens navn, postadresse og e-mail, plus dine egne som ansvarlig importør. Krav ved fjernsalg, skal stå på dansk.
-- [ ] Tjek at leveringstider og fragtpriser i teksten passer med det du faktisk kan holde
+**Venter kun på tre ting:**
+
+- [ ] **Firmanavn, CVR og support-mail** i `assets/app.js`
+- [ ] **Domæne** — peges på Vercel-projektet
+- [ ] **Shopify `domain` + `variantId`** i `assets/app.js`
+
+**Efter launch, men med frist:**
+
+- [ ] **Producentansvar registreret** (elektronik + emballage) — **14 dages frist før første salg**. Se `../research/TJEKLISTE-OPSTART.md`
+- [ ] **CVR + momsregistrering** — senest 8 dage før du starter aktiviteten
+- [ ] **GPSR-oplysninger på produktsiden**: producentens navn, postadresse og e-mail, plus dine egne som ansvarlig importør. Krav ved fjernsalg, skal stå på dansk. Kan først udfyldes når leverandøren er endeligt valgt.
+
+**Når du har noget at sætte ind:**
+
+- [ ] **Kundeudtalelser på forsiden.** Sektionen er bygget færdig men står tom med vilje. Rigtige citater fra rigtige kunder, med deres accept. Opdigtede anmeldelser er forbudt efter markedsføringslovens bilag 1 nr. 23c — per se-overtrædelse, ingen skade skal bevises.
+- [ ] **Produktfotos** — `.photo`-slots står klar i "hvorfor"-sektionen og på det andet produktkort
+- [ ] Tjek at leveringstider passer med det du faktisk kan holde
 
 ## 3D-kortet
 
