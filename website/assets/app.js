@@ -11,6 +11,24 @@ const BRAND = {
   city: 'Danmark',
 };
 
+/* Shopify som ren kasseapparat: sitet bliver hvor det er, og "Gå til betaling"
+   sender kurven videre via et cart-permalink. Udfyld de to felter, så skifter
+   bestillingsformularen automatisk fra mail til rigtig checkout.
+
+   variantId findes i Shopify under Produkter → dit produkt → Varianter.
+   Det er tallet sidst i URL'en, fx .../variants/45678901234567
+   Mængderabatten sættes op i Shopify under Rabatter → Automatisk rabat. */
+const SHOPIFY = {
+  domain: '',            // ← fx 'dit-shop.myshopify.com'
+  variantId: '',         // ← fx '45678901234567'
+};
+
+/* Fragt. Pakkeshop er gratis uanset ordrestørrelse; hjemmelevering koster. */
+const SHIPPING = {
+  pakkeshop: 0,
+  hjem: 49,
+};
+
 document.documentElement.classList.add('js');
 window.BRAND = BRAND;
 
@@ -432,12 +450,15 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
   if (!form) return;
 
   const TIERS = JSON.parse(form.dataset.tiers);
-  const SHIP = 39, FREE_SHIP = 299, VAT = 0.25;
+  const VAT = 0.25;
 
   const qtyInput = form.querySelector('[data-qty]');
   const presets  = form.querySelectorAll('[data-qty-set]');
   const linkWrap = form.querySelector('[data-link-wrap]');
-  const glink    = form.querySelector('[data-glink]');
+  const shipRadios = form.querySelectorAll('[data-ship]');
+
+  const shipMode = () => (form.querySelector('[data-ship]:checked') || {}).value || 'pakkeshop';
+  const shipCost = () => SHIPPING[shipMode()] ?? 0;
 
   const out = {
     qty:   form.querySelector('[data-sum-qty]'),
@@ -456,7 +477,7 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
     const q = clampQty();
     const unit = unitFor(q);
     const goods = unit * q;
-    const ship = goods >= FREE_SHIP ? 0 : SHIP;
+    const ship = shipCost();
     const total = goods + ship;
 
     out.qty.textContent = q;
@@ -473,6 +494,7 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
 
   qtyInput.addEventListener('input', render);
   presets.forEach(b => b.addEventListener('click', () => { qtyInput.value = b.dataset.qtySet; render(); }));
+  shipRadios.forEach(r => r.addEventListener('change', render));
 
   // The link field only matters if we're doing the programming.
   form.querySelectorAll('[data-prog]').forEach(radio => {
@@ -506,13 +528,31 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
     }
 
     const q = clampQty(), unit = unitFor(q);
-    const goods = unit * q, ship = goods >= FREE_SHIP ? 0 : SHIP;
+    const goods = unit * q, ship = shipCost();
     const d = Object.fromEntries(new FormData(form).entries());
+
+    // Shopify as the till: hand the basket over via a cart permalink and let
+    // Shopify own payment, shipping selection and the receipt. The Google link
+    // and the programming choice ride along as cart attributes, so they land
+    // on the order without us needing a backend of our own.
+    if (SHOPIFY.domain && SHOPIFY.variantId) {
+      const attrs = new URLSearchParams();
+      attrs.set('attributes[Programmering]', d.programmering || '');
+      if (d.google_link) attrs.set('attributes[Google-link]', d.google_link);
+      if (d.virksomhed)  attrs.set('attributes[Virksomhed]', d.virksomhed);
+      if (d.cvr)         attrs.set('attributes[CVR]', d.cvr);
+      if (d.besked)      attrs.set('attributes[Besked]', d.besked);
+      attrs.set('attributes[Levering]', shipMode() === 'hjem' ? 'Hjemmelevering' : 'Pakkeshop');
+      note('Sender dig til betaling…');
+      location.href = `https://${SHOPIFY.domain}/cart/${SHOPIFY.variantId}:${q}?${attrs}`;
+      return;
+    }
 
     const lines = [
       `Antal:            ${q} stk.`,
       `Pris pr. stk.:    ${kr(unit)} kr`,
       `Varer i alt:      ${kr(goods)} kr`,
+      `Levering:         ${shipMode() === 'hjem' ? 'Hjemmelevering' : 'Pakkeshop'}`,
       `Fragt:            ${ship === 0 ? 'Gratis' : kr(ship) + ' kr'}`,
       `I ALT:            ${kr(goods + ship)} kr inkl. moms`,
       '',

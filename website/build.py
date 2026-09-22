@@ -19,6 +19,7 @@ TIERS = [
     (1, 189), (3, 169), (5, 155), (10, 129), (25, 109),
     (50, 95), (100, 79), (250, 59), (500, 49),
 ]
+SHIP_HOME = 49          # hjemmelevering; pakkeshop er gratis
 TIERS_JSON = "[" + ",".join('{"min":%d,"price":%d}' % t for t in TIERS) + "]"
 P1 = TIERS[0][1]
 
@@ -213,16 +214,23 @@ def footer(depth=0):
         </ul>
       </div>
     </div>
+    %s
     <div class="foot__legal">
       <p class="tiny">© <span data-year>2026</span> <span data-brand>Firmanavn</span> · CVR <span data-cvr>—</span></p>
-      <p class="tiny">Priser er inkl. moms · 14 dages fortrydelsesret · 2 års reklamationsret</p>
+      <p class="tiny">Priser inkl. moms · Fri fragt til pakkeshop · 14 dages fortrydelsesret · 2 års reklamationsret</p>
     </div>
   </div>
 </footer>
-<script src="%sassets/app.js?v=12"></script>
+<script src="%sassets/app.js?v=13"></script>
 </body>
-</html>""" % ((up, LOGO) + (up,) * 12 + (up,))
+</html>""" % ((up, LOGO) + (up,) * 12 + (PAYMENTS, up))
 
+
+PAYMENTS = """
+<div class="pay" aria-label="Betalingsmuligheder">
+  <span>Dankort</span><span>Visa</span><span>Mastercard</span><span>MobilePay</span>
+  <span>Apple&nbsp;Pay</span><span>Google&nbsp;Pay</span><span>Klarna</span><span>Faktura</span>
+</div>"""
 
 PAGES = []
 
@@ -424,7 +432,7 @@ home_products = """
 home_trust = """
 <div class="wrap">
   <div class="trust" data-reveal>
-    <span>%s Pakkes og sendes fra Danmark</span>
+    <span>%s Fri fragt til pakkeshop</span>
     <span>%s 14 dages fortrydelsesret</span>
     <span>%s 2 års reklamationsret</span>
     <span>%s Intet abonnement</span>
@@ -445,7 +453,7 @@ home_prices = """
           <div class="stat__n" style="margin-top:var(--s-3)">%d<small>→</small>%d<small>kr</small></div>
           <p class="stat__note" style="margin-top:var(--s-3);color:var(--green);font-weight:560">%d kr lavere pr. kort ved 500 stk.</p>
         </div>
-        <p class="small">Fragt 39 kr, gratis over 299 kr. <a href="maengderabat.html" style="text-decoration:underline">Over 500 kort?</a></p>
+        <p class="small">Fri fragt til pakkeshop. <a href="maengderabat.html" style="text-decoration:underline">Over 500 kort?</a></p>
         <div><a class="btn btn--lg" href="bestil.html">Bestil 3 kort — %d kr %s</a></div>
       </div>
       <div data-reveal="120">
@@ -500,8 +508,9 @@ FAQ_ALL = [
         "Under 250 stk. betales der ved bestilling med kort eller MobilePay.",
     ]),
     ("Hvornår får jeg kortene?", [
-        "Vi sender 1–2 hverdage efter bestilling. Derfra er der typisk 1–3 hverdage med GLS eller PostNord.",
-        "Fragt koster 39 kr og er gratis ved køb over 299 kr.",
+        "Vi sender 1–2 hverdage efter bestilling. Derfra er der typisk 1–3 hverdage.",
+        "Levering til pakkeshop er gratis, uanset hvor meget du køber — du vælger selv den nærmeste ved betaling. Vi bruger GLS, DAO, PostNord og Bring.",
+        "Vil du have det leveret til døren i stedet, koster det 49 kr.",
     ]),
     ("Hvad hvis kortet ikke virker?", [
         "Så sender vi et nyt, uden beregning og med fragt betalt. Det gælder i hele reklamationsperioden på 2 år.",
@@ -620,7 +629,7 @@ produkt = """
           %s
         </div>
         <a class="btn btn--lg" href="bestil.html">Bestil — %d kr</a>
-        <p class="tiny">Fragt 39 kr, gratis over 299 kr · Sendes 1–2 hverdage · 14 dages fortrydelsesret · 2 års reklamationsret</p>
+        <p class="tiny">Fri fragt til pakkeshop · Sendes 1–2 hverdage · 14 dages fortrydelsesret · 2 års reklamationsret</p>
       </div>
     </div>
   </div>
@@ -815,7 +824,7 @@ maengde = hero(
           <div class="row" style="justify-content:space-between"><span class="small">Pris pr. stk.</span><span class="num" style="font-weight:600"><span data-calc-unit>55</span> kr</span></div>
           <div class="row" style="justify-content:space-between"><span class="small">I alt inkl. moms</span><span class="num" style="font-weight:640;font-size:1.3rem;letter-spacing:-.02em"><span data-calc-total>5.500</span> kr</span></div>
         </div>
-        <p class="tiny" style="margin-top:var(--s-4)">Vejledende. Fragt 39 kr, gratis over 299 kr.</p>
+        <p class="tiny" style="margin-top:var(--s-4)">Vejledende. Fri fragt til pakkeshop, hjemmelevering 49 kr.</p>
       </div>
     </div>
   </div>
@@ -1085,12 +1094,14 @@ handels = hero("Betingelser", "Handelsbetingelser",
     <p>Alle priser er angivet i danske kroner og inklusive 25 % moms. Der tages forbehold for prisfejl, udsolgte varer og afgiftsændringer.</p>
 
     <h2>3. Betaling</h2>
-    <p>Vi modtager betaling med de kort og betalingsmetoder der fremgår ved bestilling. Beløbet trækkes når varen afsendes.</p>
+    <p>Vi modtager Dankort, Visa, Mastercard, MobilePay, Apple Pay, Google Pay og Klarna. Beløbet trækkes når varen afsendes.</p>
     <p>Ved ordrer fra 250 stk. tilbyder vi betaling med faktura, 14 dage netto, efter forudgående aftale.</p>
 
     <h2>4. Levering</h2>
-    <p>Vi afsender 1–2 hverdage efter modtaget bestilling. Levering sker med GLS eller PostNord og tager typisk 1–3 hverdage derefter.</p>
-    <p>Fragt koster 39 kr. Ved køb over 299 kr er fragten gratis. Vi leverer til adresser i Danmark.</p>
+    <p>Vi afsender 1–2 hverdage efter modtaget bestilling. Derfra er der typisk 1–3 hverdage.</p>
+    <p><strong>Levering til pakkeshop er gratis</strong>, uanset ordrens størrelse. Du vælger selv pakkeshop ved betaling. Vi bruger GLS, DAO, PostNord og Bring, og udbuddet af pakkeshops afhænger af din adresse.</p>
+    <p><strong>Hjemmelevering koster 49 kr</strong> og sker på hverdage.</p>
+    <p>Vi leverer til adresser i Danmark. Skal du have leveret til Færøerne eller Grønland, så skriv til os først — der gælder andre regler og priser.</p>
 
     <h2>5. Fortrydelsesret</h2>
     <p>Du har 14 dages fortrydelsesret fra den dag du modtager varen. Se den fulde vejledning under <a href="fortrydelsesret.html">Fortrydelsesret</a>, hvor du også finder standardfortrydelsesformularen.</p>
@@ -1243,7 +1254,18 @@ bestil = hero(
           </fieldset>
 
           <fieldset class="ofield">
-            <legend class="eyebrow">3 · Dine oplysninger</legend>
+            <legend class="eyebrow">3 · Levering</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="levering" value="pakkeshop" checked data-ship>
+                <span><strong>Pakkeshop — gratis</strong><br><span class="small">GLS, DAO, PostNord eller Bring. Du vælger den nærmeste ved betaling.</span></span></label>
+              <label class="opt"><input type="radio" name="levering" value="hjem" data-ship>
+                <span><strong>Hjemmelevering — %d kr</strong><br><span class="small">Leveret til døren på hverdage.</span></span></label>
+            </div>
+            <p class="tiny" style="margin-top:var(--s-3)">Vi sender 1–2 hverdage efter din bestilling. Derfra er der typisk 1–3 hverdage.</p>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">4 · Dine oplysninger</legend>
             <div class="grid grid-2" style="gap:var(--s-4);margin-top:var(--s-3)">
               <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" required></div>
               <div><label class="small" for="cvrf">CVR <span class="tiny">(valgfrit)</span></label><input id="cvrf" name="cvr" class="inp" inputmode="numeric"></div>
@@ -1275,7 +1297,7 @@ bestil = hero(
       </div>
     </form>
   </div>
-</section>""" % (TIERS_JSON, qty_btns)
+</section>""" % (TIERS_JSON, qty_btns, SHIP_HOME)
 
 page(ORDER, "Bestil anmeldelseskort — {brand}",
      "Bestil NFC-anmeldelseskort. Vælg antal, se prisen med det samme, og send bestillingen. Ingen betaling på siden.",
