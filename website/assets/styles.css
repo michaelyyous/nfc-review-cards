@@ -70,24 +70,8 @@
   --t-slow: 560ms;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --surface:      #0A0A0B;
-    --surface-sunk: #131417;
-    --surface-card: #17181A;
-    --hairline:     rgba(255, 255, 255, 0.10);
-    --hairline-strong: rgba(255, 255, 255, 0.18);
-    --text:      #F5F5F7;
-    --text-soft: #A1A5AD;
-    --text-faint:#7E828A;
-    --chrome-bg:  rgba(12, 12, 14, 0.72);
-    --chrome-brd: rgba(255, 255, 255, 0.08);
-    --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
-    --shadow-md: 0 4px 16px rgba(0,0,0,.45);
-    --shadow-lg: 0 18px 48px rgba(0,0,0,.55);
-    --shadow-xl: 0 40px 90px rgba(0,0,0,.65);
-  }
-}
+/* Ingen dark mode: siden er hvid uanset systemets tema, som chippy. */
+:root { color-scheme: only light; }
 
 /* ---------- Reset ---------- */
 *, *::before, *::after { box-sizing: border-box; }
@@ -394,12 +378,6 @@ p { margin: 0; letter-spacing: -0.003em; }
 .stat__label { margin-top: var(--s-3); font-size: 1.02rem; letter-spacing: -.012em; }
 .stat__note { margin-top: var(--s-5); font-size: .82rem; color: var(--text-soft); }
 
-@media (prefers-color-scheme: dark) {
-  .stat {
-    background: linear-gradient(158deg, rgba(27,158,90,.16), rgba(27,158,90,.04) 46%, rgba(255,255,255,.03));
-    border-color: rgba(255,255,255,.10);
-  }
-}
 
 /* ---------- Product cards ---------- */
 .prod {
@@ -764,16 +742,4 @@ textarea.inp { resize: vertical; min-height: 5rem; }
     --text-faint: var(--ink-700);
     --chrome-bg: var(--surface);
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --hairline: rgba(255,255,255,.46);
-      --hairline-strong: rgba(255,255,255,.72);
-      --text-soft: #E6E7EA;
-      --text-faint: #C9CBD0;
-    }
-  }
-  .topbar, .nav { backdrop-filter: none; -webkit-backdrop-filter: none; }
-  .card, .tiers, .pill { border-width: 1.5px; }
-  .btn--ghost { box-shadow: inset 0 0 0 1.5px var(--hairline-strong); }
-  :focus-visible { outline-width: 3px; }
-}
+  
