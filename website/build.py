@@ -367,6 +367,45 @@ home_hero = """
     </div>
   </div>""" % (star() * 5, P1, ARROW, CHECK, CHECK, CHECK, TIERS[-1][1])
 
+# ---------------------------------------------------------------- kundelogoer
+# Udfyld KUN med virksomheder der faktisk er kunder OG har sagt ja til at blive
+# nævnt. Så længe listen er tom, viser sitet en tydelig pladsholder i stedet —
+# den må ikke gå live med navne der ikke er bekræftet.
+#
+# Når du har dem:  CUSTOMERS = ["Roots Kitchen", "CleanClub", ...]
+CUSTOMERS = []
+
+def marquee():
+    if not CUSTOMERS:
+        return """
+<section class="section--tight">
+  <div class="wrap">
+    <div class="stack" style="align-items:center;text-align:center" data-reveal>
+      <span class="eyebrow">Virksomheder der bruger kortet</span>
+      <div class="marquee--empty" style="width:100%%;margin-top:var(--s-4)">
+        <p><strong>Pladsholder — må ikke gå live som den er.</strong><br>
+        Sektionen er bygget og animeret. Tilføj navnene i <code>CUSTOMERS</code> i <code>build.py</code>,
+        når virksomhederne faktisk er kunder <em>og</em> har sagt ja til at blive nævnt.
+        Navne på firmaer der ikke er kunder er vildledende markedsføring efter markedsføringslovens § 5.</p>
+      </div>
+    </div>
+  </div>
+</section>"""
+    track = '<div class="marquee__track">' + "".join(
+        '<span class="marquee__item">%s</span>' % c for c in CUSTOMERS) + '</div>'
+    return """
+<section class="section--tight">
+  <div class="wrap stack" style="align-items:center" data-reveal>
+    <span class="eyebrow">Virksomheder der bruger kortet</span>
+  </div>
+  <div class="marquee" aria-label="Virksomheder der bruger kortet">
+    <div class="marquee__row">%s%s</div>
+  </div>
+</section>""" % (track, track)
+
+home_logos = marquee()
+
+
 home_benefits = """
 <section class="benefits">
   <div class="benefits__in">
@@ -650,7 +689,7 @@ home_sticky = """
 page("index.html",
      "Anmeldelseskort til Google med NFC — {brand}",
      "NFC-anmeldelseskort til danske virksomheder. Kunden lægger telefonen på kortet, og din Google-anmeldelsesside åbner. Fra %d kr. Intet abonnement." % P1,
-     home_benefits + home_stats + home_steps + home_quotes + home_products
+     home_benefits + home_logos + home_stats + home_steps + home_quotes + home_products
      + home_prices + home_trust + home_faq + home_guides + home_sticky,
      current="index.html", hero=home_hero)
 

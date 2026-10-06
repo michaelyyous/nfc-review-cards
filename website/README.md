@@ -99,6 +99,21 @@ Sitet sætter i dag **ingen cookies**. Det eneste der gemmes er selve samtykkeva
 
 Tilføjer du statistik eller et Meta-pixel, skal loaderen ind i `runTracking()` i `app.js` — den kaldes kun efter et aktivt accepter. Husk at opdatere `cookiepolitik.html` samtidig, for den beskriver lige nu korrekt at der intet er.
 
+## Kundelogo-bjælken
+
+Sektionen *"Virksomheder der bruger kortet"* er bygget færdig — sømløs uendelig scroll, pause ved hover, falder tilbage til en almindelig række ved `prefers-reduced-motion`.
+
+Navnene står i **én liste** øverst i `build.py`:
+
+```python
+CUSTOMERS = []          # tom = pladsholder vises i stedet
+CUSTOMERS = ["Roots Kitchen", "CleanClub", "Hinoya"]   # udfyldt = bjælken kører
+```
+
+**Udfyld den kun med virksomheder der både er kunder og har sagt ja.** Navne på firmaer der ikke er kunder er vildledende markedsføring efter markedsføringslovens § 5 — og bruger du deres logo oveni, er det også et varemærkeproblem. Så længe listen er tom, viser siden en tydeligt markeret pladsholder, så den ikke kan gå live ved et uheld.
+
+Vil du have rigtige logoer frem for navne i tekst, lægges filerne i `assets/img/` og `marquee()` skiftes til `<img>`.
+
 ## 🔴 Skal gøres før lancering
 
 **Venter kun på tre ting:**

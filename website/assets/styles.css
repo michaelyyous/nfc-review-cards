@@ -202,6 +202,41 @@ p { margin: 0; letter-spacing: -0.003em; }
 .hero__media { border-radius: 22px; overflow: hidden; aspect-ratio: 5 / 4; background: var(--surface-sunk); }
 .hero__media img { width: 100%; height: 100%; object-fit: cover; }
 
+/* ---------- Customer logo marquee ----------
+   Two identical tracks slide as one; when the first has moved exactly its own
+   width, the second is in the same place, so the loop has no seam. Only
+   transform animates. */
+.marquee { overflow: hidden; position: relative; padding-block: var(--s-6); }
+.marquee::before, .marquee::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: 7rem; z-index: 2; pointer-events: none;
+}
+.marquee::before { left: 0;  background: linear-gradient(90deg, var(--surface), transparent); }
+.marquee::after  { right: 0; background: linear-gradient(270deg, var(--surface), transparent); }
+.marquee__row { display: flex; width: max-content; animation: marquee 42s linear infinite; }
+.marquee:hover .marquee__row { animation-play-state: paused; }
+.marquee__track { display: flex; align-items: center; gap: clamp(var(--s-8), 5vw, var(--s-16)); padding-right: clamp(var(--s-8), 5vw, var(--s-16)); }
+.marquee__item {
+  font-size: 1.05rem; font-weight: 700; letter-spacing: -.02em;
+  color: var(--text-faint); white-space: nowrap; flex: none;
+  transition: color var(--t-fast) var(--ease-out);
+}
+.marquee:hover .marquee__item { color: var(--text-soft); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+/* No sliding for anyone who asked for less motion — it becomes a plain row. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee__row { animation: none; flex-wrap: wrap; width: auto; }
+  .marquee__track:nth-child(2) { display: none; }
+  .marquee::before, .marquee::after { display: none; }
+}
+
+/* Empty state: the section is built, the names are not in yet. */
+.marquee--empty {
+  border: 1px dashed var(--hairline-strong); border-radius: var(--r-lg);
+  padding: var(--s-8); text-align: center;
+}
+.marquee--empty p { color: var(--text-faint); font-size: .86rem; max-width: 34rem; margin-inline: auto; }
+
 /* ---------- Benefit bar under the hero ---------- */
 .benefits { background: var(--surface-sunk); border-block: 1px solid var(--hairline); }
 .benefits__in {
