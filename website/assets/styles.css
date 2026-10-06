@@ -21,7 +21,10 @@
   /* Accent */
   --gold:      #F5B301;
   --gold-soft: #FFC02E;
-  --green:     #1B9E5A;
+  --green:      #14724A;   /* primær */
+  --green-deep: #0E5637;
+  --green-tint: #EAF6EF;   /* lys flade */
+  --ink:        #0E1110;   /* tekstsort */
 
   /* Google */
   --g-blue:   #4285F4;
@@ -30,14 +33,14 @@
   --g-red:    #EA4335;
 
   /* Surfaces */
-  --surface:      #F4F4F2;      /* warm off-white page */
-  --surface-sunk: #EDEDEA;
+  --surface:      #FFFFFF;
+  --surface-sunk: #F6F7F6;
   --surface-card: var(--paper);
-  --hairline:     rgba(0, 0, 0, 0.09);
-  --hairline-strong: rgba(0, 0, 0, 0.16);
-  --text:      var(--ink-900);
-  --text-soft: var(--ink-500);
-  --text-faint:var(--ink-400);
+  --hairline:     rgba(14, 17, 16, 0.10);
+  --hairline-strong: rgba(14, 17, 16, 0.18);
+  --text:      var(--ink);
+  --text-soft: #5A6260;
+  --text-faint:#858C8A;
 
   --chrome-bg:  rgba(255, 255, 255, 0.72);
   --chrome-brd: rgba(0, 0, 0, 0.07);
@@ -91,10 +94,8 @@
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 body {
   margin: 0;
-  /* System font first: it already ships optical sizing, tracking tables and
-     legibility tuning that a webfont would have to reinvent. */
-  font: 100%/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI",
-        system-ui, "Helvetica Neue", Arial, sans-serif;
+  font: 100%/1.6 "Schibsted Grotesk", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
   font-optical-sizing: auto;
   font-synthesis-weight: none;
   background: var(--surface);
@@ -113,36 +114,36 @@ table { border-collapse: collapse; width: 100%; }
 /* Tracking is size-dependent, never uniform: large type gets negative
    tracking and tight leading, body copy sits near zero. */
 .display {
-  font-size: clamp(2.6rem, 7vw, 5rem);
-  line-height: 1.03;
-  letter-spacing: -0.038em;
-  font-weight: 620;
+  font-size: clamp(2.3rem, 4.2vw, 3.125rem);
+  line-height: 1.04;
+  letter-spacing: -0.037em;
+  font-weight: 800;
   margin: 0;
   text-wrap: balance;
 }
 h1, .h1 {
-  font-size: clamp(2.15rem, 5vw, 3.5rem);
-  line-height: 1.06;
-  letter-spacing: -0.03em;
-  font-weight: 620;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+  font-weight: 800;
   margin: 0;
   text-wrap: balance;
 }
 /* Section headings carry more weight than the hero here — big and bold,
    with tracking tightening as the size grows. */
 h2, .h2 {
-  font-size: clamp(1.9rem, 3.6vw, 2.875rem);
-  line-height: 1.06;
-  letter-spacing: -0.035em;
-  font-weight: 700;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  line-height: 1.07;
+  letter-spacing: -0.03em;
+  font-weight: 800;
   margin: 0;
   text-wrap: balance;
 }
 h3, .h3 {
-  font-size: 1.16rem;
-  line-height: 1.32;
-  letter-spacing: -0.011em;
-  font-weight: 600;
+  font-size: 1.31rem;
+  line-height: 1.26;
+  letter-spacing: -0.03em;
+  font-weight: 800;
   margin: 0;
 }
 p { margin: 0; letter-spacing: -0.003em; }
@@ -186,105 +187,53 @@ p { margin: 0; letter-spacing: -0.003em; }
 .grid-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
 .grid-4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); }
 
-/* ---------- Hero block ----------
-   A contained, rounded dark surface sitting on the page rather than a
-   full-bleed band. The inset is what makes it read as an object. */
-.heroblock {
-  position: relative;
-  margin: var(--s-3);
-  border-radius: 26px;
-  background: #101113;
-  color: #F5F5F7;
-  overflow: hidden;
-  isolation: isolate;
-}
-@media (min-width: 700px) { .heroblock { margin: var(--s-4); border-radius: 30px; } }
-
-/* Depth behind the content: a soft, off-centre glow so the block isn't
-   a flat rectangle of colour. */
-.heroblock::before {
-  content: ""; position: absolute; inset: 0; z-index: -1;
-  background:
-    radial-gradient(70% 80% at 78% 18%, rgba(255,255,255,.10), transparent 62%),
-    radial-gradient(50% 60% at 12% 92%, rgba(245,179,1,.07), transparent 70%);
-}
+/* ---------- Hero ----------
+   White page, copy on the left, a large rounded photo on the right.
+   No dark container — the page itself is the surface. */
+.heroblock { position: relative; background: var(--surface); }
 .heroblock__in {
   max-width: var(--w-page); margin-inline: auto;
-  padding: clamp(var(--s-10), 6vw, var(--s-20)) var(--s-6) clamp(var(--s-12), 7vw, var(--s-24));
+  padding: clamp(var(--s-10), 5vw, var(--s-16)) var(--s-6) clamp(var(--s-12), 6vw, var(--s-20));
 }
-/* Two columns: the headline holds the left, support and CTA sit right —
-   rather than one tall stack that pushes everything below the fold. */
 .heroblock__grid {
-  display: grid; gap: clamp(var(--s-8), 4vw, var(--s-16));
-  align-items: center;
-  grid-template-columns: 1fr;
+  display: grid; gap: clamp(var(--s-8), 4vw, var(--s-12));
+  align-items: center; grid-template-columns: 1fr;
 }
-@media (min-width: 900px) {
-  .heroblock__grid { grid-template-columns: 1.15fr .85fr; align-items: end; }
-}
-.heroblock .display { color: #FFFFFF; }
-.heroblock .lede { color: rgba(245,245,247,.72); }
-.heroblock .tiny { color: rgba(245,245,247,.5); }
-.heroblock .pill {
-  background: rgba(255,255,255,.09); color: rgba(245,245,247,.86);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.13);
-}
-.heroblock .btn { --btn-bg: #FFFFFF; --btn-fg: #101113; }
-.heroblock .btn--ghost {
-  --btn-bg: transparent; --btn-fg: #F5F5F7;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.24);
-}
-.heroblock .btn--ghost:hover { background: rgba(255,255,255,.09); }
-.heroblock .card3d__hint { color: rgba(245,245,247,.45); }
+@media (min-width: 940px) { .heroblock__grid { grid-template-columns: 1fr 1.08fr; } }
 
-/* The nav sits over the block, so the page reads as one surface. */
-.topbar.topbar--onhero {
-  background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none;
-  box-shadow: none; color: #F5F5F7;
+.hero__eyebrow { display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap; }
+.hero__eyebrow .stars { color: var(--green); }
+.hero__eyebrow span:last-child { font-size: .95rem; font-weight: 600; letter-spacing: -.012em; }
+
+/* Price sits beside the call to action, not above it. */
+.hero__buy { display: flex; align-items: center; gap: var(--s-6); flex-wrap: wrap; }
+.hero__price { line-height: 1.05; }
+.hero__price small { display: block; font-size: .95rem; font-weight: 600; color: var(--text-soft); }
+.hero__price strong { font-size: 2.375rem; font-weight: 800; letter-spacing: -.035em; }
+
+.ticks { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-6); }
+.ticks span { display: inline-flex; align-items: center; gap: var(--s-2); font-size: .95rem; font-weight: 600; }
+.ticks svg { color: var(--green); flex: none; }
+
+.hero__media { border-radius: 22px; overflow: hidden; aspect-ratio: 5 / 4; background: var(--surface-sunk); }
+.hero__media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Benefit bar under the hero ---------- */
+.benefits { background: var(--surface-sunk); border-block: 1px solid var(--hairline); }
+.benefits__in {
+  max-width: var(--w-page); margin-inline: auto;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
 }
-.topbar.topbar--onhero::after { display: none; }
-/* Over the hero the capsules become dark translucent glass. Chippy uses a
-   flat 42% fill; the blur is added because the capsule sits over a photo and
-   text legibility over a shifting backdrop is what vibrancy is for. */
-.topbar.topbar--onhero .nav,
-.topbar.topbar--onhero .brand {
-  background: rgba(18, 18, 16, 0.42);
-  backdrop-filter: blur(14px) saturate(160%);
-  -webkit-backdrop-filter: blur(14px) saturate(160%);
+.benefit { display: flex; gap: var(--s-4); padding: var(--s-8) var(--s-6); }
+.benefit + .benefit { border-left: 1px solid var(--hairline); }
+@media (max-width: 960px) { .benefit + .benefit { border-left: 0; border-top: 1px solid var(--hairline); } }
+.benefit__ico {
+  width: 38px; height: 38px; border-radius: 11px; flex: none;
+  display: grid; place-items: center;
+  background: var(--green-tint); color: var(--green);
 }
-.topbar.topbar--onhero .nav a { color: rgba(255,255,255,.82); }
-.topbar.topbar--onhero .nav a:hover,
-.topbar.topbar--onhero .nav a[aria-current="page"] { color: #fff; background: rgba(255,255,255,.14); }
-.topbar.topbar--onhero .brand { color: #fff; }
-/* The mark is a white tile, so the star inside has to go dark or it vanishes. */
-.topbar.topbar--onhero .brand__mark path { fill: #101113; }
-.topbar.topbar--onhero[data-scrolled="true"] .brand__mark path { fill: var(--surface); }
-.topbar.topbar--onhero .btn { --btn-bg: #fff; --btn-fg: #101113; }
-.topbar.topbar--onhero .btn--ghost {
-  --btn-bg: transparent; --btn-fg: #F5F5F7;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.24);
-}
-.topbar.topbar--onhero .btn--ghost:hover { background: rgba(255,255,255,.10); }
-.topbar.topbar--onhero .burger span { background: #fff; }
-/* Once it detaches from the block it becomes ordinary translucent chrome. */
-.topbar.topbar--onhero[data-scrolled="true"] {
-  background: var(--chrome-bg); color: var(--text);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.5);
-}
-.topbar.topbar--onhero[data-scrolled="true"]::after { display: block; }
-.topbar.topbar--onhero[data-scrolled="true"] .nav,
-.topbar.topbar--onhero[data-scrolled="true"] .brand {
-  background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none;
-}
-.topbar.topbar--onhero[data-scrolled="true"] .nav a { color: var(--text-soft); }
-.topbar.topbar--onhero[data-scrolled="true"] .nav a:hover,
-.topbar.topbar--onhero[data-scrolled="true"] .nav a[aria-current="page"] { color: var(--text); background: var(--hairline); }
-.topbar.topbar--onhero[data-scrolled="true"] .brand { color: var(--text); }
-.topbar.topbar--onhero[data-scrolled="true"] .btn { --btn-bg: var(--text); --btn-fg: var(--surface); }
-.topbar.topbar--onhero[data-scrolled="true"] .btn--ghost { --btn-fg: var(--text); box-shadow: inset 0 0 0 1px var(--hairline-strong); }
-.topbar.topbar--onhero[data-scrolled="true"] .burger span { background: var(--text); }
+.benefit h3 { font-size: 1.22rem; }
+.benefit p { margin-top: var(--s-2); font-size: .9rem; line-height: 1.5; color: var(--text-soft); }
 
 /* ---------- Chrome ---------- */
 /* Chrome is a translucent material the page scrolls *under*, not an opaque
@@ -316,38 +265,32 @@ p { margin: 0; letter-spacing: -0.003em; }
   gap: var(--s-4); padding-block: 18px;
   max-width: var(--w-page); margin-inline: auto; padding-inline: var(--s-6);
 }
-/* Capsules. The logo, the link group and the actions each sit in their own
-   rounded container floating over the hero — a segmented control, not a bar. */
 .brand {
   display: inline-flex; align-items: center; gap: var(--s-2);
-  padding: 10px 20px 10px 14px; border-radius: var(--r-full);
-  font-weight: 600; letter-spacing: -.018em; font-size: .97rem;
-  transition: background var(--t-fast) var(--ease-out);
+  font-weight: 800; letter-spacing: -.03em; font-size: 1.1rem;
 }
-.brand__mark { width: 26px; height: 26px; border-radius: 8px; flex: none; }
+.brand__mark { width: 30px; height: 30px; border-radius: 9px; flex: none; }
 
-.nav {
-  display: flex; align-items: center; gap: 2px;
-  padding: 6px; border-radius: var(--r-full);
-}
+.nav { display: flex; align-items: center; gap: var(--s-1); }
 .nav a {
   padding: 8px 14px; border-radius: var(--r-full);
-  font-size: .875rem; font-weight: 500; letter-spacing: -.006em;
-  color: var(--text-soft); white-space: nowrap;
+  font-size: .905rem; font-weight: 500; letter-spacing: -.004em;
+  color: var(--text); white-space: nowrap;
   transition: color var(--t-fast) var(--ease-out), background var(--t-fast) var(--ease-out);
 }
-.nav a:hover { color: var(--text); background: var(--hairline); }
-.nav a[aria-current="page"] { color: var(--text); background: var(--hairline); }
+.nav a:hover { background: var(--surface-sunk); }
+.nav a[aria-current="page"] { font-weight: 700; }
 
 /* ---------- Announcement bar ---------- */
 .announce {
   display: flex; align-items: center; justify-content: center;
   gap: var(--s-8); flex-wrap: wrap;
-  height: 38px; padding-inline: var(--s-6);
-  font-size: .82rem; color: var(--text-soft);
+  min-height: 38px; padding: var(--s-2) var(--s-6);
+  background: var(--green); color: var(--green-tint);
+  font-size: .8rem; font-weight: 600;
 }
 .announce span { display: inline-flex; align-items: center; gap: var(--s-2); }
-.announce svg { flex: none; opacity: .75; }
+.announce svg { flex: none; opacity: .85; }
 @media (max-width: 560px) { .announce { gap: var(--s-5); font-size: .76rem; } }
 .topbar__cta { display: flex; align-items: center; gap: var(--s-2); }
 .burger { display: none; width: 40px; height: 40px; place-items: center; border-radius: var(--r-sm); }
@@ -385,20 +328,21 @@ p { margin: 0; letter-spacing: -0.003em; }
 
 /* ---------- Buttons ---------- */
 .btn {
-  --btn-bg: var(--text); --btn-fg: var(--surface);
+  --btn-bg: var(--green); --btn-fg: #fff;
   display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
-  padding: .72rem 1.3rem; border-radius: var(--r-full);
+  padding: .68rem 1.3rem; border-radius: var(--r-full);
   background: var(--btn-bg); color: var(--btn-fg);
-  font-size: .93rem; font-weight: 560; letter-spacing: -.008em;
+  font-size: .9rem; font-weight: 700; letter-spacing: -.004em;
   white-space: nowrap;
   transition: transform var(--t-fast) var(--ease-out), opacity var(--t-fast) var(--ease-out), background var(--t-fast) var(--ease-out);
   will-change: transform;
 }
-.btn:hover { opacity: .88; }
+.btn:hover { background: var(--green-deep); opacity: 1; }
 .btn:active { transform: scale(.972); }
 .btn--sm { padding: .5rem 1rem; font-size: .86rem; }
-.btn--lg { padding: .92rem 1.7rem; font-size: 1rem; }
+.btn--lg { padding: .875rem 1.625rem; font-size: .97rem; }
 .btn--ghost { --btn-bg: transparent; --btn-fg: var(--text); box-shadow: inset 0 0 0 1px var(--hairline-strong); }
+.btn--ghost:hover { background: var(--surface-sunk); }
 .btn--ghost:hover { background: var(--hairline); opacity: 1; }
 .btn--gold { --btn-bg: var(--gold); --btn-fg: #17181A; }
 

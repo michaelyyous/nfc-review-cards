@@ -160,6 +160,9 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <meta property="og:locale" content="da_DK">
 <meta property="og:image" content="%s/assets/og.png">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="%sassets/styles.css">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%%2317181A'/><path d='M16 8.5l2.06 4.36 4.69.69-3.4 3.4.81 4.79L16 19.47l-4.16 2.27.8-4.79-3.39-3.4 4.69-.69L16 8.5z' fill='%%23F5B301'/></svg>">
 <link rel="canonical" href="%s">
@@ -315,24 +318,69 @@ def hero(eyebrow, h1, lede, buttons="", note="", extra=""):
 
 
 # ================================================================ FORSIDE
+ARROW = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+         'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+         '<path d="M5 12h14M13 6l6 6-6 6"/></svg>')
+CHECK = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+         'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+         '<path d="M20 6L9 17l-5-5"/></svg>')
+
+ICO_STAR = ('<svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+            '<path d="M12 2l2.9 6.2 6.6.8-4.8 4.8 1.2 6.7L12 17.3 6.1 20.5l1.2-6.7L2.5 9l6.6-.8L12 2z"/></svg>')
+ICO_TAG = ('<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" '
+           'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+           '<path d="M20.6 13.4l-7.2 7.2a2 2 0 01-2.8 0L3 13V3h10l7.6 7.6a2 2 0 010 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>')
+ICO_TRUCK = ('<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" '
+             'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+             '<path d="M1 3h15v13H1zM16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>')
+ICO_NO = ('<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" '
+          'aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>')
+
+
 home_hero = """
   <div class="heroblock__in">
     <div class="heroblock__grid">
       <div class="stack-6" data-reveal>
-        <span class="pill">%s Ingen app · intet abonnement</span>
-        <h1 class="display" style="font-size:clamp(2.3rem,4.6vw,3.9rem)">Kunden lægger telefonen på kortet.<br>Anmeldelsen er skrevet.</h1>
-      </div>
-      <div class="stack-6" data-reveal="80">
-        <p class="lede">De fleste tilfredse kunder giver aldrig en anmeldelse. Ikke fordi de ikke vil — men fordi de skal finde din side, logge ind og skrive. Kortet fjerner alle tre trin.</p>
-        <div class="row">
-          <a class="btn btn--lg" href="bestil.html">Bestil — fra %d kr</a>
-          <a class="btn btn--ghost btn--lg" href="saadan-virker-det.html">Sådan virker det</a>
+        <div class="hero__eyebrow">
+          <span class="stars">%s</span>
+          <span>Anmeldelseskort til danske virksomheder</span>
         </div>
-        <p class="tiny">Sendes 1–2 hverdage · Gratis programmering · 14 dages fortrydelsesret</p>
+        <h1 class="display">Kunden skriver anmeldelsen,<br>før de går ud ad døren.</h1>
+        <p class="lede">Læg kortet på disken. Kunden holder telefonen mod det, og jeres anmeldelsesside åbner af sig selv. Ingen app, intet abonnement, ingen løbende udgift.</p>
+        <div class="hero__buy">
+          <span class="hero__price"><small>Fra</small><strong>%d kr.</strong></span>
+          <a class="btn btn--lg" href="bestil.html">Se kort og priser %s</a>
+        </div>
+        <div class="ticks">
+          <span>%s Sendes på 1–2 hverdage</span>
+          <span>%s Intet abonnement</span>
+          <span>%s iPhone og Android</span>
+        </div>
+        <p class="small">Køber du flere? <a href="maengderabat.html" style="text-decoration:underline">Mængderabat ned til %d kr. pr. kort →</a></p>
+      </div>
+      <div data-reveal="80">
+        <div class="hero__media">
+          <div class="photo photo--empty" style="height:100%%;aspect-ratio:auto">
+            <p><strong>Billedplads.</strong><br>Foto af en kunde der holder telefonen mod kortet. Læg filen i <code>assets/img/</code> og erstat denne blok med et <code>&lt;img&gt;</code>.</p>
+          </div>
+        </div>
       </div>
     </div>
-    <div data-reveal="140" style="margin-top:clamp(var(--s-8),4vw,var(--s-12))">%s</div>
-  </div>""" % (GOOGLE_G, P1, CARD_3D)
+  </div>""" % (star() * 5, P1, ARROW, CHECK, CHECK, CHECK, TIERS[-1][1])
+
+home_benefits = """
+<section class="benefits">
+  <div class="benefits__in">
+    <div class="benefit"><div class="benefit__ico">%s</div>
+      <div><h3>Glade kunder</h3><p>Udtalelser indsættes her, når de første kunder har skrevet dem.</p></div></div>
+    <div class="benefit"><div class="benefit__ico">%s</div>
+      <div><h3>ned til %d kr</h3><p>pr. kort. Rabatten stiger af sig selv med antallet.</p></div></div>
+    <div class="benefit"><div class="benefit__ico">%s</div>
+      <div><h3>1–2 hverdage</h3><p>til vi sender. Derefter 1–3 dage med GLS, DAO eller PostNord.</p></div></div>
+    <div class="benefit"><div class="benefit__ico">%s</div>
+      <div><h3>0 kr</h3><p>i abonnement. Du køber kortet, og så er det dit.</p></div></div>
+  </div>
+</section>""" % (ICO_STAR, ICO_TAG, TIERS[-1][1], ICO_TRUCK, ICO_NO)
 
 STATS = [
     ("0", "kr/md", "Intet abonnement",
@@ -343,12 +391,6 @@ STATS = [
      "Vi sender 1–2 hverdage efter ordre, med GLS eller PostNord."),
 ]
 
-ARROW = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
-         'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
-         '<path d="M5 12h14M13 6l6 6-6 6"/></svg>')
-CHECK = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" '
-         'stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
-         '<path d="M20 6L9 17l-5-5"/></svg>')
 
 home_stats = """
 <section class="section">
@@ -609,7 +651,7 @@ home_sticky = """
 page("index.html",
      "Anmeldelseskort til Google med NFC — {brand}",
      "NFC-anmeldelseskort til danske virksomheder. Kunden lægger telefonen på kortet, og din Google-anmeldelsesside åbner. Fra %d kr. Intet abonnement." % P1,
-     home_stats + home_steps + home_quotes + home_products
+     home_benefits + home_stats + home_steps + home_quotes + home_products
      + home_prices + home_trust + home_faq + home_guides + home_sticky,
      current="index.html", hero=home_hero)
 
