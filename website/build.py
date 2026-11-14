@@ -242,7 +242,7 @@ def footer(depth=0):
     </div>
   </div>
 </footer>
-<script src="%sassets/app.js?v=13"></script>
+<script src="%sassets/app.js?v=14"></script>
 </body>
 </html>""" % ((up, LOGO) + (up,) * 13 + (PAYMENTS, up))
 

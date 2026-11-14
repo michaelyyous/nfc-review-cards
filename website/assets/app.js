@@ -19,7 +19,7 @@ const BRAND = {
    Det er tallet sidst i URL'en, fx .../variants/45678901234567
    Mængderabatten sættes op i Shopify under Rabatter → Automatisk rabat. */
 const SHOPIFY = {
-  domain: 'bjq8jd-17.myshopify.com',
+  domain: 'shop.reviewpartneren.dk',
   variantId: '60500735557977',   // Google-anmeldelseskort, sort
 };
 
