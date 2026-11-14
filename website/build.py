@@ -32,7 +32,7 @@ def kr(n):
 
 # ---------------------------------------------------------------- nav
 ORDER = "bestil.html"
-BASE_URL = "https://nfc-review-cards-weld.vercel.app"
+BASE_URL = "https://reviewpartneren.dk"
 
 ORG_LD = {
     "@context": "https://schema.org",
@@ -1456,7 +1456,7 @@ for p in PAGES:
 
 
 # ================================================================ SEO + 404
-BASE = "https://nfc-review-cards-weld.vercel.app"
+BASE = "https://reviewpartneren.dk"
 urls = "".join(
     '  <url><loc>%s/%s</loc></url>\n' % (BASE, p.replace("index.html", "").replace(".html", ""))
     for p in PAGES)

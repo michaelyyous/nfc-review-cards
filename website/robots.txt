@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nfc-review-cards-weld.vercel.app/sitemap.xml
+Sitemap: https://reviewpartneren.dk/sitemap.xml

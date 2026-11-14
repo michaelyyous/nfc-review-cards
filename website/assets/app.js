@@ -4,10 +4,10 @@
    ============================================================ */
 
 const BRAND = {
-  name: '',              // ← Sæt navnet her. Tomt = pladsholder vises.
+  name: 'Reviewpartneren',
   placeholder: 'Firmanavn',
   cvr: '',               // ← CVR-nummer
-  email: '',             // ← support-mail
+  email: 'support@reviewpartneren.dk',
   city: 'Danmark',
 };
 
