@@ -163,7 +163,7 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="%sassets/styles.css?v=15">
+<link rel="stylesheet" href="%sassets/styles.css?v=17">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%%2317181A'/><path d='M16 8.5l2.06 4.36 4.69.69-3.4 3.4.81 4.79L16 19.47l-4.16 2.27.8-4.79-3.39-3.4 4.69-.69L16 8.5z' fill='%%23F5B301'/></svg>">
 <link rel="canonical" href="%s">
 <script type="application/ld+json">%s</script>
@@ -376,7 +376,7 @@ home_hero = """
       </div>
       <div data-reveal="80">
         <div class="hero__media">
-          <img src="assets/img/card-hero.png" width="1600" height="1200" alt="Google Review-kort i sort og hvid, set skråt oppefra" fetchpriority="high">
+          <img src="assets/img/card-hero.png?v=2" width="1600" height="1200" alt="Google Review-kort i sort og hvid, set skråt oppefra" fetchpriority="high">
         </div>
       </div>
     </div>
@@ -496,7 +496,9 @@ home_why = """
     </div>
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%%,20rem),1fr));gap:var(--s-10);align-items:center">
       <div data-reveal>
-        <img src="assets/img/card-front.png" width="1800" height="1136" alt="Google Review-kortets hvide forside med Google-logo, fem stjerner og NFC-symbol" loading="lazy">
+        <div class="photo photo--card">
+          <img src="assets/img/card-front.png?v=2" width="1368" height="864" alt="Google Review-kortets hvide forside med Google-logo, fem stjerner og NFC-symbol" loading="lazy">
+        </div>
       </div>
       <div class="stack-6" data-reveal="60">
         <div class="stack"><h3>Det sker ved disken</h3>
@@ -545,7 +547,7 @@ home_products = """
       </div>
       <div class="prod" data-reveal="80">
         <div class="prod__media">
-          <img src="assets/img/card-back.png" width="1800" height="1136" alt="Google Review-kortets sorte NFC-side" loading="lazy">
+          <img src="assets/img/card-back.png?v=2" width="1368" height="864" alt="Google Review-kortets sorte NFC-side" loading="lazy">
         </div>
         <div class="prod__body">
           <span class="eyebrow">Dit eget motiv</span>

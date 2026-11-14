@@ -400,6 +400,11 @@ p { margin: 0; letter-spacing: -0.003em; }
   box-shadow: inset 0 0 0 1px var(--hairline);
 }
 .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Kortfotos har kortets eget format og må ikke blive større end et kort
+   ser troværdigt ud i. Uden loftet fylder de hele spalten og læses som
+   grafik i stedet for som et produkt. */
+.photo--card { aspect-ratio: 1368 / 864; max-width: 30rem; margin-inline: auto; }
 .photo--empty { display: grid; place-items: center; text-align: center; padding: var(--s-6); }
 .photo--empty p { color: var(--text-faint); font-size: .82rem; max-width: 18rem; }
 
