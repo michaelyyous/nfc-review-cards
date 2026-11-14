@@ -340,6 +340,18 @@ ICO_NO = ('<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="c
           'aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg>')
 
 
+# Badge under prisen i hero'en. Teksten siger det sande: teknologien er
+# gennemprøvet. Den siger IKKE noget om hvor mange anmeldelser vores egne
+# kort har samlet ind — det tal findes ikke endnu og ville kraeve
+# dokumentation efter markedsfoeringslovens § 13.
+HERO_BADGE = """
+        <div class="proof">
+          %s
+          <span><strong>Samme NFC-teknologi</strong> som butikker over hele verden bruger til Google-anmeldelser</span>
+        </div>""" % GOOGLE_G
+
+
+
 home_hero = """
   <div class="heroblock__in">
     <div class="heroblock__grid">
@@ -354,6 +366,7 @@ home_hero = """
           <span class="hero__price"><small>Fra</small><strong>%d kr.</strong></span>
           <a class="btn btn--lg" href="bestil.html">Se kort og priser %s</a>
         </div>
+        %s
         <div class="ticks">
           <span>%s Sendes på 1–2 hverdage</span>
           <span>%s Intet abonnement</span>
@@ -367,7 +380,7 @@ home_hero = """
         </div>
       </div>
     </div>
-  </div>""" % (star() * 5, P1, ARROW, CHECK, CHECK, CHECK, TIERS[-1][1])
+  </div>""" % (star() * 5, P1, ARROW, HERO_BADGE, CHECK, CHECK, CHECK, TIERS[-1][1])
 
 # ---------------------------------------------------------------- kundelogoer
 # Udfyld KUN med virksomheder der faktisk er kunder OG har sagt ja til at blive
