@@ -32,6 +32,8 @@ def kr(n):
 
 # ---------------------------------------------------------------- nav
 BRAND_NAME = "Reviewpartneren"   # bages ind i titler og synlig tekst ved build
+BRAND_EMAIL = "support@reviewpartneren.dk"  # skal findes som rigtig postkasse
+BRAND_CVR = ""                   # udfyldes naar CVR-nummeret er tildelt
 ORDER = "bestil.html"
 BASE_URL = "https://reviewpartneren.dk"
 
@@ -271,6 +273,12 @@ def page(path, title, desc, body, current=None, depth=0, hero=None, jsonld=None)
     # Bag navnet ind, saa titler og synlig tekst er korrekte uden JavaScript
     html = html.replace("{brand}", BRAND_NAME)
     html = html.replace("<span data-brand>Firmanavn</span>", "<span data-brand>%s</span>" % BRAND_NAME)
+    # Kontaktoplysninger er lovpligtige, saa de skal staa i kilden og ikke kun
+    # blive sat af JavaScript — ellers ser crawlere og alt uden JS en pladsholder.
+    html = html.replace('<a data-email href="#"', '<a data-email href="mailto:%s"' % BRAND_EMAIL)
+    html = html.replace(">support@\u2026</a>", ">%s</a>" % BRAND_EMAIL)
+    if BRAND_CVR:
+        html = html.replace("<span data-cvr>\u2014</span>", "<span data-cvr>%s</span>" % BRAND_CVR)
     out = ROOT / path
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html, encoding="utf-8")
@@ -1409,7 +1417,7 @@ qty_btns = "".join(
 
 bestil = hero(
     "Bestil", "Bestil Google Review-kort",
-    "Vælg antal, udfyld felterne, og send. Du får en ordrebekræftelse med betalingsoplysninger — vi trækker ingen penge her på siden.",
+    "Vælg antal, udfyld felterne, og gå til betaling. Du betaler sikkert med kort, MobilePay eller Klarna, og får ordrebekræftelsen med det samme.",
 ) + """
 <section class="section--tight">
   <div class="wrap">
@@ -1485,7 +1493,7 @@ bestil = hero(
             <p class="tiny" data-sum-ex>heraf moms — kr · ekskl. moms — kr</p>
             <p class="tiny" data-sum-save style="color:var(--green);font-weight:560"></p>
             <button class="btn btn--lg" type="submit" style="width:100%%;margin-top:var(--s-5)">Send bestilling</button>
-            <p class="tiny" style="margin-top:var(--s-3)">Der trækkes ingen penge nu. Du får en bekræftelse med betalingsoplysninger.</p>
+            <p class="tiny" style="margin-top:var(--s-3)">Du sendes til vores sikre betalingsside. Kortoplysninger indtastes aldrig her på sitet.</p>
             <p class="tiny" style="margin-top:var(--s-4)">14 dages fortrydelsesret · 2 års reklamationsret · Sendes 1–2 hverdage</p>
           </div>
         </aside>
