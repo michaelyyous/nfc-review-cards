@@ -31,6 +31,7 @@ def kr(n):
     return f"{n:,}".replace(",", ".")
 
 # ---------------------------------------------------------------- nav
+BRAND_NAME = "Reviewpartneren"   # bages ind i titler og synlig tekst ved build
 ORDER = "bestil.html"
 BASE_URL = "https://reviewpartneren.dk"
 
@@ -267,6 +268,9 @@ def page(path, title, desc, body, current=None, depth=0, hero=None, jsonld=None)
     canon = BASE_URL + "/" + path.replace("index.html", "").replace(".html", "")
     ld = _json.dumps(jsonld or ORG_LD, ensure_ascii=False, separators=(",", ":"))
     html = head(title, desc, depth, canon, ld) + chrome + body + footer(depth)
+    # Bag navnet ind, saa titler og synlig tekst er korrekte uden JavaScript
+    html = html.replace("{brand}", BRAND_NAME)
+    html = html.replace("<span data-brand>Firmanavn</span>", "<span data-brand>%s</span>" % BRAND_NAME)
     out = ROOT / path
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html, encoding="utf-8")
