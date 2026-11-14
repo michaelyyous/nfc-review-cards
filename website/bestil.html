@@ -61,7 +61,17 @@
           </fieldset>
 
           <fieldset class="ofield">
-            <legend class="eyebrow">2 · Programmering</legend>
+            <legend class="eyebrow">2 · Hvem køber?</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="koebertype" value="Til egen virksomhed" checked>
+                <span><strong>Til min egen virksomhed</strong><br><span class="small">Kortene skal ligge i min butik, salon eller klinik.</span></span></label>
+              <label class="opt"><input type="radio" name="koebertype" value="Til videresalg">
+                <span><strong>Jeg vil sælge dem videre</strong><br><span class="small">Jeg køber ind og sælger til butikker i mit område. Du behøver ikke have et CVR for at bestille.</span></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">3 · Programmering</legend>
             <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
               <label class="opt"><input type="radio" name="programmering" value="Programmeret af jer" checked data-prog>
                 <span><strong>Programmér dem for mig</strong><br><span class="small">Gratis. Jeg sender linket nedenfor.</span></span></label>
@@ -76,7 +86,7 @@
           </fieldset>
 
           <fieldset class="ofield">
-            <legend class="eyebrow">3 · Levering</legend>
+            <legend class="eyebrow">4 · Levering</legend>
             <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
               <label class="opt"><input type="radio" name="levering" value="pakkeshop" checked data-ship>
                 <span><strong>Pakkeshop — gratis</strong><br><span class="small">GLS, DAO, PostNord eller Bring. Du vælger den nærmeste ved betaling.</span></span></label>
@@ -87,9 +97,9 @@
           </fieldset>
 
           <fieldset class="ofield">
-            <legend class="eyebrow">4 · Dine oplysninger</legend>
+            <legend class="eyebrow">5 · Dine oplysninger</legend>
             <div class="grid grid-2" style="gap:var(--s-4);margin-top:var(--s-3)">
-              <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" autocomplete="organization" required></div>
+              <div><label class="small" for="firma">Virksomhed <span class="tiny">(valgfrit)</span></label><input id="firma" name="virksomhed" class="inp" autocomplete="organization"></div>
               <div><label class="small" for="cvrf">CVR <span class="tiny">(valgfrit)</span></label><input id="cvrf" name="cvr" class="inp" inputmode="numeric" autocomplete="off"></div>
               <div><label class="small" for="navn">Navn</label><input id="navn" name="navn" class="inp" autocomplete="name" required></div>
               <div><label class="small" for="mail">E-mail</label><input id="mail" name="email" type="email" class="inp" autocomplete="email" inputmode="email" required></div>
@@ -128,7 +138,7 @@
 <rect width="32" height="32" rx="8" fill="currentColor"/>
 <path d="M16 8.5l2.06 4.36 4.69.69-3.4 3.4.81 4.79L16 19.47l-4.16 2.27.8-4.79-3.39-3.4 4.69-.69L16 8.5z" fill="var(--surface)"/>
 </svg><span data-brand>Reviewpartneren</span></a>
-        <p class="small" style="max-width:24rem">Google Review-kort til danske virksomheder. Ét tryk, og kunden står på din Google-anmeldelsesside. Intet abonnement.</p>
+        <p class="small" style="max-width:24rem">Google Review-kort til butikker, saloner og alle der vil sælge dem videre. Ét tryk, og kunden står på din Google-anmeldelsesside. Intet abonnement.</p>
       </div>
       <div>
         <h4>Produkt</h4>

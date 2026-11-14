@@ -538,6 +538,7 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
     if (SHOPIFY.domain && SHOPIFY.variantId) {
       const attrs = new URLSearchParams();
       attrs.set('attributes[Programmering]', d.programmering || '');
+      if (d.koebertype) attrs.set('attributes[Kundetype]', d.koebertype);
       if (d.google_link) attrs.set('attributes[Google-link]', d.google_link);
       if (d.virksomhed)  attrs.set('attributes[Virksomhed]', d.virksomhed);
       if (d.cvr)         attrs.set('attributes[CVR]', d.cvr);
@@ -556,10 +557,11 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
       `Fragt:            ${ship === 0 ? 'Gratis' : kr(ship) + ' kr'}`,
       `I ALT:            ${kr(goods + ship)} kr inkl. moms`,
       '',
+      `Kundetype:        ${d.koebertype || '—'}`,
       `Programmering:    ${d.programmering}`,
       d.google_link ? `Google-link:      ${d.google_link}` : null,
       '',
-      `Virksomhed:       ${d.virksomhed}`,
+      d.virksomhed ? `Virksomhed:       ${d.virksomhed}` : null,
       d.cvr ? `CVR:              ${d.cvr}` : null,
       `Navn:             ${d.navn}`,
       `E-mail:           ${d.email}`,

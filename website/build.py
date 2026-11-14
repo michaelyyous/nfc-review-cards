@@ -203,7 +203,7 @@ def footer(depth=0):
     <div class="foot__grid">
       <div>
         <a class="brand" href="%sindex.html" style="margin-bottom:var(--s-4)">%s<span data-brand>Firmanavn</span></a>
-        <p class="small" style="max-width:24rem">Google Review-kort til danske virksomheder. Ét tryk, og kunden står på din Google-anmeldelsesside. Intet abonnement.</p>
+        <p class="small" style="max-width:24rem">Google Review-kort til butikker, saloner og alle der vil sælge dem videre. Ét tryk, og kunden står på din Google-anmeldelsesside. Intet abonnement.</p>
       </div>
       <div>
         <h4>Produkt</h4>
@@ -346,7 +346,7 @@ home_hero = """
       <div class="stack-6" data-reveal>
         <div class="hero__eyebrow">
           <span class="stars">%s</span>
-          <span>Google Review-kort til danske virksomheder</span>
+          <span>Til butikker, saloner og alle der vil sælge dem videre</span>
         </div>
         <h1 class="display">Kunden skriver anmeldelsen,<br>før de går ud ad døren.</h1>
         <p class="lede">Læg kortet på disken. Kunden holder telefonen mod det, og jeres anmeldelsesside åbner af sig selv. Ingen app, intet abonnement, ingen løbende udgift.</p>
@@ -406,6 +406,27 @@ def marquee():
 </section>""" % (track, track)
 
 home_logos = marquee()
+
+
+home_paths = """
+<section class="section--tight">
+  <div class="wrap">
+    <div class="grid grid-2">
+      <div class="card" data-reveal>
+        <span class="eyebrow">Til din egen forretning</span>
+        <h3 style="margin-top:var(--s-3)">Kort til butikken</h3>
+        <p class="small" style="margin-top:var(--s-2)">Ét ved kassen, ét ved bordet. Vi programmerer dem til jeres Google-side inden afsendelse, så I bare lægger dem frem.</p>
+        <p class="small" style="margin-top:var(--s-5);font-weight:600"><a href="bestil.html">Bestil fra %d kr %s</a></p>
+      </div>
+      <div class="card" data-reveal="80">
+        <span class="eyebrow">Til videresalg</span>
+        <h3 style="margin-top:var(--s-3)">Køb ind og sælg videre</h3>
+        <p class="small" style="margin-top:var(--s-2)">Du behøver ikke et CVR for at bestille. Køber du flere, falder prisen af sig selv — ned til %d kr pr. kort. Fra 250 stk. får du fast indkøbspris og faktura.</p>
+        <p class="small" style="margin-top:var(--s-5);font-weight:600"><a href="forhandler.html">Se forhandlervilkår %s</a></p>
+      </div>
+    </div>
+  </div>
+</section>""" % (P1, ARROW, TIERS[-1][1], ARROW)
 
 
 home_benefits = """
@@ -686,8 +707,8 @@ home_sticky = """
 
 page("index.html",
      "Google Review-kort — tap og få anmeldelsen — {brand}",
-     "Google Review-kort til danske virksomheder. Kunden lægger telefonen på kortet, og jeres Google-anmeldelsesside åbner. Fra %d kr. Intet abonnement." % P1,
-     home_benefits + home_logos + home_stats + home_steps + home_why + home_quotes + home_products
+     "Google Review-kort til danske butikker — og til dig der vil købe ind og sælge videre. Kunden lægger telefonen på kortet, og anmeldelsessiden åbner. Fra %d kr. Intet abonnement." % P1,
+     home_benefits + home_paths + home_logos + home_stats + home_steps + home_why + home_quotes + home_products
      + home_prices + home_trust + home_faq + home_guides + home_sticky,
      current="index.html", hero=home_hero)
 
@@ -1389,7 +1410,17 @@ bestil = hero(
           </fieldset>
 
           <fieldset class="ofield">
-            <legend class="eyebrow">2 · Programmering</legend>
+            <legend class="eyebrow">2 · Hvem køber?</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="koebertype" value="Til egen virksomhed" checked>
+                <span><strong>Til min egen virksomhed</strong><br><span class="small">Kortene skal ligge i min butik, salon eller klinik.</span></span></label>
+              <label class="opt"><input type="radio" name="koebertype" value="Til videresalg">
+                <span><strong>Jeg vil sælge dem videre</strong><br><span class="small">Jeg køber ind og sælger til butikker i mit område. Du behøver ikke have et CVR for at bestille.</span></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">3 · Programmering</legend>
             <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
               <label class="opt"><input type="radio" name="programmering" value="Programmeret af jer" checked data-prog>
                 <span><strong>Programmér dem for mig</strong><br><span class="small">Gratis. Jeg sender linket nedenfor.</span></span></label>
@@ -1404,7 +1435,7 @@ bestil = hero(
           </fieldset>
 
           <fieldset class="ofield">
-            <legend class="eyebrow">3 · Levering</legend>
+            <legend class="eyebrow">4 · Levering</legend>
             <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
               <label class="opt"><input type="radio" name="levering" value="pakkeshop" checked data-ship>
                 <span><strong>Pakkeshop — gratis</strong><br><span class="small">GLS, DAO, PostNord eller Bring. Du vælger den nærmeste ved betaling.</span></span></label>
@@ -1415,9 +1446,9 @@ bestil = hero(
           </fieldset>
 
           <fieldset class="ofield">
-            <legend class="eyebrow">4 · Dine oplysninger</legend>
+            <legend class="eyebrow">5 · Dine oplysninger</legend>
             <div class="grid grid-2" style="gap:var(--s-4);margin-top:var(--s-3)">
-              <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" autocomplete="organization" required></div>
+              <div><label class="small" for="firma">Virksomhed <span class="tiny">(valgfrit)</span></label><input id="firma" name="virksomhed" class="inp" autocomplete="organization"></div>
               <div><label class="small" for="cvrf">CVR <span class="tiny">(valgfrit)</span></label><input id="cvrf" name="cvr" class="inp" inputmode="numeric" autocomplete="off"></div>
               <div><label class="small" for="navn">Navn</label><input id="navn" name="navn" class="inp" autocomplete="name" required></div>
               <div><label class="small" for="mail">E-mail</label><input id="mail" name="email" type="email" class="inp" autocomplete="email" inputmode="email" required></div>
