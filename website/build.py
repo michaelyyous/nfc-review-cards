@@ -426,6 +426,11 @@ def marquee():
   </div>
 </section>""" % (track, track)
 
+# Logobjaelken, kundecitaterne og tal-sektionen er taget af forsiden 2026-11-14.
+# De to foerste stod med synlige pladsholdere og kan ikke vaere paa en side vi
+# koeber trafik til; den tredje gentog bare fordels-striben ovenfor. Koden bliver
+# staaende faerdig, saa logoer og citater kan saettes ind den dag der er rigtige
+# kunder at vise — saet dem tilbage i page("index.html", ...) nedenfor.
 home_logos = marquee()
 
 
@@ -454,7 +459,7 @@ home_benefits = """
 <section class="benefits">
   <div class="benefits__in">
     <div class="benefit"><div class="benefit__ico">%s</div>
-      <div><h3>Glade kunder</h3><p>Udtalelser indsættes her, når de første kunder har skrevet dem.</p></div></div>
+      <div><h3>Stjernerne står klar</h3><p>Kortet åbner skrivefeltet — ikke bare din Google-profil.</p></div></div>
     <div class="benefit"><div class="benefit__ico">%s</div>
       <div><h3>ned til %d kr</h3><p>pr. kort. Rabatten stiger af sig selv med antallet.</p></div></div>
     <div class="benefit"><div class="benefit__ico">%s</div>
@@ -501,6 +506,7 @@ home_why = """
       <span class="eyebrow">Hvorfor det virker</span>
       <h2 class="h2">Problemet er ikke viljen.<br>Det er de tolv sekunder.</h2>
       <p class="lede" style="max-width:40rem">En kunde der lige har haft en god oplevelse vil gerne sige det. Men i det øjeblik hun skal låse telefonen op, åbne Google, søge efter dit firma og finde den rigtige knap, er øjeblikket væk.</p>
+      <p class="tiny" style="max-width:40rem">Vi skriver ikke hvor mange flere anmeldelser du får. Det afhænger af hvor mange kunder du har, og hvor kortet ligger — og vi har ingen data der kan bære det løfte.</p>
     </div>
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%%,20rem),1fr));gap:var(--s-10);align-items:center">
       <div data-reveal>
@@ -684,10 +690,11 @@ home_faq = """
     <div class="stack-8" style="max-width:48rem">
       <h2 class="h2" data-reveal>Spørgsmål</h2>
       <div data-reveal="60">%s</div>
+      <p class="small" data-reveal="100"><a href="faq.html" style="text-decoration:underline">Se alle spørgsmål og svar %s</a></p>
       <div data-reveal="120"><a class="btn btn--lg" href="anmeldelseskort.html">Se kortet — fra %d kr %s</a></div>
     </div>
   </div>
-</section>""" % (acc([FAQ_ALL[2], FAQ_ALL[0], FAQ_ALL[10], FAQ_ALL[11], FAQ_ALL[7], FAQ_ALL[6], FAQ_ALL[3]]), P1, ARROW)
+</section>""" % (acc([FAQ_ALL[0], FAQ_ALL[11], FAQ_ALL[7]]), ARROW, P1, ARROW)
 
 GUIDE_CARDS = [
     ("saadan-virker-det.html", "Sådan virker det", "Derfor virker et Google Review-kort",
@@ -731,7 +738,7 @@ home_sticky = """
 page("index.html",
      "Google Review-kort — tap og få anmeldelsen — {brand}",
      "Google Review-kort til danske butikker — og til dig der vil købe ind og sælge videre. Kunden lægger telefonen på kortet, og anmeldelsessiden åbner. Fra %d kr. Intet abonnement." % P1,
-     home_benefits + home_paths + home_logos + home_stats + home_steps + home_why + home_quotes + home_products
+     home_benefits + home_paths + home_steps + home_why + home_products
      + home_prices + home_trust + home_faq + home_guides + home_sticky,
      current="index.html", hero=home_hero)
 
