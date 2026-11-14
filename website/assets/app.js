@@ -19,8 +19,8 @@ const BRAND = {
    Det er tallet sidst i URL'en, fx .../variants/45678901234567
    Mængderabatten sættes op i Shopify under Rabatter → Automatisk rabat. */
 const SHOPIFY = {
-  domain: '',            // ← fx 'dit-shop.myshopify.com'
-  variantId: '',         // ← fx '45678901234567'
+  domain: 'bjq8jd-17.myshopify.com',
+  variantId: '60500735557977',   // Google-anmeldelseskort, sort
 };
 
 /* Fragt. Pakkeshop er gratis uanset ordrestørrelse; hjemmelevering koster. */
