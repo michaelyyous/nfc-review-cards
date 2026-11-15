@@ -1,0 +1,90 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Card photo renderer</title>
+<style>html,body{margin:0;background:transparent;overflow:hidden}canvas{display:block}</style>
+<canvas id="c"></canvas>
+<script>window.__cardNoViewer = true;</script>
+<script type="module">
+// Product shots rendered from the same 3D card the site uses.
+// ?shot=hero  → both cards on a surface (front page)
+// ?shot=front / back → one card, for the smaller section images
+import { THREE, CARD, makeCard, makeRenderer, makeScene, loadTextures } from '../assets/card3d.js';
+
+const shot = new URLSearchParams(location.search).get('shot') || 'hero';
+const W = innerWidth, H = innerHeight;
+const canvas = document.getElementById('c');
+const renderer = makeRenderer(canvas, { preserve: true });
+renderer.setPixelRatio(1);
+renderer.setSize(W, H);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const [front, back] = await loadTextures(renderer, new URL('../', location.href).href);
+const { scene, keyLight } = makeScene(renderer, { envIntensity: 0.55, key: 1.1 });
+
+// Floor that only shows shadow, so the page's own background shows through.
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.ShadowMaterial({ opacity: 0.32 }));
+floor.rotation.x = -Math.PI / 2;
+floor.receiveShadow = true;
+scene.add(floor);
+
+keyLight.position.set(-9, 13, 5);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(768, 768);
+keyLight.shadow.bias = -0.0004;
+Object.assign(keyLight.shadow.camera, { left: -12, right: 12, top: 12, bottom: -12, near: 1, far: 40 });
+
+// A second, tighter shadow so the card sits ON the surface instead of hovering.
+const contact = new THREE.DirectionalLight(0xffffff, 0.35);
+contact.position.set(-1, 20, 2);
+contact.castShadow = true;
+contact.shadow.mapSize.set(2048, 2048);
+Object.assign(contact.shadow.camera, { left: -12, right: 12, top: 12, bottom: -12, near: 1, far: 40 });
+scene.add(contact);
+
+const lay = (card, faceUp, x, z, turn) => {
+  card.traverse(o => { if (o.isMesh) o.castShadow = true; });
+  // Black side up needs a half turn in-plane too, or it lands upside down.
+  card.rotation.set(faceUp === 'white' ? -Math.PI / 2 : Math.PI / 2, 0, faceUp === 'white' ? 0 : Math.PI);
+  const holder = new THREE.Group();
+  holder.add(card);
+  card.position.y = CARD.d / 2 + 0.001;
+  // Soft contact shadow: a blurred card silhouette on the floor, nudged away
+  // from the light. A flat card's real shadow sits exactly under it, so
+  // without this it looks pasted on.
+  const sc = document.createElement('canvas');
+  sc.width = 320; sc.height = 460;
+  const g = sc.getContext('2d');
+  g.filter = 'blur(22px)';
+  g.fillStyle = 'rgba(0,0,0,1)';
+  g.beginPath(); g.roundRect(56, 56, 208, 348, 14); g.fill();
+  const tex = new THREE.CanvasTexture(sc);
+  const sh = new THREE.Mesh(
+    new THREE.PlaneGeometry(CARD.w * 320 / 208, CARD.h * 460 / 348),
+    new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.30, depthWrite: false }),
+  );
+  sh.rotation.x = -Math.PI / 2;
+  sh.position.set(0.22, 0.0005, 0.32);
+  holder.add(sh);
+  holder.rotation.y = turn;
+  holder.position.set(x, 0, z);
+  scene.add(holder);
+  return holder;
+};
+
+const camera = new THREE.PerspectiveCamera(26, W / H, 1, 200);
+
+if (shot === 'hero') {
+  lay(makeCard(front, back), 'white', -3.45, 0.45, THREE.MathUtils.degToRad(12));
+  lay(makeCard(front, back), 'black',  3.45, -0.35, THREE.MathUtils.degToRad(-9));
+  camera.position.set(0.5, 20, 15);
+  camera.lookAt(0, 0, 0.2);
+} else {
+  lay(makeCard(front, back), shot === 'back' ? 'black' : 'white', 0, 0, THREE.MathUtils.degToRad(shot === 'back' ? -14 : 14));
+  camera.position.set(0.3, 17, 13);
+  camera.lookAt(0, 0, 0.3);
+}
+
+renderer.render(scene, camera);
+document.title = 'done';
+</script>

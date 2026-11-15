@@ -404,7 +404,7 @@ p { margin: 0; letter-spacing: -0.003em; }
 /* Kortfotos har kortets eget format og må ikke blive større end et kort
    ser troværdigt ud i. Uden loftet fylder de hele spalten og læses som
    grafik i stedet for som et produkt. */
-.photo--card { aspect-ratio: 1368 / 864; max-width: 30rem; margin-inline: auto; }
+.photo--card { aspect-ratio: 1 / 1; max-width: 28rem; margin-inline: auto; }
 .photo--empty { display: grid; place-items: center; text-align: center; padding: var(--s-6); }
 .photo--empty p { color: var(--text-faint); font-size: .82rem; max-width: 18rem; }
 
@@ -439,6 +439,9 @@ p { margin: 0; letter-spacing: -0.003em; }
 .prod__foot { margin-top: auto; padding-top: var(--s-4); }
 
 /* ---------- Order form ---------- */
+.split { display: grid; gap: var(--s-6); align-items: center; }
+@media (min-width: 900px) { .split { grid-template-columns: 1fr 22rem; gap: var(--s-10); } }
+.split .stage { padding: var(--s-6) 0 var(--s-4); }
 .order__grid { display: grid; gap: var(--s-10); align-items: start; }
 @media (min-width: 900px) { .order__grid { grid-template-columns: 1fr 22rem; } }
 
@@ -639,11 +642,12 @@ textarea.inp { resize: vertical; min-height: 5rem; }
    transition would fight the physics and break interruptibility. */
 .stage {
   display: grid; place-items: center; gap: var(--s-5);
+  overflow-x: clip;               /* the WebGL canvas is wider than the card */
   padding: var(--s-10) 0;
 }
 .card3d-wrap {
   position: relative;
-  width: min(100%, 23rem); aspect-ratio: 85.6 / 54;
+  width: min(100%, 15rem); aspect-ratio: 54 / 85.6;
   perspective: 1500px;
   touch-action: none;               /* we own the gesture */
   cursor: grab;
@@ -660,7 +664,7 @@ textarea.inp { resize: vertical; min-height: 5rem; }
 }
 .card3d__face {
   position: absolute; inset: 0;
-  border-radius: 13px; overflow: hidden;
+  border-radius: 5.9% / 3.7%; overflow: hidden;
   backface-visibility: hidden;
   box-shadow: 0 22px 48px rgba(0,0,0,.30), 0 4px 12px rgba(0,0,0,.16), 0 0 0 .5px rgba(0,0,0,.14);
 }
@@ -687,8 +691,15 @@ textarea.inp { resize: vertical; min-height: 5rem; }
     transparent 58%);
   mix-blend-mode: screen;
 }
+.card3d__face svg { display: block; }
+/* WebGL takes over once card3d.js has loaded; the CSS card is the fallback. */
+.card3d__gl {
+  position: absolute; left: -30%; top: -30%; width: 160%; height: 160%;
+  pointer-events: none;
+}
+.card3d-wrap[data-gl="true"] .card3d { visibility: hidden; }
 .card3d__shadow {
-  position: absolute; left: 6%; right: 6%; bottom: -11%;
+  position: absolute; left: 6%; right: 6%; bottom: -7%;
   height: 26px; border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(0,0,0,.34), transparent 72%);
   filter: blur(14px);

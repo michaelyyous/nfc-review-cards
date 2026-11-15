@@ -222,6 +222,7 @@ function projectMomentum(velocity, decelerationRate = 0.998) {
   }
 
   function paint(ry, rx) {
+    if (window.__cardGL) window.__cardGL.render(ry, rx);
     card.style.setProperty('--rx', rx.toFixed(2) + 'deg');
     card.style.setProperty('--ry', ry.toFixed(2) + 'deg');
 
@@ -382,6 +383,18 @@ function projectMomentum(velocity, decelerationRate = 0.998) {
 
   paint(sy.value, sx.value);
   requestAnimationFrame(frame);
+
+  // The real-3D renderer (three.js) is fetched only when the card is about to
+  // be seen. Until it is ready — or if WebGL is missing — the CSS card shows.
+  const glSrc = document.currentScript
+    ? new URL('card3d.js?v=1', document.currentScript.src).href
+    : 'assets/card3d.js?v=1';
+  const io = new IntersectionObserver(entries => {
+    if (!entries.some(e => e.isIntersecting)) return;
+    io.disconnect();
+    import(glSrc).catch(err => console.warn('card3d:', err));
+  }, { rootMargin: '400px' });
+  io.observe(wrap);
 })();
 
 /* ---------- Quantity → price calculator ---------- */

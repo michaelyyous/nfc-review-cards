@@ -88,42 +88,65 @@ _G_PATHS = """      <path fill="#4285F4" d="M255.878 133.451c0-10.734-.871-18.56
       <path fill="#FBBC05" d="M56.281 156.37c-2.756-8.123-4.351-16.827-4.351-25.82 0-8.994 1.595-17.697 4.206-25.82l-.073-1.73L15.26 71.312l-1.335.635C5.077 89.644 0 109.517 0 130.55s5.077 40.905 13.925 58.602l42.356-32.782"/>
       <path fill="#EA4335" d="M130.55 50.479c24.514 0 41.05 10.589 50.479 19.438l36.844-35.974C195.245 12.91 165.798 0 130.55 0 79.49 0 35.393 29.301 13.925 71.947l42.211 32.783c10.59-31.477 39.891-54.251 74.414-54.251"/>"""
 
-# Fem stjerner langs bunden, som på det fysiske kort
+# Kortet er STÅENDE, 54 × 85,6 mm, tegnet efter leverandørens produktfoto:
+# "Review Us On" / "Google" øverst, G'et i midten, NFC-hånden og fem stjerner nederst.
+# viewBox er 10 enheder pr. mm, så målene kan læses direkte.
+CARD_W, CARD_H = 540, 856
+
+_STAR = "M0,-26 L6.1,-8.4 L24.7,-8.0 L9.9,3.2 L15.3,21.0 L0,10.4 L-15.3,21.0 L-9.9,3.2 L-24.7,-8.0 L-6.1,-8.4 Z"
 _STARS_CARD = "".join(
-    '<path transform="translate(%d,0) scale(1.28)" d="M0,-8 L1.8,-2.47 L7.6,-2.47 L2.9,.94 L4.7,6.47 L0,3.06 L-4.7,6.47 L-2.9,.94 L-7.6,-2.47 L-1.8,-2.47 Z"/>' % (128 + i * 22)
-    for i in range(5)
+    '<path transform="translate(%.1f,0)" d="%s"/>' % (122 + i * 74, _STAR) for i in range(5)
 )
 
-def card_face(dark):
-    """Én kortside. dark=True er den sorte NFC-side, dark=False den hvide mat-forside."""
-    bg      = "#17181A" if dark else "#FAFAF8"
-    ink     = "#FFFFFF" if dark else "#202124"
-    nfc_ink = "#9AA0A6" if dark else "#80868B"
-    # På den sorte side sidder G'et i en hvid cirkel, som på produktbilledet
-    disc    = '<circle cx="171" cy="122" r="33" fill="#fff"/>' if dark else ""
-    label   = "Sort NFC-side" if dark else "Hvid forside"
-    return """<div class="card3d__face card3d__face--%s">
-  <svg viewBox="0 0 342 216" width="100%%" height="100%%" role="img" aria-label="Google Review-kort, %s">
-    <rect width="342" height="216" rx="0" fill="%s"/>
-    <text x="171" y="42" text-anchor="middle" fill="%s"
-          font-family="'SF Pro Rounded','Avenir Next',system-ui,-apple-system,sans-serif"
-          font-size="21" font-weight="600" letter-spacing="-.2">Review Us On</text>
-    <text x="171" y="76" text-anchor="middle" fill="%s"
-          font-family="'Product Sans','SF Pro Display',system-ui,-apple-system,sans-serif"
-          font-size="32" font-weight="450" letter-spacing="-1.1">Google</text>
+def _nfc_icon(ink, bg):
+    """Hånd der holder en telefon, bølger og 'NFC' — som på det trykte kort."""
+    return """<g transform="translate(222,622)">
+      <g fill="none" stroke="%(ink)s" stroke-width="5" stroke-linecap="round">
+        <path d="M14,30 A9,9 0 0 1 23,21"/>
+        <path d="M6,31 A17,17 0 0 1 24,13"/>
+        <path d="M-2,32 A25,25 0 0 1 25,5"/>
+      </g>
+      <text x="36" y="27" fill="%(ink)s" font-family="'Avenir Next','Avenir',system-ui,sans-serif"
+            font-size="27" font-weight="800" letter-spacing=".5">NFC</text>
+      <g transform="rotate(-14 50 76)">
+        <rect x="31" y="40" width="38" height="70" rx="8" fill="%(bg)s" stroke="%(ink)s" stroke-width="6"/>
+        <rect x="44" y="45" width="12" height="3" rx="1.5" fill="%(ink)s"/>
+      </g>
+      <path fill="%(ink)s" d="M58,122 C55,110 56,99 63,90 L71,74 C74,67 83,68 83,77 L81,92 C88,99 91,109 88,124 Z"/>
+      <rect x="21" y="86" width="20" height="9" rx="4.5" fill="%(ink)s" transform="rotate(-14 31 90)"/>
+      <rect x="23" y="98" width="20" height="9" rx="4.5" fill="%(ink)s" transform="rotate(-14 33 102)"/>
+      <rect x="26" y="110" width="19" height="9" rx="4.5" fill="%(ink)s" transform="rotate(-14 35 114)"/>
+    </g>""" % {"ink": ink, "bg": bg}
+
+def card_svg(dark, extra_attrs=""):
+    """Én kortside som ren SVG. dark=True er den sorte side, False den hvide."""
+    bg  = "#141414" if dark else "#F7F7F4"
+    ink = "#FFFFFF" if dark else "#1C1C1C"
+    disc = '<circle cx="270" cy="428" r="178" fill="#FFFFFF"/>' if dark else ""
+    label = "sort side" if dark else "hvid side"
+    return """<svg viewBox="0 0 %d %d" %s role="img" aria-label="Google Review-kort, %s">
+    <rect width="%d" height="%d" fill="%s"/>
+    <text x="270" y="80" text-anchor="middle" fill="%s"
+          font-family="'Avenir Next','Avenir',system-ui,sans-serif"
+          font-size="50" font-weight="500" letter-spacing="-.3">Review Us On</text>
+    <text x="270" y="192" text-anchor="middle" fill="%s"
+          font-family="'Futura','Avenir Next',system-ui,sans-serif"
+          font-size="96" font-weight="500" letter-spacing="-1.5">Google</text>
     %s
-    <g transform="translate(171,122) scale(.172) translate(-128,-131)">
+    <g transform="translate(270,428) scale(1.05) translate(-128,-130.5)">
 %s
     </g>
-    <g transform="translate(247,186)" fill="none" stroke="%s" stroke-width="2.1" stroke-linecap="round">
-      <rect x="-4.5" y="-9" width="12" height="18" rx="2.6"/>
-      <path d="M13,-6.5 A9,9 0 0 1 13,6.5"/>
-      <path d="M18.5,-10.5 A14.5,14.5 0 0 1 18.5,10.5"/>
-    </g>
-    <g fill="#F5B301" transform="translate(0,186)">%s</g>
-  </svg>
+    %s
+    <g fill="#F4B521" transform="translate(0,786)">%s</g>
+  </svg>""" % (CARD_W, CARD_H, extra_attrs, label, CARD_W, CARD_H, bg, ink, ink,
+               disc, _G_PATHS, _nfc_icon(ink, bg), _STARS_CARD)
+
+def card_face(dark):
+    """Kortsiden som den sidder i CSS-3D-kortet (fallback når WebGL ikke kører)."""
+    return """<div class="card3d__face card3d__face--%s">
+  %s
   <div class="card3d__glare"></div>
-</div>""" % ("back" if dark else "front", label, bg, ink, ink, disc, _G_PATHS, nfc_ink, _STARS_CARD)
+</div>""" % ("back" if dark else "front", card_svg(dark, 'width="100%" height="100%"'))
 
 
 CARD_3D = """<div class="stage">
@@ -165,7 +188,7 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="%sassets/styles.css?v=17">
+<link rel="stylesheet" href="%sassets/styles.css?v=20">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%%2317181A'/><path d='M16 8.5l2.06 4.36 4.69.69-3.4 3.4.81 4.79L16 19.47l-4.16 2.27.8-4.79-3.39-3.4 4.69-.69L16 8.5z' fill='%%23F5B301'/></svg>">
 <link rel="canonical" href="%s">
 <script type="application/ld+json">%s</script>
@@ -244,7 +267,7 @@ def footer(depth=0):
     </div>
   </div>
 </footer>
-<script src="%sassets/app.js?v=15"></script>
+<script src="%sassets/app.js?v=16"></script>
 </body>
 </html>""" % ((up, LOGO) + (up,) * 13 + (PAYMENTS, up))
 
@@ -384,7 +407,7 @@ home_hero = """
       </div>
       <div data-reveal="80">
         <div class="hero__media">
-          <img src="assets/img/card-hero.png?v=2" width="1600" height="1200" alt="Google Review-kort i sort og hvid, set skråt oppefra" fetchpriority="high">
+          <img src="assets/img/card-hero.webp?v=3" width="1600" height="1280" alt="To Google Review-kort på et bord: den hvide side og den sorte side, med Google-logo, NFC-symbol og fem stjerner" fetchpriority="high">
         </div>
       </div>
     </div>
@@ -511,7 +534,7 @@ home_why = """
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%%,20rem),1fr));gap:var(--s-10);align-items:center">
       <div data-reveal>
         <div class="photo photo--card">
-          <img src="assets/img/card-front.png?v=2" width="1368" height="864" alt="Google Review-kortets hvide forside med Google-logo, fem stjerner og NFC-symbol" loading="lazy">
+          <img src="assets/img/card-front.webp?v=3" width="1200" height="1200" alt="Google Review-kortets hvide side med Google-logo, NFC-symbol og fem stjerner" loading="lazy">
         </div>
       </div>
       <div class="stack-6" data-reveal="60">
@@ -561,7 +584,7 @@ home_products = """
       </div>
       <div class="prod" data-reveal="80">
         <div class="prod__media">
-          <img src="assets/img/card-back.png?v=2" width="1368" height="864" alt="Google Review-kortets sorte NFC-side" loading="lazy">
+          <img src="assets/img/card-back.webp?v=3" width="1200" height="1200" alt="Google Review-kortets sorte side med Google-logo i hvid cirkel" loading="lazy">
         </div>
         <div class="prod__body">
           <span class="eyebrow">Dit eget motiv</span>
@@ -1422,10 +1445,19 @@ qty_btns = "".join(
     '<button type="button" class="qty__preset%s" data-qty-set="%d">%d</button>'
     % (" is-on" if q == 10 else "", q, q) for q, _ in TIERS)
 
-bestil = hero(
-    "Bestil", "Bestil Google Review-kort",
-    "Vælg antal, udfyld felterne, og gå til betaling. Du betaler sikkert med kort, MobilePay eller Klarna, og får ordrebekræftelsen med det samme.",
-) + """
+bestil = """
+<section class="section" style="padding-bottom:clamp(var(--s-6),3vw,var(--s-10))">
+  <div class="wrap">
+    <div class="split">
+      <div class="stack-6" style="max-width:44rem" data-reveal>
+        <span class="eyebrow">Bestil</span><h1 class="display">Bestil Google Review-kort</h1>
+        <p class="lede">Vælg antal, udfyld felterne, og gå til betaling. Du betaler sikkert med kort, MobilePay eller Klarna, og får ordrebekræftelsen med det samme.</p>
+        <p class="small">Hvid på den ene side, sort på den anden — du vælger selv hvilken side der vender op på disken. Træk i kortet for at se det fra alle sider.</p>
+      </div>
+      <div data-reveal="80">%s</div>
+    </div>
+  </div>
+</section>""" % CARD_3D + """
 <section class="section--tight">
   <div class="wrap">
     <form class="order" data-order data-tiers='%s' novalidate>
