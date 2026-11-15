@@ -1,0 +1,147 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Studio renderer</title>
+<style>html,body{margin:0;background:#000;overflow:hidden}canvas{display:block}#gl{position:absolute;left:-99999px}</style>
+<canvas id="gl"></canvas><canvas id="out"></canvas>
+<script>window.__cardNoViewer = true;</script>
+<script type="module">
+// Product "photograph" of the real card, rendered like a camera would see it:
+// many passes averaged together, each with the lens moved across its aperture
+// (true depth of field), the key light moved across its area (true soft
+// shadows) and the pixel grid nudged (clean edges). No AI, no post blur.
+import { THREE, CARD, makeCard, makeRenderer, loadTextures } from '../assets/card3d.js';
+import { RoomEnvironment } from 'https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/environments/RoomEnvironment.js/+esm';
+
+const q = new URLSearchParams(location.search);
+const num = (k, d) => (q.has(k) ? +q.get(k) : d);
+const W = num('w', 1600), H = num('h', 1280), N = num('n', 48);
+const deg = THREE.MathUtils.degToRad;
+let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+
+const glc = document.getElementById('gl');
+const renderer = makeRenderer(glc, { preserve: true });
+renderer.setPixelRatio(1);
+renderer.setSize(W, H);
+renderer.setClearColor(0x000000, 1);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
+renderer.toneMappingExposure = num('exp', 1.0);
+
+const scene = new THREE.Scene();
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = num('env', 0.38);
+
+/* ---------- seamless paper backdrop: floor that curves up into a wall */
+function paperTexture(base) {
+  const S = 1024, c = document.createElement('canvas'); c.width = c.height = S;
+  const g = c.getContext('2d');
+  g.fillStyle = base; g.fillRect(0, 0, S, S);
+  const img = g.getImageData(0, 0, S, S), d = img.data;
+  for (let i = 0; i < d.length; i += 4) { const v = (rnd() - .5) * 7; d[i] += v; d[i + 1] += v; d[i + 2] += v; }
+  g.putImageData(img, 0, 0);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 1);
+  return t;
+}
+const sweepShape = [];
+const R = 14;                                    // radius of the curve
+for (let i = 0; i <= 40; i++) {                  // profile in (z, y): floor → curve → wall
+  const a = (i / 40) * Math.PI / 2;
+  sweepShape.push(new THREE.Vector2(-30 - R * Math.sin(a), R - R * Math.cos(a)));
+}
+const prof = [new THREE.Vector2(60, 0), new THREE.Vector2(-30, 0), ...sweepShape.slice(1), new THREE.Vector2(-30 - R, 70)];
+const pts = prof.map(p => p);
+const sweepGeo = new THREE.BufferGeometry();
+{
+  const xs = [-80, 80], pos = [], uv = [], idx = [];
+  // UVs in real centimetres along the profile, so the paper grain is even
+  let run = 0;
+  pts.forEach((p, i) => {
+    if (i) run += p.distanceTo(pts[i - 1]);
+    xs.forEach(x => { pos.push(x, p.y, p.x); uv.push(x / 40, run / 40); });
+  });
+  for (let i = 0; i < pts.length - 1; i++) { const a = i * 2; idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3); }
+  sweepGeo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  sweepGeo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2));
+  sweepGeo.setIndex(idx); sweepGeo.computeVertexNormals();
+}
+const paper = new THREE.Mesh(sweepGeo, new THREE.MeshStandardMaterial({
+  map: paperTexture(q.get('bg') ? '#' + q.get('bg') : '#D8D1C6'), roughness: 0.95, side: THREE.DoubleSide }));
+paper.receiveShadow = true;
+scene.add(paper);
+
+/* ---------- light: big soft key from back-left, gentle fill from the front */
+const KEY = new THREE.Vector3(num('kx', -14), num('ky', 22), num('kz', -10));
+const key = new THREE.DirectionalLight(0xFFF8F0, num('key', 2.6));
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+key.shadow.bias = -0.0004; key.shadow.normalBias = 0.02;
+Object.assign(key.shadow.camera, { left: -14, right: 14, top: 14, bottom: -14, near: 1, far: 80 });
+scene.add(key, key.target);
+const fill = new THREE.DirectionalLight(0xEAF0FF, num('fill', 0.35));
+fill.position.set(8, 10, 18);
+scene.add(fill);
+
+/* ---------- cards */
+const [front, back] = await loadTextures(renderer, new URL('../', location.href).href);
+function lay(side, x, y, z, turn, tiltX = 0) {
+  const card = makeCard(front, back);
+  card.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  card.rotation.set(side === 'white' ? -Math.PI / 2 : Math.PI / 2, 0, side === 'white' ? 0 : Math.PI);
+  card.position.y = CARD.d / 2;
+  const h = new THREE.Group(); h.add(card);
+  h.rotation.set(tiltX, turn, 0, 'YXZ');
+  h.position.set(x, y, z);
+  scene.add(h);
+  return h;
+}
+
+// A loose fan: cards slid off a stack, black and white sides alternating,
+// the hero card on top with the white side up.
+const fan = [
+  ['black', -1.9, 1.15, -24],
+  ['white', -0.8, 0.55, -12],
+  ['black',  0.5, 0.25,  -2],
+  ['white',  0.0, 0.0,    9],
+];
+fan.forEach(([side, x, z, r], i) => lay(side, x + num('fx', 0), i * (CARD.d + 0.006), z + num('fz', 0), deg(r + num('fr', 0))));
+// One card further back, out of focus, black side up.
+lay('black', num('bx', 7.5), 0, num('bz', -9), deg(num('br', 28)));
+// One closer to the lens, bottom left, white side, very out of focus.
+if (q.get('fg') !== '0') lay('white', num('gx', -8.5), 0, num('gz', 8.5), deg(num('gr', -38)));
+
+/* ---------- camera + accumulation */
+const camera = new THREE.PerspectiveCamera(num('fov', 26), W / H, 0.5, 300);
+const BASE = new THREE.Vector3(num('cx', 4), num('cy', 13), num('cz', 24));
+const FOCUS = new THREE.Vector3(num('tx', 0), 0, num('tz', 1));
+const APERTURE = num('ap', 0.55);   // lens radius in cm — bigger = shallower focus
+const LIGHT_R = num('lr', 3.5);     // key light radius — bigger = softer shadows
+
+const gl = renderer.getContext();
+const px = new Uint8Array(W * H * 4), acc = new Float32Array(W * H * 3);
+const fwd = new THREE.Vector3(), right = new THREE.Vector3(), up = new THREE.Vector3();
+for (let s = 0; s < N; s++) {
+  // point on the aperture disk (uniform)
+  const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * APERTURE;
+  camera.position.copy(BASE); camera.lookAt(FOCUS);
+  camera.getWorldDirection(fwd);
+  right.crossVectors(fwd, camera.up).normalize(); up.crossVectors(right, fwd).normalize();
+  camera.position.addScaledVector(right, Math.cos(a) * r).addScaledVector(up, Math.sin(a) * r);
+  camera.lookAt(FOCUS);
+  camera.setViewOffset(W, H, rnd() - .5, rnd() - .5, W, H);
+  // point on the key light
+  const b = rnd() * Math.PI * 2, lr = Math.sqrt(rnd()) * LIGHT_R;
+  key.position.copy(KEY).add(new THREE.Vector3(Math.cos(b) * lr, Math.sin(b) * lr * .5, Math.sin(b) * lr));
+  renderer.render(scene, camera);
+  gl.readPixels(0, 0, W, H, gl.RGBA, gl.UNSIGNED_BYTE, px);
+  for (let i = 0, j = 0; i < px.length; i += 4, j += 3) { acc[j] += px[i]; acc[j + 1] += px[i + 1]; acc[j + 2] += px[i + 2]; }
+}
+const out = document.getElementById('out'); out.width = W; out.height = H;
+const o = out.getContext('2d'), img = o.createImageData(W, H);
+for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+  const src = ((H - 1 - y) * W + x) * 3, dst = (y * W + x) * 4;
+  img.data[dst] = acc[src] / N; img.data[dst + 1] = acc[src + 1] / N; img.data[dst + 2] = acc[src + 2] / N; img.data[dst + 3] = 255;
+}
+o.putImageData(img, 0, 0);
+document.title = 'done';
+</script>

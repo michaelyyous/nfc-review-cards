@@ -197,7 +197,7 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <meta property="og:description" content="%s">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="da_DK">
-<meta property="og:image" content="%s/assets/og.png?v=2">
+<meta property="og:image" content="%s/assets/og.png?v=3">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -423,7 +423,7 @@ home_hero = """
       </div>
       <div data-reveal="80">
         <div class="hero__media">
-          <img src="assets/img/card-hero.webp?v=4" width="1600" height="1280" alt="En telefon holdes mod et hvidt Google Review-kort på en disk, og skærmen viser en side til at give stjerner. Bagved ligger en stak kort med den sorte side op" fetchpriority="high">
+          <img src="assets/img/card-hero.webp?v=5" width="1600" height="1280" alt="Google Review-kort spredt på et bord: den hvide side med Google-logo, NFC-symbol og fem stjerner øverst, sorte kort under og bagved" fetchpriority="high">
         </div>
       </div>
     </div>
