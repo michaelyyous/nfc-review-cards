@@ -98,6 +98,11 @@ table { border-collapse: collapse; width: 100%; }
 /* ---------- Type ---------- */
 /* Tracking is size-dependent, never uniform: large type gets negative
    tracking and tight leading, body copy sits near zero. */
+.display__kicker {
+  display: block; margin-bottom: .55em;
+  font-size: clamp(.95rem, .9rem + .3vw, 1.1rem); line-height: 1.3;
+  font-weight: 650; letter-spacing: -.01em; color: var(--green);
+}
 .display {
   font-size: clamp(2.3rem, 4.2vw, 3.125rem);
   line-height: 1.04;
