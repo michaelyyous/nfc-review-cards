@@ -698,7 +698,7 @@ function trackEvent(name, data) {
           <button type="button" class="btn btn--ghost btn--sm" data-consent="afvist">Afvis</button>
           <button type="button" class="btn btn--sm" data-consent="accepteret">Accepter</button>
         </div>
-        <a class="cookie__link" href="${location.pathname.includes('/guides/') ? '../' : ''}cookiepolitik.html">Læs cookiepolitikken</a>
+        <a class="cookie__link" href="/cookiepolitik">Læs cookiepolitikken</a>
       </div>`;
     document.body.appendChild(el);
     requestAnimationFrame(() => { el.dataset.show = 'true'; });

@@ -9,7 +9,7 @@ Alt indhold ligger i denne fil. Header, footer og navigation er defineret
 Firmanavn, CVR og mail sættes i assets/app.js (BRAND-objektet).
 """
 
-import pathlib
+import pathlib, posixpath, re
 
 ROOT = pathlib.Path(__file__).parent
 
@@ -60,7 +60,7 @@ HOME_LD = {"@context": "https://schema.org", "@graph": [
 NAV = [
     ("anmeldelseskort.html", "Google Review-kort"),
     ("saadan-virker-det.html", "Sådan virker det"),
-    ("saet-det-op.html", "Sæt det op"),
+    ("brancher/index.html", "Brancher"),
     ("maengderabat.html", "Mængderabat"),
     ("faq.html", "FAQ"),
     ("forhandler.html", "Forhandler"),
@@ -202,7 +202,7 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="%sassets/styles.css?v=23">
+<link rel="stylesheet" href="%sassets/styles.css?v=24">
 <link rel="icon" href="%sfavicon.ico" sizes="48x48">
 <link rel="icon" href="%sfavicon-192.png" type="image/png" sizes="192x192">
 <link rel="icon" href="%sfavicon.svg" type="image/svg+xml">
@@ -218,7 +218,7 @@ def topbar(current, depth=0, onhero=False):
     up = "../" * depth
     cur = ' aria-current="page"'
     links = "".join(
-        '<a href="%s%s"%s>%s</a>' % (up, href, cur if href == current else "", label)
+        '<a href="%s%s"%s>%s</a>' % (up, href, cur if href == current or (href.endswith("/index.html") and current.startswith(href[:-10])) else "", label)
         for href, label in NAV
     )
     variant = " topbar--onhero" if onhero else ""
@@ -253,6 +253,7 @@ def footer(depth=0):
           <li><a href="%sanmeldelseskort.html">Google Review-kort</a></li>
           <li><a href="%smaengderabat.html">Mængderabat</a></li>
           <li><a href="%sforhandler.html">Bliv forhandler</a></li>
+          <li><a href="/brancher">Brancher</a></li>
           <li><a href="%ssaadan-virker-det.html">Sådan virker det</a></li>
         </ul>
       </div>
@@ -261,6 +262,7 @@ def footer(depth=0):
         <ul>
           <li><a href="%ssaet-det-op.html">Sæt det op selv</a></li>
           <li><a href="%sfaq.html">Spørgsmål og svar</a></li>
+          <li><a href="/guides/flere-google-anmeldelser">Få flere anmeldelser</a></li>
           <li><a href="%sguides/index.html">Guides</a></li>
           <li><a href="%skontakt.html">Kontakt support</a></li>
         </ul>
@@ -284,7 +286,7 @@ def footer(depth=0):
     </div>
   </div>
 </footer>
-<script src="%sassets/app.js?v=16"></script>
+<script src="%sassets/app.js?v=17"></script>
 </body>
 </html>""" % ((up, LOGO) + (up,) * 13 + (PAYMENTS, up))
 
@@ -297,6 +299,36 @@ PAYMENTS = """
 
 PAGES = []
 
+def clean_path(path):
+    """'guides/index.html' -> '/guides', 'faq.html' -> '/faq', 'index.html' -> '/'."""
+    p = "/" + path
+    p = p[:-len("index.html")] if p.endswith("index.html") else p[:-5] if p.endswith(".html") else p
+    return p.rstrip("/") or "/"
+
+def _clean_href(m, page_path):
+    href = m.group(1)
+    if re.match(r"^(?:[a-z][a-z0-9+.-]*:|//|#|/)", href):
+        return m.group(0)
+    target, _, frag = href.partition("#")
+    if not target.endswith(".html"):
+        return m.group(0)
+    full = posixpath.normpath(posixpath.join(posixpath.dirname(page_path), target))
+    return 'href="%s%s"' % (clean_path(full), "#" + frag if frag else "")
+
+def breadcrumbs(items):
+    """items: [(label, path)], last item is the current page. Returns (html, json-ld)."""
+    parts = []
+    for i, (label, path) in enumerate(items):
+        if i: parts.append('<span aria-hidden="true">/</span>')
+        if i < len(items) - 1:
+            parts.append('<a href="%s">%s</a>' % (clean_path(path), label))
+        else:
+            parts.append('<span aria-current="page">%s</span>' % label)
+    ld = {"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": i + 1, "name": label, "item": BASE_URL + clean_path(path)}
+        for i, (label, path) in enumerate(items)]}
+    return '<nav class="crumbs" aria-label="Brødkrummer">%s</nav>' % "".join(parts), ld
+
 def page(path, title, desc, body, current=None, depth=0, hero=None, jsonld=None):
     """hero: markup for a contained hero block that the nav sits on top of.
     When given, the nav renders transparent over it and <main> opens after."""
@@ -307,11 +339,14 @@ def page(path, title, desc, body, current=None, depth=0, hero=None, jsonld=None)
     else:
         chrome = topbar(current or path, depth)
     import json as _json
-    canon = BASE_URL + "/" + path.replace("index.html", "").replace(".html", "")
+    canon = BASE_URL + clean_path(path)
     ld = _json.dumps(jsonld or ORG_LD, ensure_ascii=False, separators=(",", ":"))
     html = head(title, desc, depth, canon, ld) + chrome + body + footer(depth)
     # Bag navnet ind, saa titler og synlig tekst er korrekte uden JavaScript
     html = html.replace("{brand}", BRAND_NAME)
+    # Interne links peger direkte på de rene adresser (/anmeldelseskort), så
+    # hverken Google eller kunden skal igennem Vercels .html-omdirigering.
+    html = re.sub(r'href="([^"]*)"', lambda m: _clean_href(m, path), html)
     html = html.replace("<span data-brand>Firmanavn</span>", "<span data-brand>%s</span>" % BRAND_NAME)
     # Kontaktoplysninger er lovpligtige, saa de skal staa i kilden og ikke kun
     # blive sat af JavaScript — ellers ser crawlere og alt uden JS en pladsholder.
@@ -737,6 +772,8 @@ home_faq = """
 </section>""" % (acc([FAQ_ALL[0], FAQ_ALL[11], FAQ_ALL[7]]), ARROW, P1, ARROW)
 
 GUIDE_CARDS = [
+    ("guides/flere-google-anmeldelser.html", "Den store guide", "Sådan får du flere Google-anmeldelser",
+     "Hvornår du skal spørge, hvad du skal sige, og hvad du ikke må."),
     ("saadan-virker-det.html", "Sådan virker det", "Derfor virker et Google Review-kort",
      "Hvad kortet gør ved besværet — og hvad det ikke kan."),
     ("guides/placering.html", "Placering", "Hvor skal kortet ligge?",
@@ -840,10 +877,11 @@ produkt = """
         <span class="eyebrow">Hvem bruger det</span>
         <h2 class="h2">Til steder hvor kunden står ved disken</h2>
         <ul class="stack" style="gap:var(--s-3);padding-left:1.1em">
-          <li><strong>Frisører, saloner og klinikker</strong> — kortet ligger ved kassen, mens kunden betaler.</li>
-          <li><strong>Caféer og restauranter</strong> — på disken eller med regningen.</li>
-          <li><strong>Butikker</strong> — ved betalingsterminalen, hvor alle kunder kommer forbi.</li>
-          <li><strong>Håndværkere og servicefirmaer</strong> — giv kortet til kunden, når jobbet er færdigt.</li>
+          <li><strong><a href="/brancher/frisoer">Frisører og saloner</a></strong> — kortet ligger ved kassen, mens kunden betaler.</li>
+          <li><strong><a href="/brancher/klinik">Klinikker og behandlere</a></strong> — ved receptionen, når næste tid er booket.</li>
+          <li><strong><a href="/brancher/restaurant-og-cafe">Caféer og restauranter</a></strong> — på disken eller med regningen.</li>
+          <li><strong><a href="/brancher/butik">Butikker</a></strong> — ved betalingsterminalen, hvor alle kunder kommer forbi.</li>
+          <li><strong><a href="/brancher/haandvaerker-og-vaerksted">Håndværkere og værksteder</a></strong> — giv kortet til kunden, når jobbet er færdigt.</li>
           <li><strong>Forhandlere</strong> — køb ind til fast pris og sælg kortene videre til lokale virksomheder.</li>
         </ul>
       </div>
@@ -1297,19 +1335,6 @@ GUIDES = [
      <p>Fra dansk side kan overtrædelse af markedsføringsloven straffes med bøde."""),
 ]
 
-guide_cards = "".join("""
-  <a class="card card--lift" href="%s" data-reveal="%d">
-    <h3>%s</h3>
-    <p class="small" style="margin-top:var(--s-2)">%s</p>
-    <p class="small" style="margin-top:var(--s-4);font-weight:560">Læs →</p>
-  </a>""" % (href, i * 60, title, desc) for i, (href, title, desc, _) in enumerate(GUIDES))
-
-page("guides/index.html", "Guides om Google-anmeldelser og NFC-kort — {brand}",
-     "Praktiske guides om Google Review-kort: NFC vs. QR, placering i butikken, og reglerne du skal kende.",
-     hero("Guides", "Guides", "Kort og konkret om hvordan du får mest ud af kortet — og hvilke regler der gælder.") + """
-<section class="section--tight"><div class="wrap"><div class="grid grid-3">%s</div></div></section>""" % guide_cards,
-     depth=1)
-
 # Søgevenlige <title>'er; overskriften på siden bliver den korte.
 GUIDE_SEO_TITLES = {
     "nfc-eller-qr.html": "NFC eller QR-kode til Google-anmeldelser?",
@@ -1317,17 +1342,143 @@ GUIDE_SEO_TITLES = {
     "daarlige-anmeldelser.html": "Dårlige Google-anmeldelser: hvad kan du gøre?",
     "regler-for-anmeldelser.html": "Regler for Google-anmeldelser i Danmark",
 }
-for href, title, desc, body in GUIDES:
-    page("guides/" + href, GUIDE_SEO_TITLES.get(href, title) + " — {brand}", desc,
-         hero("Guide", title, desc) + """
+
+from seo_content import BRANCHER, GUIDES_SEO
+
+def fill(t):
+    return t.replace("{P1}", str(P1)).replace("{PMIN}", str(TIERS[-1][1]))
+
+def with_crumbs(hero_html, crumbs_html):
+    anchor = '<div class="stack-6" style="max-width:44rem" data-reveal>'
+    return hero_html.replace(anchor, anchor + crumbs_html, 1)
+
+def graph(*nodes):
+    return {"@context": "https://schema.org", "@graph": [ORG_LD_NODE] + list(nodes)}
+
+ORG_LD_NODE = {k: v for k, v in ORG_LD.items() if k != "@context"}
+
+CTA_BOX = """
+<div class="cta-box stack" data-reveal>
+  <h2 class="h3">Gør det til ét tryk for kunden</h2>
+  <p class="small" style="max-width:36rem">Google Review-kort med NFC og QR-kode. Kunden holder telefonen mod kortet, og anmeldelsesfeltet åbner. Fra %d kr — ned til %d kr pr. stk. ved større antal. Vi programmerer kortet gratis.</p>
+  <div class="row"><a class="btn" href="/bestil">Bestil kort</a><a class="btn btn--ghost" href="/anmeldelseskort">Se kortet</a></div>
+</div>""" % (P1, TIERS[-1][1])
+
+# Alle guides: de nye søgeguides først, så de gamle.
+ALL_GUIDES = [(f, t, d, seo, body) for f, t, d, seo, body in GUIDES_SEO] + \
+             [(f, t, d, GUIDE_SEO_TITLES.get(f, t), body) for f, t, d, body in GUIDES]
+
+guide_cards = "".join("""
+  <a class="card card--lift" href="%s" data-reveal="%d">
+    <h3>%s</h3>
+    <p class="small" style="margin-top:var(--s-2)">%s</p>
+    <p class="small" style="margin-top:var(--s-4);font-weight:560">Læs →</p>
+  </a>""" % (href, (i % 3) * 60, title, desc) for i, (href, title, desc, _, _) in enumerate(ALL_GUIDES))
+
+crumb_html, crumb_ld = breadcrumbs([("Forside", "index.html"), ("Guides", "guides/index.html")])
+page("guides/index.html", "Guides om Google-anmeldelser og Google Review-kort — {brand}",
+     "Guides om Google-anmeldelser: sådan får du flere anmeldelser, finder dit anmeldelseslink, beder kunden om en anmeldelse, og hvilke regler der gælder.",
+     with_crumbs(hero("Guides", "Guides om Google-anmeldelser",
+          "Kort og konkret om hvordan du får flere Google-anmeldelser — og hvilke regler der gælder. Gratis, uanset om du køber noget af os."), crumb_html) + """
+<section class="section--tight"><div class="wrap"><div class="grid grid-3">%s</div></div></section>""" % guide_cards,
+     depth=1, jsonld=graph(crumb_ld))
+
+for href, title, desc, seo_title, body in ALL_GUIDES:
+    path = "guides/" + href
+    crumb_html, crumb_ld = breadcrumbs([("Forside", "index.html"), ("Guides", "guides/index.html"), (title, path)])
+    related = [g for g in ALL_GUIDES if g[0] != href][:3]
+    rel = "".join("""
+      <a class="card card--lift" href="%s">
+        <h3 class="h3" style="font-size:1.05rem">%s</h3>
+        <p class="small" style="margin-top:var(--s-2)">%s</p>
+      </a>""" % (g[0], g[1], g[2]) for g in related)
+    article = {"@type": "Article", "headline": seo_title, "description": desc,
+               "inLanguage": "da-DK", "url": BASE_URL + clean_path(path),
+               "image": BASE_URL + "/assets/og.png",
+               "author": {"@type": "Organization", "name": BRAND_NAME, "url": BASE_URL},
+               "publisher": {"@type": "Organization", "name": BRAND_NAME, "logo": {"@type": "ImageObject", "url": BASE_URL + "/assets/img/logo-512.png"}},
+               "dateModified": "2026-11-15"}
+    page(path, seo_title + " — {brand}", desc,
+         with_crumbs(hero("Guide", title, desc), crumb_html) + """
 <section class="section--tight">
-  <div class="wrap"><div class="prose" data-reveal>%s</div>
-    <div class="row" style="margin-top:var(--s-10)">
-      <a class="btn" href="../anmeldelseskort.html">Se kortet</a>
-      <a class="btn btn--ghost" href="index.html">Alle guides</a>
+  <div class="wrap stack-8"><div class="prose" data-reveal>%s</div>
+    %s
+    <div class="stack-6">
+      <h2 class="h3">Læs også</h2>
+      <div class="grid grid-3">%s</div>
     </div>
   </div>
-</section>""" % body, depth=1)
+</section>""" % (body, CTA_BOX, rel), depth=1, jsonld=graph(crumb_ld, article))
+
+
+# ================================================================ BRANCHER
+def branch_card(b, i=0):
+    return """
+      <a class="card card--lift" href="/brancher/%s" data-reveal="%d">
+        <span class="eyebrow">%s</span>
+        <h3 style="margin-top:var(--s-3)">Google Review-kort til %s</h3>
+        <p class="small" style="margin-top:var(--s-2)">%s</p>
+        <p class="small" style="margin-top:var(--s-4);font-weight:560">Se hvordan →</p>
+      </a>""" % (b["slug"], (i % 3) * 60, b["nav"], b["nav"].lower(), b["who"])
+
+crumb_html, crumb_ld = breadcrumbs([("Forside", "index.html"), ("Brancher", "brancher/index.html")])
+page("brancher/index.html", "Google Review-kort til din branche — {brand}",
+     "Google Review-kort til frisører, restauranter, caféer, butikker, håndværkere og klinikker. Se hvor kortet skal ligge, og hvad du skal sige, i netop din branche.",
+     with_crumbs(hero("Brancher", "Google Review-kort til din branche",
+          "Kortet er det samme. Det, der afgør, om det bliver brugt, er hvor det ligger, og hvornår det bliver nævnt — og det er forskelligt fra en salon til en restaurant til en håndværker."), crumb_html) + """
+<section class="section--tight"><div class="wrap stack-8"><div class="grid grid-3">%s</div>%s</div></section>""" % (
+         "".join(branch_card(b, i) for i, b in enumerate(BRANCHER)), CTA_BOX),
+     depth=1, jsonld=graph(crumb_ld))
+
+for b in BRANCHER:
+    path = "brancher/%s.html" % b["slug"]
+    crumb_html, crumb_ld = breadcrumbs([("Forside", "index.html"), ("Brancher", "brancher/index.html"), (b["nav"], path)])
+    secs = "".join("<h2>%s</h2>\n%s\n" % (h, body) for h, body in b["sections"])
+    others = "".join(branch_card(o, i) for i, o in enumerate([o for o in BRANCHER if o is not b][:3]))
+    faq_ld = {"@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": " ".join(a)}} for q, a in b["faq"]]}
+    service = {"@type": "Product", "name": "Google Review-kort med NFC", "url": BASE_URL + "/anmeldelseskort",
+               "image": BASE_URL + "/assets/img/card-front.webp",
+               "description": fill(b["desc"]), "brand": {"@type": "Brand", "name": BRAND_NAME},
+               "offers": {"@type": "AggregateOffer", "priceCurrency": "DKK", "lowPrice": str(TIERS[-1][1]),
+                          "highPrice": str(P1), "offerCount": str(len(TIERS)), "availability": "https://schema.org/InStock"}}
+    body = with_crumbs(hero("Til " + b["nav"].lower(), b["h1"], b["lede"],
+        '<a class="btn btn--lg" href="/bestil">Bestil — fra %d kr</a><a class="btn btn--ghost btn--lg" href="/anmeldelseskort">Se kortet</a>' % P1,
+        "Til " + b["who"].lower().replace("vvs'ere", "VVS'ere")), crumb_html) + """
+<section class="section--tight" style="padding-top:0">
+  <div class="wrap">
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%%,20rem),1fr));gap:var(--s-12);align-items:start">
+      <div class="prose" data-reveal>%s</div>
+      <div class="stack-6" data-reveal="60" style="position:sticky;top:6rem">
+        <div class="photo photo--card">
+          <img src="/assets/img/card-front.webp?v=3" width="1200" height="1200" alt="Google Review-kort med NFC til %s — hvid side med Google-logo og fem stjerner" loading="lazy">
+        </div>
+        <ul class="ticks small" style="list-style:none;padding:0;display:grid;gap:var(--s-2)">
+          <li>%s NFC og QR-kode — virker på alle telefoner</li>
+          <li>%s Ingen app, intet abonnement</li>
+          <li>%s Vi programmerer kortet gratis</li>
+          <li>%s Fra %d kr · ned til %d kr ved større antal</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section section--sunk">
+  <div class="wrap">
+    <div class="stack-8" style="max-width:46rem;margin-inline:auto">
+      <div class="stack" data-reveal><span class="eyebrow">Spørgsmål</span><h2 class="h2">Det spørger %s ofte om</h2></div>
+      <div data-reveal="60">%s</div>
+    </div>
+  </div>
+</section>
+<section class="section--tight">
+  <div class="wrap stack-8">%s
+    <div class="stack-6"><h2 class="h3">Andre brancher</h2><div class="grid grid-3">%s</div></div>
+  </div>
+</section>""" % (secs, b["nav"].lower(), CHECK, CHECK, CHECK, CHECK, P1, TIERS[-1][1],
+                 b["nav"].lower(), acc(b["faq"]), CTA_BOX, others)
+    page(path, fill(b["title"]) + " — {brand}", fill(b["desc"]), body, depth=1,
+         jsonld=graph(crumb_ld, faq_ld, service))
 
 
 # ================================================================ JURA
@@ -1605,8 +1756,8 @@ for p in PAGES:
 # ================================================================ SEO + 404
 BASE = "https://reviewpartneren.dk"
 urls = "".join(
-    '  <url><loc>%s/%s</loc></url>\n' % (BASE, p.replace("index.html", "").replace(".html", ""))
-    for p in PAGES)
+    '  <url><loc>%s%s</loc></url>\n' % (BASE, clean_path(p))
+    for p in PAGES if p != "404.html")
 (ROOT / "sitemap.xml").write_text(
     '<?xml version="1.0" encoding="UTF-8"?>\n'
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % urls,

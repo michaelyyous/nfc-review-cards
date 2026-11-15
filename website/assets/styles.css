@@ -822,3 +822,15 @@ textarea.inp { resize: vertical; min-height: 5rem; }
 .proof strong { font-weight: 700; }
 .proof__txt { display: flex; flex-direction: column; gap: 3px; }
 .proof__txt .stars svg { width: 14px; height: 14px; }
+
+/* ---- guides & branchesider: brødkrummer, citater, kode ---- */
+.crumbs { display: flex; flex-wrap: wrap; gap: .4em; font-size: .85rem; color: var(--ink-500, #6B6F76); margin-bottom: var(--s-4); }
+.crumbs a { color: inherit; text-decoration: none; }
+.crumbs a:hover { color: var(--green); text-decoration: underline; }
+.crumbs span[aria-hidden] { opacity: .5; }
+.prose blockquote { margin-inline: 0; padding: var(--s-5) var(--s-6); background: var(--surface-sunk); border-left: 3px solid var(--green); border-radius: 0 12px 12px 0; }
+.prose blockquote > * + * { margin-top: var(--s-3); }
+.prose code { font-size: .88em; background: var(--surface-sunk); padding: .12em .4em; border-radius: 6px; word-break: break-all; }
+.prose a { color: var(--green); text-underline-offset: 2px; }
+.cta-box { background: var(--green-tint); border-radius: 20px; padding: clamp(var(--s-6), 4vw, var(--s-10)); }
+.ticks li { display: flex; align-items: center; gap: var(--s-2); }
