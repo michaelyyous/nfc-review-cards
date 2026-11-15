@@ -407,7 +407,7 @@ home_hero = """
       </div>
       <div data-reveal="80">
         <div class="hero__media">
-          <img src="assets/img/card-hero.webp?v=3" width="1600" height="1280" alt="To Google Review-kort på et bord: den hvide side og den sorte side, med Google-logo, NFC-symbol og fem stjerner" fetchpriority="high">
+          <img src="assets/img/card-hero.webp?v=4" width="1600" height="1280" alt="En telefon holdes mod et hvidt Google Review-kort på en disk, og skærmen viser en side til at give stjerner. Bagved ligger en stak kort med den sorte side op" fetchpriority="high">
         </div>
       </div>
     </div>
