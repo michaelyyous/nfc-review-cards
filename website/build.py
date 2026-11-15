@@ -56,10 +56,14 @@ NAV = [
     ("forhandler.html", "Forhandler"),
 ]
 
-LOGO = """<svg class="brand__mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-<rect width="32" height="32" rx="8" fill="currentColor"/>
-<path d="M16 8.5l2.06 4.36 4.69.69-3.4 3.4.81 4.79L16 19.47l-4.16 2.27.8-4.79-3.39-3.4 4.69-.69L16 8.5z" fill="var(--surface)"/>
-</svg>"""
+# Logo: "tap-stjernen" — en anmeldelsesstjerne der sender NFC-bølger.
+LOGO_STAR = "M13 10L15.12 15.09L20.61 15.53L16.42 19.11L17.7 24.47L13 21.6L8.3 24.47L9.58 19.11L5.39 15.53L10.88 15.09Z"
+LOGO = """<svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+<rect width="32" height="32" rx="8" fill="#14724A"/>
+<path d="%s" fill="#fff"/>
+<path d="M14.91 7.17A11 11 0 0 1 23.83 16.09" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M16.2 3.9A14.3 14.3 0 0 1 27.1 15.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".55"/>
+</svg>""" % LOGO_STAR
 
 ANNOUNCE = """
 <div class="announce">
@@ -183,18 +187,19 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <meta property="og:description" content="%s">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="da_DK">
-<meta property="og:image" content="%s/assets/og.png">
+<meta property="og:image" content="%s/assets/og.png?v=2">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="%sassets/styles.css?v=20">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%%2317181A'/><path d='M16 8.5l2.06 4.36 4.69.69-3.4 3.4.81 4.79L16 19.47l-4.16 2.27.8-4.79-3.39-3.4 4.69-.69L16 8.5z' fill='%%23F5B301'/></svg>">
+<link rel="icon" href="%sfavicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="%sassets/img/apple-touch-icon.png">
 <link rel="canonical" href="%s">
 <script type="application/ld+json">%s</script>
 </head>
 <body>
-<a class="skip" href="#indhold">Spring til indhold</a>""" % (title, desc, title, desc, BASE_URL, up, canon, jsonld)
+<a class="skip" href="#indhold">Spring til indhold</a>""" % (title, desc, title, desc, BASE_URL, up, up, up, canon, jsonld)
 
 
 def topbar(current, depth=0, onhero=False):
