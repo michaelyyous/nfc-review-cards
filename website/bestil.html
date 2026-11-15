@@ -97,17 +97,14 @@
           </fieldset>
 
           <fieldset class="ofield">
-            <legend class="eyebrow">5 · Dine oplysninger</legend>
+            <legend class="eyebrow">5 · Til fakturaen <span class="tiny">(valgfrit)</span></legend>
+            <p class="tiny" style="margin-top:var(--s-2)">Navn, adresse og betaling udfylder du på næste side. Her er kun det, vi ikke kan spørge om der.</p>
             <div class="grid grid-2" style="gap:var(--s-4);margin-top:var(--s-3)">
-              <div><label class="small" for="firma">Virksomhed <span class="tiny">(valgfrit)</span></label><input id="firma" name="virksomhed" class="inp" autocomplete="organization"></div>
-              <div><label class="small" for="cvrf">CVR <span class="tiny">(valgfrit)</span></label><input id="cvrf" name="cvr" class="inp" inputmode="numeric" autocomplete="off"></div>
-              <div><label class="small" for="navn">Navn</label><input id="navn" name="navn" class="inp" autocomplete="name" required></div>
-              <div><label class="small" for="mail">E-mail</label><input id="mail" name="email" type="email" class="inp" autocomplete="email" inputmode="email" required></div>
-              <div><label class="small" for="tlf">Telefon <span class="tiny">(valgfrit)</span></label><input id="tlf" name="telefon" type="tel" class="inp" autocomplete="tel" inputmode="tel"></div>
-              <div><label class="small" for="adr">Leveringsadresse</label><input id="adr" name="adresse" class="inp" autocomplete="street-address" required></div>
+              <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" autocomplete="organization"></div>
+              <div><label class="small" for="cvrf">CVR</label><input id="cvrf" name="cvr" class="inp" inputmode="numeric" autocomplete="off"></div>
             </div>
-            <label class="small" for="besked" style="display:block;margin-top:var(--s-4)">Besked <span class="tiny">(valgfrit)</span></label>
-            <textarea id="besked" name="besked" rows="3" class="inp"></textarea>
+            <label class="small" for="besked" style="display:block;margin-top:var(--s-4)">Besked til os <span class="tiny">(valgfrit)</span></label>
+            <textarea id="besked" name="besked" rows="3" class="inp" placeholder="Fx ønsket leveringsdato, eller noget vi skal vide om programmeringen."></textarea>
           </fieldset>
         </div>
 
@@ -120,7 +117,7 @@
             <div class="sumrow sumrow--total"><span>I alt</span><span><span data-sum-total>1.329</span> kr</span></div>
             <p class="tiny" data-sum-ex>heraf moms — kr · ekskl. moms — kr</p>
             <p class="tiny" data-sum-save style="color:var(--green);font-weight:560"></p>
-            <button class="btn btn--lg" type="submit" style="width:100%;margin-top:var(--s-5)">Send bestilling</button>
+            <button class="btn btn--lg" type="submit" style="width:100%;margin-top:var(--s-5)">Gå til betaling</button>
             <p class="tiny" style="margin-top:var(--s-3)">Du sendes til vores sikre betalingsside. Kortoplysninger indtastes aldrig her på sitet.</p>
             <p class="tiny" style="margin-top:var(--s-4)">14 dages fortrydelsesret · 2 års reklamationsret · Sendes 1–2 hverdage</p>
           </div>
@@ -181,6 +178,6 @@
     </div>
   </div>
 </footer>
-<script src="assets/app.js?v=14"></script>
+<script src="assets/app.js?v=15"></script>
 </body>
 </html>

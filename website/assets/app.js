@@ -563,10 +563,10 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
       '',
       d.virksomhed ? `Virksomhed:       ${d.virksomhed}` : null,
       d.cvr ? `CVR:              ${d.cvr}` : null,
-      `Navn:             ${d.navn}`,
-      `E-mail:           ${d.email}`,
+      d.navn    ? `Navn:             ${d.navn}`    : null,
+      d.email   ? `E-mail:           ${d.email}`   : null,
       d.telefon ? `Telefon:          ${d.telefon}` : null,
-      `Adresse:          ${d.adresse}`,
+      d.adresse ? `Adresse:          ${d.adresse}` : null,
       d.besked ? `\nBesked:\n${d.besked}` : null,
     ].filter(Boolean).join('\n');
 
