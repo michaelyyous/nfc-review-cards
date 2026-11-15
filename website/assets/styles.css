@@ -819,3 +819,5 @@ textarea.inp { resize: vertical; min-height: 5rem; }
 .proof svg { flex: none; }
 .proof span { font-size: .93rem; line-height: 1.45; letter-spacing: -.008em; }
 .proof strong { font-weight: 700; }
+.proof__txt { display: flex; flex-direction: column; gap: 3px; }
+.proof__txt .stars svg { width: 14px; height: 14px; }

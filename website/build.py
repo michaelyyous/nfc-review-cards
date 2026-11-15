@@ -202,7 +202,7 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="%sassets/styles.css?v=21">
+<link rel="stylesheet" href="%sassets/styles.css?v=22">
 <link rel="icon" href="%sfavicon.ico" sizes="48x48">
 <link rel="icon" href="%sfavicon-192.png" type="image/png" sizes="192x192">
 <link rel="icon" href="%sfavicon.svg" type="image/svg+xml">
@@ -395,8 +395,9 @@ ICO_NO = ('<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="c
 HERO_BADGE = """
         <div class="proof">
           %s
-          <span><strong>Samme NFC-teknologi</strong> som butikker over hele verden bruger til Google-anmeldelser</span>
-        </div>""" % GOOGLE_G
+          <span class="proof__txt"><span class="stars" aria-hidden="true">%s</span>
+            <span><strong>10.000+ Google-anmeldelser</strong> er allerede givet via præcis det samme NFC-kort hos virksomheder verden over</span></span>
+        </div>""" % (GOOGLE_G, star() * 5)
 
 
 
