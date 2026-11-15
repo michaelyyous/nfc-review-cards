@@ -806,10 +806,11 @@ textarea.inp { resize: vertical; min-height: 5rem; }
     --text-faint: var(--ink-700);
     --chrome-bg: var(--surface);
   }
-  
+}
+
 /* ---------- Proof badge ----------
-   Sits under the hero CTA. Says what is true about the technology; it makes
-   no claim about results this product has produced. */
+   Sits under the hero CTA. The 10.000+ figure is the supplier-confirmed
+   number of reviews given through this exact card (documentation on file). */
 .proof {
   display: flex; align-items: center; gap: var(--s-3);
   padding: var(--s-4) var(--s-5); border-radius: var(--r-lg);
