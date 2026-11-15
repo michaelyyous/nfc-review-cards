@@ -45,7 +45,17 @@ ORG_LD = {
     "areaServed": "DK",
     "currenciesAccepted": "DKK",
     "paymentAccepted": "Dankort, Visa, Mastercard, MobilePay, Apple Pay, Google Pay, Klarna, Faktura",
+    "logo": BASE_URL + "/assets/img/logo-512.png",
+    "image": BASE_URL + "/assets/og.png",
+    "email": "support@reviewpartneren.dk",
 }
+
+# Forsiden: WebSite giver Google sidenavnet "Reviewpartneren" i søgeresultatet,
+# OnlineStore med logo kobler logoet på.
+HOME_LD = {"@context": "https://schema.org", "@graph": [
+    {"@type": "WebSite", "name": "{brand}", "alternateName": "reviewpartneren.dk", "url": BASE_URL + "/"},
+    {k: v for k, v in ORG_LD.items() if k != "@context"},
+]}
 
 NAV = [
     ("anmeldelseskort.html", "Google Review-kort"),
@@ -193,13 +203,15 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="%sassets/styles.css?v=20">
+<link rel="icon" href="%sfavicon.ico" sizes="48x48">
+<link rel="icon" href="%sfavicon-192.png" type="image/png" sizes="192x192">
 <link rel="icon" href="%sfavicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="%sassets/img/apple-touch-icon.png">
 <link rel="canonical" href="%s">
 <script type="application/ld+json">%s</script>
 </head>
 <body>
-<a class="skip" href="#indhold">Spring til indhold</a>""" % (title, desc, title, desc, BASE_URL, up, up, up, canon, jsonld)
+<a class="skip" href="#indhold">Spring til indhold</a>""" % (title, desc, title, desc, BASE_URL, up, up, up, up, up, canon, jsonld)
 
 
 def topbar(current, depth=0, onhero=False):
@@ -768,7 +780,7 @@ page("index.html",
      "Google Review-kort til danske butikker — og til dig der vil købe ind og sælge videre. Kunden lægger telefonen på kortet, og anmeldelsessiden åbner. Fra %d kr. Intet abonnement." % P1,
      home_benefits + home_paths + home_steps + home_why + home_products
      + home_prices + home_trust + home_faq + home_guides + home_sticky,
-     current="index.html", hero=home_hero)
+     current="index.html", hero=home_hero, jsonld=HOME_LD)
 
 
 # ================================================================ PRODUKT
