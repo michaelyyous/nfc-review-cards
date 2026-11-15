@@ -545,6 +545,7 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
       if (d.besked)      attrs.set('attributes[Besked]', d.besked);
       attrs.set('attributes[Levering]', shipMode() === 'hjem' ? 'Hjemmelevering' : 'Pakkeshop');
       note('Sender dig til betaling…');
+      trackEvent('InitiateCheckout', { num_items: q, currency: 'DKK', content_ids: [SHOPIFY.variantId] });
       location.href = `https://${SHOPIFY.domain}/cart/${SHOPIFY.variantId}:${q}?${attrs}`;
       return;
     }
@@ -637,10 +638,27 @@ function consentState() {
   try { return localStorage.getItem(CONSENT_KEY); } catch (_) { return null; }
 }
 
+/* Meta-pixel. Tomt ID = intet indlæses, heller ikke efter samtykke. */
+const META_PIXEL_ID = '';
+
 function runTracking() {
-  // Loads only after an explicit "accepter". Nothing here yet.
-  if (window.__trackingLoaded) return;
+  // Loads only after an explicit "accepter".
+  if (window.__trackingLoaded || !META_PIXEL_ID) return;
   window.__trackingLoaded = true;
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', META_PIXEL_ID);
+  fbq('track', 'PageView');
+  if (/anmeldelseskort|bestil/.test(location.pathname)) {
+    fbq('track', 'ViewContent', { content_ids: [SHOPIFY.variantId], content_type: 'product', currency: 'DKK' });
+  }
+}
+
+function trackEvent(name, data) {
+  if (window.fbq && window.__trackingLoaded) fbq('track', name, data || {});
 }
 
 (() => {
