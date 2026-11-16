@@ -4,7 +4,7 @@
    ============================================================ */
 
 const BRAND = {
-  name: 'Reviewpartneren',
+  name: 'ReviewPartneren',
   placeholder: 'Firmanavn',
   cvr: '',               // ← CVR-nummer
   email: 'support@reviewpartneren.dk',

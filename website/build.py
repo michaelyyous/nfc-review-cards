@@ -31,7 +31,7 @@ def kr(n):
     return f"{n:,}".replace(",", ".")
 
 # ---------------------------------------------------------------- nav
-BRAND_NAME = "Reviewpartneren"   # bages ind i titler og synlig tekst ved build
+BRAND_NAME = "ReviewPartneren"   # bages ind i titler og synlig tekst ved build
 BRAND_EMAIL = "support@reviewpartneren.dk"  # skal findes som rigtig postkasse
 BRAND_CVR = ""                   # udfyldes naar CVR-nummeret er tildelt
 ORDER = "bestil.html"
@@ -431,7 +431,7 @@ HERO_BADGE = """
         <div class="proof">
           %s
           <span class="proof__txt"><span class="stars" aria-hidden="true">%s</span>
-            <span><strong>10.000+ Google-anmeldelser</strong> er allerede givet via præcis det samme NFC-kort hos virksomheder verden over</span></span>
+            <span><strong>10.000+ Google-anmeldelser</strong> er allerede givet via præcis det samme kort hos virksomheder verden over</span></span>
         </div>""" % (GOOGLE_G, star() * 5)
 
 
@@ -548,7 +548,7 @@ STATS = [
     ("0", "kr/md", "Intet abonnement",
      "Du køber kortet én gang. Der er ingen licens og intet der fornyes."),
     ("10", "år", "Så længe holder chippen",
-     "NXP angiver 10 års datalevetid og mindst 100.000 skrivninger på NTAG215."),
+     "Chipproducenten angiver 10 års levetid for linket på chippen."),
     ("1–3", "dage", "Fra bestilling til disken",
      "Vi sender 1–2 hverdage efter ordre, med GLS eller PostNord."),
 ]
@@ -593,7 +593,7 @@ home_why = """
         <div class="stack"><h3>Det sker ved disken</h3>
           <p class="small">Mens oplevelsen stadig er frisk, og kunden stadig står der. Ikke tre dage senere i en mail der aldrig bliver åbnet.</p></div>
         <div class="stack"><h3>Ingen app at hente</h3>
-          <p class="small">NFC er indbygget i telefonen. Kunden lægger den mod kortet, og anmeldelsessiden åbner af sig selv.</p></div>
+          <p class="small">Kunden holder telefonen mod kortet, og anmeldelsessiden åbner af sig selv. Ingen app, intet kamera.</p></div>
         <div class="stack"><h3>Ét kort, uendeligt brug</h3>
           <p class="small">Intet batteri, intet abonnement, ingen udløbsdato. Kortet ligger på disken og virker hver eneste dag.</p></div>
       </div>
@@ -708,7 +708,7 @@ home_quotes = """
 FAQ_ALL = [
     ("Virker kortet på alle telefoner?", [
         "På langt de fleste. iPhone XS og nyere læser kortet i baggrunden — du lægger bare telefonen på, uden at åbne noget først.",
-        "iPhone 7, 8 og X kan også læse NFC, men kræver at man åbner NFC-læseren i Kontrolcenter. iPhone 6s og ældre kan ikke læse den slags kort. På Android skal NFC være slået til, og skærmen skal være tændt og låst op.",
+        "Ældre iPhones (7, 8 og X) og helt gamle telefoner bruger bare QR-koden på bagsiden — det tager to sekunder ekstra. På Android skal funktionen NFC være slået til, hvilket den er på de fleste.",
         "Derfor er der også en QR-kode på bagsiden. Så virker det uanset telefon.",
     ]),
     ("Kan jeg ændre linket bagefter?", [
@@ -741,7 +741,7 @@ FAQ_ALL = [
         "Virker det ikke som forventet, kan du også bare fortryde købet inden for 14 dage og få pengene tilbage.",
     ]),
     ("Hvad er et anmeldelseskort egentlig?", [
-        "Et plastikkort på størrelse med et betalingskort, med en NFC-chip indeni. Chippen indeholder linket til din Google-anmeldelsesside.",
+        "Et plastikkort på størrelse med et betalingskort, med en lille chip indeni. Chippen indeholder linket til din Google-anmeldelsesside.",
         "Når en kunde lægger sin telefon mod kortet, læser telefonen linket og åbner siden. Der er ingen app, ingen forbindelse og ingen strøm involveret.",
     ]),
     ("Hvad koster et anmeldelseskort?", [
@@ -814,7 +814,7 @@ home_sticky = """
 
 page("index.html",
      "Anmeldelseskort — {brand}",
-     "Anmeldelseskort der sender kunden direkte til jeres Google-anmeldelsesside med ét tryk. NFC og QR-kode — fra %d kr for ét kort og ned til %d kr ved større antal." % (P1, TIERS[-1][1]),
+     "Anmeldelseskort der sender kunden direkte til jeres Google-anmeldelsesside med ét tryk. Fra %d kr for ét kort og ned til %d kr ved større antal. Intet abonnement." % (P1, TIERS[-1][1]),
      home_benefits + home_paths + home_steps + home_why + home_products
      + home_prices + home_trust + home_faq + home_guides + home_sticky,
      current="index.html", hero=home_hero, jsonld=HOME_LD)
@@ -824,8 +824,7 @@ page("index.html",
 spec_rows = [
     ("Format", "Kreditkortstørrelse, 85,6 × 54 × 0,76 mm"),
     ("Materiale", "Massiv PVC, vandtæt"),
-    ("Chip", "NTAG215, 504 bytes brugerhukommelse"),
-    ("Frekvens", "13,56 MHz, ISO 14443-A"),
+    ("Chip", "Indbygget i kortet — holder i mange år"),
     ("Strøm", "Ingen. Chippen får energi fra telefonen"),
     ("Backup", "QR-kode trykt på bagsiden"),
     ("Linkmål", "Google, Trustpilot, Facebook eller din egen side"),
@@ -840,7 +839,7 @@ produkt = """
       <div class="stack-6 grid--product__info" data-reveal="60">
         <div class="stack">
           <span class="eyebrow">Produktet</span>
-          <h1 class="h1">Anmeldelseskort med NFC</h1>
+          <h1 class="h1">Anmeldelseskort</h1>
           <div class="row"><span class="stars">%s</span><span class="small">Hvid og sort side · standarddesign</span></div>
         </div>
         <p class="lede">Læg kortet på disken. Kunden holder telefonen mod det, og din Google-anmeldelsesside åbner med det samme — klar til at skrive i.</p>
@@ -868,7 +867,7 @@ produkt = """
       <div class="stack-6" data-reveal>
         <span class="eyebrow">Forklaret kort</span>
         <h2 class="h2">Hvad er et anmeldelseskort?</h2>
-        <p>Et anmeldelseskort er et kort i kreditkortstørrelse med en lille NFC-chip indeni. Chippen indeholder et link til jeres virksomheds side på Google. Når en kunde holder telefonen mod kortet, åbner telefonen siden, hvor man giver stjerner og skriver en anmeldelse. Der skal ikke hentes nogen app.</p>
+        <p>Et anmeldelseskort er et kort i kreditkortstørrelse med en lille chip indeni. Chippen indeholder et link til jeres virksomheds side på Google. Når en kunde holder telefonen mod kortet, åbner telefonen siden, hvor man giver stjerner og skriver en anmeldelse. Der skal ikke hentes nogen app.</p>
         <p>Kortet kaldes også et Google review-kort, et NFC-anmeldelseskort eller på engelsk et <em>Google review card</em> eller <em>tap card</em>. Det er det samme produkt. På bagsiden sidder der også en QR-kode, så det virker på alle telefoner — også dem uden NFC.</p>
         <h3>Hvad koster et anmeldelseskort?</h3>
         <p>Ét kort koster %d kr inkl. moms. Køber du flere, falder prisen pr. kort — ned til %d kr ved 500 stk. Der er intet abonnement og ingen månedlig betaling: du betaler én gang, og kortet virker, så længe jeres Google-profil findes. Programmering er gratis, og der er fri fragt til pakkeshop.</p>
@@ -925,8 +924,8 @@ produkt = """
 
 PRODUCT_LD = {
     "@context": "https://schema.org", "@type": "Product",
-    "name": "Anmeldelseskort med NFC",
-    "description": "Anmeldelseskort (Google review-kort) i kreditkortstørrelse med NTAG215 NFC-chip og QR-kode. Kunden holder telefonen mod kortet, og virksomhedens Google-anmeldelsesside åbner.",
+    "name": "Anmeldelseskort",
+    "description": "Anmeldelseskort (Google review-kort) i kreditkortstørrelse med indbygget chip og QR-kode. Kunden holder telefonen mod kortet, og virksomhedens Google-anmeldelsesside åbner.",
     "image": [BASE_URL + "/assets/img/card-front.webp", BASE_URL + "/assets/img/card-back.webp", BASE_URL + "/assets/img/card-hero.webp"],
     "sku": "NFC-GOOGLE-SORT",
     "url": BASE_URL + "/anmeldelseskort",
@@ -944,8 +943,8 @@ PRODUCT_LD = {
 }
 
 page("anmeldelseskort.html",
-     "Anmeldelseskort med NFC — fra %d kr — {brand}" % P1,
-     "Anmeldelseskort (Google review-kort) med NFC-chip og QR-kode. Kunden holder telefonen mod kortet, og jeres Google-anmeldelsesside åbner. Fra %d kr inkl. moms, gratis programmering." % P1,
+     "Anmeldelseskort — fra %d kr — {brand}" % P1,
+     "Anmeldelseskort der åbner jeres Google-anmeldelsesside med ét tryk — og en QR-kode på bagsiden til ældre telefoner. Fra %d kr inkl. moms, gratis programmering." % P1,
      produkt, jsonld=PRODUCT_LD)
 
 
@@ -1363,7 +1362,7 @@ ORG_LD_NODE = {k: v for k, v in ORG_LD.items() if k != "@context"}
 CTA_BOX = """
 <div class="cta-box stack" data-reveal>
   <h2 class="h3">Gør det til ét tryk for kunden</h2>
-  <p class="small" style="max-width:36rem">Anmeldelseskort med NFC og QR-kode. Kunden holder telefonen mod kortet, og anmeldelsesfeltet åbner. Fra %d kr — ned til %d kr pr. stk. ved større antal. Vi programmerer kortet gratis.</p>
+  <p class="small" style="max-width:36rem">Anmeldelseskort der virker på alle telefoner. Kunden holder telefonen mod kortet, og anmeldelsesfeltet åbner. Fra %d kr — ned til %d kr pr. stk. ved større antal. Vi programmerer kortet gratis.</p>
   <div class="row"><a class="btn" href="/bestil">Bestil kort</a><a class="btn btn--ghost" href="/anmeldelseskort">Se kortet</a></div>
 </div>""" % (P1, TIERS[-1][1])
 
@@ -1440,7 +1439,7 @@ for b in BRANCHER:
     others = "".join(branch_card(o, i) for i, o in enumerate([o for o in BRANCHER if o is not b][:3]))
     faq_ld = {"@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": " ".join(a)}} for q, a in b["faq"]]}
-    service = {"@type": "Product", "name": "Anmeldelseskort med NFC", "url": BASE_URL + "/anmeldelseskort",
+    service = {"@type": "Product", "name": "Anmeldelseskort", "url": BASE_URL + "/anmeldelseskort",
                "image": BASE_URL + "/assets/img/card-front.webp",
                "description": fill(b["desc"]), "brand": {"@type": "Brand", "name": BRAND_NAME},
                "offers": {"@type": "AggregateOffer", "priceCurrency": "DKK", "lowPrice": str(TIERS[-1][1]),
@@ -1454,10 +1453,10 @@ for b in BRANCHER:
       <div class="prose" data-reveal>%s</div>
       <div class="stack-6" data-reveal="60" style="position:sticky;top:6rem">
         <div class="photo photo--card">
-          <img src="/assets/img/card-front.webp?v=3" width="1200" height="1200" alt="Anmeldelseskort med NFC til %s — hvid side med Google-logo og fem stjerner" loading="lazy">
+          <img src="/assets/img/card-front.webp?v=3" width="1200" height="1200" alt="Anmeldelseskort til %s — hvid side med Google-logo og fem stjerner" loading="lazy">
         </div>
         <ul class="ticks small" style="list-style:none;padding:0;display:grid;gap:var(--s-2)">
-          <li>%s NFC og QR-kode — virker på alle telefoner</li>
+          <li>%s Tryk eller scan — virker på alle telefoner</li>
           <li>%s Ingen app, intet abonnement</li>
           <li>%s Vi programmerer kortet gratis</li>
           <li>%s Fra %d kr · ned til %d kr ved større antal</li>
@@ -1747,7 +1746,7 @@ bestil = """
 </section>""" % (TIERS_JSON, qty_btns, SHIP_HOME)
 
 page(ORDER, "Bestil anmeldelseskort — {brand}",
-     "Bestil anmeldelseskort med NFC. Vælg antal, se mængderabatten med det samme, og betal med kort, MobilePay eller Klarna. Fri fragt til pakkeshop.",
+     "Bestil anmeldelseskort. Vælg antal, se mængderabatten med det samme, og betal med kort, MobilePay eller Klarna. Fri fragt til pakkeshop.",
      bestil)
 
 

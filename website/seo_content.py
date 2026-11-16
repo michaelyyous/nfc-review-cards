@@ -30,7 +30,7 @@ BRANCHER = [
 <li><strong>Ved kassen eller betalingsterminalen.</strong> Det er det eneste sted, hver eneste kunde kommer forbi med telefonen fremme. Læg kortet lige ved siden af terminalen.</li>
 <li><strong>Ved hver arbejdsplads, hvis I tager betaling ved stolen.</strong> Mange saloner tager MobilePay ved stolen. Så skal kortet være der — ikke ved en disk, kunden aldrig går hen til.</li>
 <li><strong>Ikke ved indgangen.</strong> Når kunden kommer ind, har de intet at anmelde endnu.</li>
-<li><strong>Ikke på en metalhylde.</strong> Metal svækker NFC-signalet. Træ, glas, plastik og sten er helt fint.</li>
+<li><strong>Ikke på en metalhylde.</strong> Metal svækker signalet. Træ, glas, plastik og sten er helt fint.</li>
 </ul>"""),
             ("Hvad du kan sige — uden at det bliver akavet",
              """<p>Det største løft kommer, når den, der har klippet, selv nævner det. Én gang, venligt, og uden at stå og vente:</p>
@@ -69,7 +69,7 @@ BRANCHER = [
 <li><strong>Med regningen.</strong> Kommer regningen i en mappe eller på en bakke, så læg kortet i den. Det er den mest effektive placering i en restaurant.</li>
 <li><strong>Ved disken i caféen.</strong> Bestiller og betaler man ved disken, så læg kortet ved terminalen. Et kort pr. kasse.</li>
 <li><strong>Ved udleveringen til takeaway.</strong> Kunden står og venter på maden — et oplagt sted at vise kortet.</li>
-<li><strong>Pas på metalbakker.</strong> En regning på en stålbakke svækker NFC-signalet. Læg kortet oven på et stykke papir, en træplade eller i en læder- eller plastikmappe.</li>
+<li><strong>Pas på metalbakker.</strong> En regning på en stålbakke svækker signalet. Læg kortet oven på et stykke papir, en træplade eller i en læder- eller plastikmappe.</li>
 </ul>"""),
             ("Sådan får personalet det med",
              """<p>Kortet virker bedst, når tjeneren nævner det, mens regningen bliver sat på bordet:</p>
@@ -110,7 +110,7 @@ BRANCHER = [
 </ul>"""),
             ("Kortet i posen?",
              """<p>Nogle butikker lægger et kort i posen eller pakken. Det koster mere, fordi kortet ikke kommer igen, og effekten er mindre, fordi kunden først opdager det hjemme. Hvis du gør det, så brug QR-koden som hovedsagen, og vælg en billigere løsning end et NFC-kort til hver pose.</p>
-<p>Til selve kassen er NFC-kortet det rigtige: ét kort, der bliver brugt hundredvis af gange.</p>"""),
+<p>Til selve kassen er anmeldelseskortet det rigtige: ét kort, der bliver brugt hundredvis af gange.</p>"""),
             ("Har du flere butikker?",
              """<p>Hver butik har sin egen Google-profil, så hvert kort skal pege på den rigtige butik. Vi koder kortene for dig og mærker dem, så de ikke bliver blandet sammen. Se <a href="../maengderabat.html">priser ved større antal</a>.</p>"""),
         ],
@@ -145,7 +145,7 @@ BRANCHER = [
 <p>Vil du også nå kunder, du ikke ser, kan du sætte linket eller QR-koden på fakturaen. Det er et godt supplement, men det virker langt bedre, når du står over for kunden.</p>"""),
             ("På værkstedet",
              """<p>Har du et værksted med en disk — bilværksted, cykelværksted, dækcenter — så læg kortet der, hvor kunden henter nøglen og betaler. Det er dér, de ser, at bilen er klar, og at regningen var, som aftalt.</p>
-<p>Pas på metal: en værkstedsdisk i stål svækker NFC-signalet. Læg kortet på en gummimåtte eller en træplade.</p>"""),
+<p>Pas på metal: en værkstedsdisk i stål svækker signalet. Læg kortet på en gummimåtte eller en træplade.</p>"""),
             ("Hvad med de utilfredse kunder?",
              """<p>Spørg alle — også når du er i tvivl. Det er reglen, og det er også det, der gør dine anmeldelser troværdige. Et par kritiske anmeldelser blandt mange gode får dig til at se ægte ud. Og et godt svar på en kritisk anmeldelse viser, at du står ved dit arbejde. Se <a href="../guides/daarlige-anmeldelser.html">guiden om dårlige anmeldelser</a>.</p>"""),
         ],
