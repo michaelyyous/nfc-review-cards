@@ -58,7 +58,7 @@ HOME_LD = {"@context": "https://schema.org", "@graph": [
 ]}
 
 NAV = [
-    ("anmeldelseskort.html", "Google Review-kort"),
+    ("anmeldelseskort.html", "Anmeldelseskort"),
     ("saadan-virker-det.html", "Sådan virker det"),
     ("brancher/index.html", "Brancher"),
     ("maengderabat.html", "Mængderabat"),
@@ -138,7 +138,7 @@ def card_svg(dark, extra_attrs=""):
     ink = "#FFFFFF" if dark else "#1C1C1C"
     disc = '<circle cx="270" cy="428" r="178" fill="#FFFFFF"/>' if dark else ""
     label = "sort side" if dark else "hvid side"
-    return """<svg viewBox="0 0 %d %d" %s role="img" aria-label="Google Review-kort, %s">
+    return """<svg viewBox="0 0 %d %d" %s role="img" aria-label="Anmeldelseskort, %s">
     <rect width="%d" height="%d" fill="%s"/>
     <text x="270" y="80" text-anchor="middle" fill="%s"
           font-family="'Avenir Next','Avenir',system-ui,sans-serif"
@@ -245,12 +245,12 @@ def footer(depth=0):
     <div class="foot__grid">
       <div>
         <a class="brand" href="%sindex.html" style="margin-bottom:var(--s-4)">%s<span data-brand>Firmanavn</span></a>
-        <p class="small" style="max-width:24rem">Google Review-kort til butikker, saloner og alle der vil sælge dem videre. Ét tryk, og kunden står på din Google-anmeldelsesside. Intet abonnement.</p>
+        <p class="small" style="max-width:24rem">Anmeldelseskort til butikker, saloner og alle der vil sælge dem videre. Ét tryk, og kunden står på din Google-anmeldelsesside. Intet abonnement.</p>
       </div>
       <div>
         <h4>Produkt</h4>
         <ul>
-          <li><a href="%sanmeldelseskort.html">Google Review-kort</a></li>
+          <li><a href="%sanmeldelseskort.html">Anmeldelseskort</a></li>
           <li><a href="%smaengderabat.html">Mængderabat</a></li>
           <li><a href="%sforhandler.html">Bliv forhandler</a></li>
           <li><a href="/brancher">Brancher</a></li>
@@ -443,10 +443,10 @@ home_hero = """
         <div class="hero__eyebrow">
           <span class="stars">%s</span>
         </div>
-        <h1 class="display"><span class="display__kicker">Google Review-kort til butikker, saloner og videresalg</span>Kunden skriver anmeldelsen,<br>før de går ud ad døren.</h1>
+        <h1 class="display"><span class="display__kicker">Anmeldelseskort til butikker, saloner og videresalg</span>Kunden skriver anmeldelsen,<br>før de går ud ad døren.</h1>
         <p class="lede">Læg kortet på disken. Kunden holder telefonen mod det, og jeres anmeldelsesside åbner af sig selv. Ingen app, intet abonnement, ingen løbende udgift.</p>
         <div class="hero__buy">
-          <span class="hero__price"><small>Fra</small><strong>%d kr.</strong></span>
+          <span class="hero__price"><small>Fra</small> <strong>%d kr.</strong></span>
           <a class="btn btn--lg" href="bestil.html">Se kort og priser %s</a>
         </div>
         %s
@@ -459,7 +459,7 @@ home_hero = """
       </div>
       <div data-reveal="80">
         <div class="hero__media">
-          <img src="assets/img/card-hero.webp?v=5" width="1600" height="1280" alt="Google Review-kort spredt på et bord: den hvide side med Google-logo, NFC-symbol og fem stjerner øverst, sorte kort under og bagved" fetchpriority="high">
+          <img src="assets/img/card-hero.webp?v=5" width="1600" height="1280" alt="Anmeldelseskort spredt på et bord: den hvide side med Google-logo, NFC-symbol og fem stjerner øverst, sorte kort under og bagved" fetchpriority="high">
         </div>
       </div>
     </div>
@@ -586,7 +586,7 @@ home_why = """
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%%,20rem),1fr));gap:var(--s-10);align-items:center">
       <div data-reveal>
         <div class="photo photo--card">
-          <img src="assets/img/card-front.webp?v=3" width="1200" height="1200" alt="Google Review-kortets hvide side med Google-logo, NFC-symbol og fem stjerner" loading="lazy">
+          <img src="assets/img/card-front.webp?v=3" width="1200" height="1200" alt="Anmeldelseskortets hvide side med Google-logo, NFC-symbol og fem stjerner" loading="lazy">
         </div>
       </div>
       <div class="stack-6" data-reveal="60">
@@ -625,7 +625,7 @@ home_products = """
         <div class="prod__media">%s</div>
         <div class="prod__body">
           <span class="eyebrow">Googles motiv</span>
-          <h3 style="font-size:1.35rem">Google Review-kort</h3>
+          <h3 style="font-size:1.35rem">Anmeldelseskort</h3>
           <p class="small">Motivet siger selv hvad der sker. Du skal ikke forklare noget ved disken.</p>
           <div class="prod__foot stack">
             <div class="row"><span class="badge">På lager</span></div>
@@ -636,7 +636,7 @@ home_products = """
       </div>
       <div class="prod" data-reveal="80">
         <div class="prod__media">
-          <img src="assets/img/card-back.webp?v=3" width="1200" height="1200" alt="Google Review-kortets sorte side med Google-logo i hvid cirkel" loading="lazy">
+          <img src="assets/img/card-back.webp?v=3" width="1200" height="1200" alt="Anmeldelseskortets sorte side med Google-logo i hvid cirkel" loading="lazy">
         </div>
         <div class="prod__body">
           <span class="eyebrow">Dit eget motiv</span>
@@ -740,11 +740,11 @@ FAQ_ALL = [
         "Så sender vi et nyt, uden beregning og med fragt betalt. Det gælder i hele reklamationsperioden på 2 år.",
         "Virker det ikke som forventet, kan du også bare fortryde købet inden for 14 dage og få pengene tilbage.",
     ]),
-    ("Hvad er et Google Review-kort egentlig?", [
+    ("Hvad er et anmeldelseskort egentlig?", [
         "Et plastikkort på størrelse med et betalingskort, med en NFC-chip indeni. Chippen indeholder linket til din Google-anmeldelsesside.",
         "Når en kunde lægger sin telefon mod kortet, læser telefonen linket og åbner siden. Der er ingen app, ingen forbindelse og ingen strøm involveret.",
     ]),
-    ("Hvad koster et Google Review-kort?", [
+    ("Hvad koster et anmeldelseskort?", [
         "Ét kort koster %d kr inkl. moms. Køber du flere, falder prisen — ned til %d kr pr. stk. ved 500 stk." % (P1, TIERS[-1][1]),
         "Der er ingen løbende omkostninger oveni. Se hele pristrappen under Mængderabat.",
     ]),
@@ -774,7 +774,7 @@ home_faq = """
 GUIDE_CARDS = [
     ("guides/flere-google-anmeldelser.html", "Den store guide", "Sådan får du flere Google-anmeldelser",
      "Hvornår du skal spørge, hvad du skal sige, og hvad du ikke må."),
-    ("saadan-virker-det.html", "Sådan virker det", "Derfor virker et Google Review-kort",
+    ("saadan-virker-det.html", "Sådan virker det", "Derfor virker et anmeldelseskort",
      "Hvad kortet gør ved besværet — og hvad det ikke kan."),
     ("guides/placering.html", "Placering", "Hvor skal kortet ligge?",
      "Konkrete placeringer for café, frisør, værksted og butik."),
@@ -813,8 +813,8 @@ home_sticky = """
 </div>""" % P1
 
 page("index.html",
-     "Google Review-kort — tap og få anmeldelsen — {brand}",
-     "Google Review-kort med NFC og QR-kode. Kunden holder telefonen mod kortet, og jeres Google-anmeldelsesside åbner. Fra %d kr, intet abonnement, sendes fra Danmark." % P1,
+     "Anmeldelseskort — {brand}",
+     "Anmeldelseskort der sender kunden direkte til jeres Google-anmeldelsesside med ét tryk. NFC og QR-kode — fra %d kr for ét kort og ned til %d kr ved større antal." % (P1, TIERS[-1][1]),
      home_benefits + home_paths + home_steps + home_why + home_products
      + home_prices + home_trust + home_faq + home_guides + home_sticky,
      current="index.html", hero=home_hero, jsonld=HOME_LD)
@@ -840,7 +840,7 @@ produkt = """
       <div class="stack-6 grid--product__info" data-reveal="60">
         <div class="stack">
           <span class="eyebrow">Produktet</span>
-          <h1 class="h1">Google Review-kort med NFC</h1>
+          <h1 class="h1">Anmeldelseskort med NFC</h1>
           <div class="row"><span class="stars">%s</span><span class="small">Hvid og sort side · standarddesign</span></div>
         </div>
         <p class="lede">Læg kortet på disken. Kunden holder telefonen mod det, og din Google-anmeldelsesside åbner med det samme — klar til at skrive i.</p>
@@ -867,10 +867,10 @@ produkt = """
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%%,22rem),1fr));gap:var(--s-10);align-items:start">
       <div class="stack-6" data-reveal>
         <span class="eyebrow">Forklaret kort</span>
-        <h2 class="h2">Hvad er et Google Review-kort?</h2>
-        <p>Et Google Review-kort er et kort i kreditkortstørrelse med en lille NFC-chip indeni. Chippen indeholder et link til jeres virksomheds side på Google. Når en kunde holder telefonen mod kortet, åbner telefonen siden, hvor man giver stjerner og skriver en anmeldelse. Der skal ikke hentes nogen app.</p>
-        <p>Kortet kaldes også et anmeldelseskort, et NFC-anmeldelseskort eller på engelsk et <em>Google review card</em> eller <em>tap card</em>. Det er det samme produkt. På bagsiden sidder der også en QR-kode, så det virker på alle telefoner — også dem uden NFC.</p>
-        <h3>Hvad koster et Google Review-kort?</h3>
+        <h2 class="h2">Hvad er et anmeldelseskort?</h2>
+        <p>Et anmeldelseskort er et kort i kreditkortstørrelse med en lille NFC-chip indeni. Chippen indeholder et link til jeres virksomheds side på Google. Når en kunde holder telefonen mod kortet, åbner telefonen siden, hvor man giver stjerner og skriver en anmeldelse. Der skal ikke hentes nogen app.</p>
+        <p>Kortet kaldes også et Google review-kort, et NFC-anmeldelseskort eller på engelsk et <em>Google review card</em> eller <em>tap card</em>. Det er det samme produkt. På bagsiden sidder der også en QR-kode, så det virker på alle telefoner — også dem uden NFC.</p>
+        <h3>Hvad koster et anmeldelseskort?</h3>
         <p>Ét kort koster %d kr inkl. moms. Køber du flere, falder prisen pr. kort — ned til %d kr ved 500 stk. Der er intet abonnement og ingen månedlig betaling: du betaler én gang, og kortet virker, så længe jeres Google-profil findes. Programmering er gratis, og der er fri fragt til pakkeshop.</p>
       </div>
       <div class="stack-6" data-reveal="60">
@@ -925,8 +925,8 @@ produkt = """
 
 PRODUCT_LD = {
     "@context": "https://schema.org", "@type": "Product",
-    "name": "Google Review-kort med NFC",
-    "description": "Google Review-kort (anmeldelseskort) i kreditkortstørrelse med NTAG215 NFC-chip og QR-kode. Kunden holder telefonen mod kortet, og virksomhedens Google-anmeldelsesside åbner.",
+    "name": "Anmeldelseskort med NFC",
+    "description": "Anmeldelseskort (Google review-kort) i kreditkortstørrelse med NTAG215 NFC-chip og QR-kode. Kunden holder telefonen mod kortet, og virksomhedens Google-anmeldelsesside åbner.",
     "image": [BASE_URL + "/assets/img/card-front.webp", BASE_URL + "/assets/img/card-back.webp", BASE_URL + "/assets/img/card-hero.webp"],
     "sku": "NFC-GOOGLE-SORT",
     "url": BASE_URL + "/anmeldelseskort",
@@ -944,8 +944,8 @@ PRODUCT_LD = {
 }
 
 page("anmeldelseskort.html",
-     "Google Review-kort med NFC — fra %d kr — {brand}" % P1,
-     "Google Review-kort (anmeldelseskort) med NFC-chip og QR-kode. Kunden holder telefonen mod kortet, og jeres Google-anmeldelsesside åbner. Fra %d kr inkl. moms, gratis programmering." % P1,
+     "Anmeldelseskort med NFC — fra %d kr — {brand}" % P1,
+     "Anmeldelseskort (Google review-kort) med NFC-chip og QR-kode. Kunden holder telefonen mod kortet, og jeres Google-anmeldelsesside åbner. Fra %d kr inkl. moms, gratis programmering." % P1,
      produkt, jsonld=PRODUCT_LD)
 
 
@@ -996,8 +996,8 @@ saadan = hero(
   </div>
 </section>""" % CARD_3D
 
-page("saadan-virker-det.html", "Sådan virker et Google Review-kort — {brand}",
-     "Sådan fungerer Google Review-kortet trin for trin: hvad chippen indeholder, hvordan telefonen læser den, og hvorfor der også er en QR-kode.",
+page("saadan-virker-det.html", "Sådan virker et anmeldelseskort — {brand}",
+     "Sådan fungerer anmeldelseskortet trin for trin: hvad chippen indeholder, hvordan telefonen læser den, og hvorfor der også er en QR-kode.",
      saadan)
 
 
@@ -1069,7 +1069,7 @@ saet_op = hero(
   </div>
 </section>"""
 
-page("saet-det-op.html", "Sæt dit Google Review-kort op selv — {brand}",
+page("saet-det-op.html", "Sæt dit anmeldelseskort op selv — {brand}",
      "Trin-for-trin vejledning: find dit Google-anmeldelseslink, skriv det til NFC-chippen, beskyt kortet med kode og test det.",
      saet_op)
 
@@ -1119,8 +1119,8 @@ maengde = hero(
   </div>
 </section>""" % (tier_rows(), TIERS_JSON, calc_btns)
 
-page("maengderabat.html", "Mængderabat på Google Review-kort — fra %d kr pr. stk. — {brand}" % TIERS[-1][1],
-     "Google Review-kort i mængder: prisen falder fra %d kr til %d kr pr. kort. Fra 250 stk. eget tryk og betaling med faktura." % (P1, TIERS[-1][1]),
+page("maengderabat.html", "Mængderabat på anmeldelseskort — fra %d kr pr. stk. — {brand}" % TIERS[-1][1],
+     "Anmeldelseskort i mængder: prisen falder fra %d kr til %d kr pr. kort. Fra 250 stk. eget tryk og betaling med faktura." % (P1, TIERS[-1][1]),
      maengde)
 
 
@@ -1173,7 +1173,7 @@ forhandler = hero(
   </div>
 </section>""" % (TIERS[-2][1], TIERS[-1][1])
 
-page("forhandler.html", "Bliv forhandler af Google Review-kort — {brand}",
+page("forhandler.html", "Bliv forhandler af anmeldelseskort — {brand}",
      "Forhandlerpris fra 250 stk., ingen binding og tilbagekøb af usolgt lager. Ingen løfter om indtjening — læs betingelserne her.",
      forhandler)
 
@@ -1193,15 +1193,15 @@ FAQ_LD = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
      "acceptedAnswer": {"@type": "Answer", "text": " ".join(a).replace("<em>", "").replace("</em>", "")}}
     for q, a in FAQ_ALL]}
 
-page("faq.html", "Spørgsmål og svar om Google Review-kort — {brand}",
-     "Svar på de mest stillede spørgsmål om Google Review-kort: telefonkompatibilitet, programmering, levering, holdbarhed og Googles regler.",
+page("faq.html", "Spørgsmål og svar om anmeldelseskort — {brand}",
+     "Svar på de mest stillede spørgsmål om anmeldelseskort: telefonkompatibilitet, programmering, levering, holdbarhed og Googles regler.",
      faq_page, jsonld=FAQ_LD)
 
 
 # ================================================================ OM OS
 om = hero(
     "Om os", "En enkel ting, gjort ordentligt",
-    "Vi sælger Google Review-kort til danske virksomheder. Ikke en platform, ikke et abonnement, ikke et dashboard du skal lære at bruge. Et kort der ligger på disken og gør én ting.",
+    "Vi sælger anmeldelseskort til danske virksomheder. Ikke en platform, ikke et abonnement, ikke et dashboard du skal lære at bruge. Et kort der ligger på disken og gør én ting.",
 ) + """
 <section class="section--tight">
   <div class="wrap">
@@ -1222,7 +1222,7 @@ om = hero(
   </div>
 </section>"""
 
-page("om-os.html", "Om os — {brand}", "Vi sælger Google Review-kort til danske virksomheder. Ingen abonnementer, ingen udokumenterede påstande.", om)
+page("om-os.html", "Om os — {brand}", "Vi sælger anmeldelseskort til danske virksomheder. Ingen abonnementer, ingen udokumenterede påstande.", om)
 
 
 # ================================================================ KONTAKT
@@ -1338,7 +1338,7 @@ GUIDES = [
 # Søgevenlige <title>'er; overskriften på siden bliver den korte.
 GUIDE_SEO_TITLES = {
     "nfc-eller-qr.html": "NFC eller QR-kode til Google-anmeldelser?",
-    "placering.html": "Hvor skal Google Review-kortet ligge?",
+    "placering.html": "Hvor skal anmeldelseskortet ligge?",
     "daarlige-anmeldelser.html": "Dårlige Google-anmeldelser: hvad kan du gøre?",
     "regler-for-anmeldelser.html": "Regler for Google-anmeldelser i Danmark",
 }
@@ -1363,7 +1363,7 @@ ORG_LD_NODE = {k: v for k, v in ORG_LD.items() if k != "@context"}
 CTA_BOX = """
 <div class="cta-box stack" data-reveal>
   <h2 class="h3">Gør det til ét tryk for kunden</h2>
-  <p class="small" style="max-width:36rem">Google Review-kort med NFC og QR-kode. Kunden holder telefonen mod kortet, og anmeldelsesfeltet åbner. Fra %d kr — ned til %d kr pr. stk. ved større antal. Vi programmerer kortet gratis.</p>
+  <p class="small" style="max-width:36rem">Anmeldelseskort med NFC og QR-kode. Kunden holder telefonen mod kortet, og anmeldelsesfeltet åbner. Fra %d kr — ned til %d kr pr. stk. ved større antal. Vi programmerer kortet gratis.</p>
   <div class="row"><a class="btn" href="/bestil">Bestil kort</a><a class="btn btn--ghost" href="/anmeldelseskort">Se kortet</a></div>
 </div>""" % (P1, TIERS[-1][1])
 
@@ -1379,7 +1379,7 @@ guide_cards = "".join("""
   </a>""" % (href, (i % 3) * 60, title, desc) for i, (href, title, desc, _, _) in enumerate(ALL_GUIDES))
 
 crumb_html, crumb_ld = breadcrumbs([("Forside", "index.html"), ("Guides", "guides/index.html")])
-page("guides/index.html", "Guides om Google-anmeldelser og Google Review-kort — {brand}",
+page("guides/index.html", "Guides om Google-anmeldelser og anmeldelseskort — {brand}",
      "Guides om Google-anmeldelser: sådan får du flere anmeldelser, finder dit anmeldelseslink, beder kunden om en anmeldelse, og hvilke regler der gælder.",
      with_crumbs(hero("Guides", "Guides om Google-anmeldelser",
           "Kort og konkret om hvordan du får flere Google-anmeldelser — og hvilke regler der gælder. Gratis, uanset om du køber noget af os."), crumb_html) + """
@@ -1419,15 +1419,15 @@ def branch_card(b, i=0):
     return """
       <a class="card card--lift" href="/brancher/%s" data-reveal="%d">
         <span class="eyebrow">%s</span>
-        <h3 style="margin-top:var(--s-3)">Google Review-kort til %s</h3>
+        <h3 style="margin-top:var(--s-3)">Anmeldelseskort til %s</h3>
         <p class="small" style="margin-top:var(--s-2)">%s</p>
         <p class="small" style="margin-top:var(--s-4);font-weight:560">Se hvordan →</p>
       </a>""" % (b["slug"], (i % 3) * 60, b["nav"], b["nav"].lower(), b["who"])
 
 crumb_html, crumb_ld = breadcrumbs([("Forside", "index.html"), ("Brancher", "brancher/index.html")])
-page("brancher/index.html", "Google Review-kort til din branche — {brand}",
-     "Google Review-kort til frisører, restauranter, caféer, butikker, håndværkere og klinikker. Se hvor kortet skal ligge, og hvad du skal sige, i netop din branche.",
-     with_crumbs(hero("Brancher", "Google Review-kort til din branche",
+page("brancher/index.html", "Anmeldelseskort til din branche — {brand}",
+     "Anmeldelseskort til frisører, restauranter, caféer, butikker, håndværkere og klinikker. Se hvor kortet skal ligge, og hvad du skal sige, i netop din branche.",
+     with_crumbs(hero("Brancher", "Anmeldelseskort til din branche",
           "Kortet er det samme. Det, der afgør, om det bliver brugt, er hvor det ligger, og hvornår det bliver nævnt — og det er forskelligt fra en salon til en restaurant til en håndværker."), crumb_html) + """
 <section class="section--tight"><div class="wrap stack-8"><div class="grid grid-3">%s</div>%s</div></section>""" % (
          "".join(branch_card(b, i) for i, b in enumerate(BRANCHER)), CTA_BOX),
@@ -1440,7 +1440,7 @@ for b in BRANCHER:
     others = "".join(branch_card(o, i) for i, o in enumerate([o for o in BRANCHER if o is not b][:3]))
     faq_ld = {"@type": "FAQPage", "mainEntity": [
         {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": " ".join(a)}} for q, a in b["faq"]]}
-    service = {"@type": "Product", "name": "Google Review-kort med NFC", "url": BASE_URL + "/anmeldelseskort",
+    service = {"@type": "Product", "name": "Anmeldelseskort med NFC", "url": BASE_URL + "/anmeldelseskort",
                "image": BASE_URL + "/assets/img/card-front.webp",
                "description": fill(b["desc"]), "brand": {"@type": "Brand", "name": BRAND_NAME},
                "offers": {"@type": "AggregateOffer", "priceCurrency": "DKK", "lowPrice": str(TIERS[-1][1]),
@@ -1454,7 +1454,7 @@ for b in BRANCHER:
       <div class="prose" data-reveal>%s</div>
       <div class="stack-6" data-reveal="60" style="position:sticky;top:6rem">
         <div class="photo photo--card">
-          <img src="/assets/img/card-front.webp?v=3" width="1200" height="1200" alt="Google Review-kort med NFC til %s — hvid side med Google-logo og fem stjerner" loading="lazy">
+          <img src="/assets/img/card-front.webp?v=3" width="1200" height="1200" alt="Anmeldelseskort med NFC til %s — hvid side med Google-logo og fem stjerner" loading="lazy">
         </div>
         <ul class="ticks small" style="list-style:none;padding:0;display:grid;gap:var(--s-2)">
           <li>%s NFC og QR-kode — virker på alle telefoner</li>
@@ -1657,7 +1657,7 @@ bestil = """
   <div class="wrap">
     <div class="split">
       <div class="stack-6" style="max-width:44rem" data-reveal>
-        <span class="eyebrow">Bestil</span><h1 class="display">Bestil Google Review-kort</h1>
+        <span class="eyebrow">Bestil</span><h1 class="display">Bestil anmeldelseskort</h1>
         <p class="lede">Vælg antal, udfyld felterne, og gå til betaling. Du betaler sikkert med kort, MobilePay eller Klarna, og får ordrebekræftelsen med det samme.</p>
         <p class="small">Hvid på den ene side, sort på den anden — du vælger selv hvilken side der vender op på disken. Træk i kortet for at se det fra alle sider.</p>
       </div>
@@ -1746,8 +1746,8 @@ bestil = """
   </div>
 </section>""" % (TIERS_JSON, qty_btns, SHIP_HOME)
 
-page(ORDER, "Bestil Google Review-kort — {brand}",
-     "Bestil Google Review-kort med NFC. Vælg antal, se mængderabatten med det samme, og betal med kort, MobilePay eller Klarna. Fri fragt til pakkeshop.",
+page(ORDER, "Bestil anmeldelseskort — {brand}",
+     "Bestil anmeldelseskort med NFC. Vælg antal, se mængderabatten med det samme, og betal med kort, MobilePay eller Klarna. Fri fragt til pakkeshop.",
      bestil)
 
 

@@ -15,8 +15,8 @@ BRANCHER = [
     dict(
         slug="frisoer",
         nav="Frisører og saloner",
-        title="Google Review-kort til frisører og saloner — fra {P1} kr",
-        h1="Google Review-kort til frisører og saloner",
+        title="Anmeldelseskort til frisører og saloner — fra {P1} kr",
+        h1="Anmeldelseskort til frisører og saloner",
         desc="Få flere Google-anmeldelser i din salon. Kunden holder telefonen mod kortet ved kassen, og anmeldelsen er åben. Til frisører, barbershops, negle- og skønhedssaloner. Fra {P1} kr.",
         lede="Kunden går fra stolen med nyt hår og et spejlbillede, de er glade for. Det er det bedste øjeblik for en anmeldelse, og det varer cirka lige så længe, som det tager at betale.",
         who="Frisører, barbershops, negle- og vippesaloner, skønhedsklinikker og spa",
@@ -55,8 +55,8 @@ BRANCHER = [
     dict(
         slug="restaurant-og-cafe",
         nav="Restauranter og caféer",
-        title="Google Review-kort til restauranter og caféer — fra {P1} kr",
-        h1="Google Review-kort til restauranter og caféer",
+        title="Anmeldelseskort til restauranter og caféer — fra {P1} kr",
+        h1="Anmeldelseskort til restauranter og caféer",
         desc="Flere Google-anmeldelser til din restaurant, café eller bar. Læg kortet med regningen eller på disken, og gæsten anmelder med ét tryk. Ingen app, intet abonnement. Fra {P1} kr.",
         lede="Gæsterne vælger restaurant på Google Maps — ofte stående på gaden med telefonen i hånden. Stjernerne og antallet af anmeldelser er det første, de ser.",
         who="Restauranter, caféer, barer, bagerier, takeaway og food trucks",
@@ -92,8 +92,8 @@ BRANCHER = [
     dict(
         slug="butik",
         nav="Butikker",
-        title="Google Review-kort til butikker — anmeldelser ved kassen",
-        h1="Google Review-kort til butikker",
+        title="Anmeldelseskort til butikker — anmeldelser ved kassen",
+        h1="Anmeldelseskort til butikker",
         desc="Få flere Google-anmeldelser i din butik. Kortet ligger ved betalingsterminalen, kunden holder telefonen mod det, og anmeldelsen åbner. Til tøj, kiosk, blomster, cykel og specialbutikker. Fra {P1} kr.",
         lede="I en butik kommer alle kunder forbi det samme sted: kassen. Det gør det nemt — kortet skal bare ligge der, hvor kunden alligevel står med telefonen.",
         who="Tøjbutikker, specialbutikker, blomsterhandlere, cykelhandlere, kiosker, optikere og showrooms",
@@ -126,8 +126,8 @@ BRANCHER = [
     dict(
         slug="haandvaerker-og-vaerksted",
         nav="Håndværkere og værksteder",
-        title="Google Review-kort til håndværkere og værksteder",
-        h1="Google Review-kort til håndværkere og værksteder",
+        title="Anmeldelseskort til håndværkere og værksteder",
+        h1="Anmeldelseskort til håndværkere og værksteder",
         desc="Flere Google-anmeldelser til elektrikere, VVS'ere, tømrere, malere og autoværksteder. Giv kortet til kunden, når jobbet er færdigt, eller læg det ved værkstedsdisken. Fra {P1} kr.",
         lede="Når et job er godt udført, er kunden aldrig mere tilfreds end i øjeblikket, hvor de ser resultatet. Det er også øjeblikket, hvor anmeldelsen er nemmest at få.",
         who="Elektrikere, VVS'ere, tømrere, malere, murere, rengøring, autoværksteder og cykelværksteder",
@@ -161,9 +161,9 @@ BRANCHER = [
     dict(
         slug="klinik",
         nav="Klinikker og behandlere",
-        title="Google Review-kort til klinikker og behandlere",
-        h1="Google Review-kort til klinikker og behandlere",
-        desc="Google Review-kort til fysioterapeuter, kiropraktorer, tandlæger, massører, dyrlæger og andre klinikker. Patienten anmelder ved receptionen med ét tryk. Fra {P1} kr.",
+        title="Anmeldelseskort til klinikker og behandlere",
+        h1="Anmeldelseskort til klinikker og behandlere",
+        desc="Anmeldelseskort til fysioterapeuter, kiropraktorer, tandlæger, massører, dyrlæger og andre klinikker. Patienten anmelder ved receptionen med ét tryk. Fra {P1} kr.",
         lede="I en klinik sker anmeldelsen bedst ved receptionen, når næste tid er booket. Men en klinik skal også være ekstra omhyggelig med, hvordan der bliver spurgt — og svaret.",
         who="Fysioterapeuter, kiropraktorer, tandlæger, massører, psykologer, dyrlæger og andre behandlere",
         sections=[
@@ -225,7 +225,7 @@ GUIDES_SEO = [
 <li><strong>Klinik:</strong> ved receptionen, når næste tid er booket.</li>
 <li><strong>Webshop:</strong> når varen er modtaget og prøvet — ikke når ordren er afgivet.</li>
 </ul>
-<p>Se konkrete råd for din branche under <a href="../brancher/index.html">Google Review-kort til din branche</a>.</p>
+<p>Se konkrete råd for din branche under <a href="../brancher/index.html">anmeldelseskort til din branche</a>.</p>
 
 <h2>3. Gør det til ét tryk</h2>
 <p>Et link er godt i en mail. Ved disken er et link ubrugeligt — kunden kan ikke klikke på noget, der står på et skilt. Der er to måder at gøre det til ét skridt:</p>
@@ -233,7 +233,7 @@ GUIDES_SEO = [
 <li><strong>En QR-kode</strong>, som kunden scanner med kameraet. Virker på alle telefoner, men kræver tre handlinger: åbn kamera, sigt, tryk på linket.</li>
 <li><strong>Et NFC-kort</strong>, som kunden holder telefonen mod. Ingen app, intet kamera — siden åbner bare. Det er det hurtigste, der findes.</li>
 </ul>
-<p>Vores <a href="../anmeldelseskort.html">Google Review-kort</a> har begge dele: NFC på forsiden og QR-kode på bagsiden. Læs mere om forskellen i <a href="nfc-eller-qr.html">NFC eller QR-kode?</a></p>
+<p>Vores <a href="../anmeldelseskort.html">anmeldelseskort</a> har begge dele: NFC på forsiden og QR-kode på bagsiden. Læs mere om forskellen i <a href="nfc-eller-qr.html">NFC eller QR-kode?</a></p>
 
 <h2>4. Sig det højt — én gang</h2>
 <p>Et kort, der ligger fremme, bliver brugt. Et kort, som personalet nævner, bliver brugt markant mere. Det behøver ikke være mere end:</p>
@@ -276,7 +276,7 @@ GUIDES_SEO = [
      "Find dit Google-anmeldelseslink — trin for trin",
      """<h2>Hvad er et Google-anmeldelseslink?</h2>
 <p>Det er et link, der fører kunden direkte til feltet, hvor man giver stjerner og skriver en anmeldelse af din virksomhed. Ikke til din profil, hvor kunden selv skal finde knappen — men direkte til skrivefeltet.</p>
-<p>Det er det link, du skal bruge på et Google Review-kort, en QR-kode, i en mail eller på din hjemmeside.</p>
+<p>Det er det link, du skal bruge på et anmeldelseskort, en QR-kode, i en mail eller på din hjemmeside.</p>
 
 <h2>Det skal du bruge</h2>
 <p>En Google-virksomhedsprofil, som du har adgang til, og som er verificeret. Har du en virksomhed, der vises på Google Maps med adresse og åbningstider, findes profilen sandsynligvis allerede — spørgsmålet er bare, om du har adgang til den.</p>
@@ -371,7 +371,7 @@ GUIDES_SEO = [
 <p>Læs hele gennemgangen i <a href="regler-for-anmeldelser.html">Regler for Google-anmeldelser i Danmark</a>.</p>
 
 <h2>Gør det nemt at sige ja</h2>
-<p>Den bedste formulering hjælper ikke, hvis kunden bagefter skal søge dig frem selv. Derfor virker et <a href="../anmeldelseskort.html">Google Review-kort</a> ved disken: kunden holder telefonen mod kortet, og anmeldelsesfeltet er åbent.</p>"""),
+<p>Den bedste formulering hjælper ikke, hvis kunden bagefter skal søge dig frem selv. Derfor virker et <a href="../anmeldelseskort.html">anmeldelseskort</a> ved disken: kunden holder telefonen mod kortet, og anmeldelsesfeltet er åbent.</p>"""),
 ]
 
 GUIDES_SEO += [
@@ -419,7 +419,7 @@ GUIDES_SEO += [
 
 <h2>QR-kode eller NFC?</h2>
 <p>En QR-kode er gratis og virker på stort set alle telefoner. Men den kræver tre handlinger af kunden: åbn kamera, sigt, tryk på linket. Ved en travl disk er det ofte dér, folk giver op.</p>
-<p>Med NFC holder kunden bare telefonen mod kortet, og siden åbner. Vores <a href="../anmeldelseskort.html">Google Review-kort</a> har begge dele — NFC på forsiden og QR-kode på bagsiden — så du får det hurtige uden at miste de ældre telefoner. Læs mere i <a href="nfc-eller-qr.html">NFC eller QR-kode?</a></p>"""),
+<p>Med NFC holder kunden bare telefonen mod kortet, og siden åbner. Vores <a href="../anmeldelseskort.html">anmeldelseskort</a> har begge dele — NFC på forsiden og QR-kode på bagsiden — så du får det hurtige uden at miste de ældre telefoner. Læs mere i <a href="nfc-eller-qr.html">NFC eller QR-kode?</a></p>"""),
 
     ("anmeldelseslink-virker-ikke.html",
      "Google-anmeldelseslinket virker ikke",
@@ -510,5 +510,5 @@ GUIDE_OVERRIDES = {
 <p>Kortet kan i princippet omprogrammeres af andre, hvis det ikke er beskyttet. Vores kort er låst med en kode, så kun du kan ændre linket — men du kan stadig selv ændre det, hvis du får brug for det.</p>
 
 <h2>Hvad koster det?</h2>
-<p>En QR-kode kan du lave gratis — se <a href="qr-kode-til-google-anmeldelser.html">Gratis QR-kode til Google-anmeldelser</a>. Et NFC-kort koster lidt mere, men holder i årevis og bliver brugt af hundredvis af kunder. Vores <a href="../anmeldelseskort.html">Google Review-kort</a> koster fra {P1} kr og har begge dele."""),
+<p>En QR-kode kan du lave gratis — se <a href="qr-kode-til-google-anmeldelser.html">Gratis QR-kode til Google-anmeldelser</a>. Et NFC-kort koster lidt mere, men holder i årevis og bliver brugt af hundredvis af kunder. Vores <a href="../anmeldelseskort.html">anmeldelseskort</a> koster fra {P1} kr og har begge dele."""),
 }
