@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="assets/styles.css?v=24">
+<link rel="stylesheet" href="assets/styles.css?v=26">
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="icon" href="favicon-192.png" type="image/png" sizes="192x192">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -36,7 +36,7 @@
     <nav class="nav" aria-label="Hovedmenu"><a href="/anmeldelseskort" aria-current="page">Anmeldelseskort</a><a href="/saadan-virker-det">Sådan virker det</a><a href="/brancher">Brancher</a><a href="/maengderabat">Mængderabat</a><a href="/faq">FAQ</a><a href="/forhandler">Forhandler</a></nav>
     <div class="topbar__cta">
       <a class="btn btn--ghost btn--sm" href="/kontakt">Kontakt</a>
-      <a class="btn btn--sm" href="/bestil">Bestil</a>
+      <a class="btn btn--sm" href="/anmeldelseskort#bestil">Bestil</a>
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -146,42 +146,101 @@
           <span class="pill">Ingen app</span><span class="pill">Intet abonnement</span><span class="pill">Gratis programmering</span>
         </div>
         <hr class="hairline">
-        <div class="stack">
-          <div class="row" style="justify-content:space-between">
-            <span class="h3">Pris</span>
-            <span class="small">151,20 kr ekskl. moms pr. stk.</span>
-          </div>
-          <div class="tiers"><div class="tier">
-  <span class="tier__q">1 stk.</span><span></span>
+
+        <form class="order stack-8" id="bestil" data-order data-tiers='[{"min":1,"price":189},{"min":3,"price":169},{"min":5,"price":155},{"min":10,"price":129},{"min":25,"price":109},{"min":50,"price":95},{"min":100,"price":79},{"min":250,"price":59},{"min":500,"price":49}]' novalidate>
+          <fieldset class="ofield">
+            <legend class="eyebrow">1 · Vælg antal</legend>
+            <p class="tiny">Priser inkl. moms. Jo flere kort, jo lavere pris pr. stk.</p>
+            <div style="margin-top:var(--s-3)"><div class="tiers tiers--pick" role="group" aria-label="Vælg antal"><button type="button" class="tier tier--pick is-on" data-qty-set="1" aria-label="1 stk. til 189 kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>1 stk.</span><span></span>
   <span class="tier__p num">189 kr <small>/stk.</small></span>
-</div><div class="tier">
-  <span class="tier__q">3 stk.</span><span class="tier__save">−11%</span>
+</button><button type="button" class="tier tier--pick" data-qty-set="3" aria-label="3 stk. til 169 kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>3 stk.</span><span class="tier__save">−11%</span>
   <span class="tier__p num">169 kr <small>/stk.</small></span>
-</div><div class="tier">
-  <span class="tier__q">5 stk.</span><span class="tier__save">−18%</span>
+</button><button type="button" class="tier tier--pick" data-qty-set="5" aria-label="5 stk. til 155 kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>5 stk.</span><span class="tier__save">−18%</span>
   <span class="tier__p num">155 kr <small>/stk.</small></span>
-</div><div class="tier">
-  <span class="tier__q">10 stk.</span><span class="tier__save">−32%</span>
+</button><button type="button" class="tier tier--pick" data-qty-set="10" aria-label="10 stk. til 129 kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>10 stk.</span><span class="tier__save">−32%</span>
   <span class="tier__p num">129 kr <small>/stk.</small></span>
-</div><div class="tier">
-  <span class="tier__q">25 stk.</span><span class="tier__save">−42%</span>
+</button><button type="button" class="tier tier--pick" data-qty-set="25" aria-label="25 stk. til 109 kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>25 stk.</span><span class="tier__save">−42%</span>
   <span class="tier__p num">109 kr <small>/stk.</small></span>
-</div><div class="tier">
-  <span class="tier__q">50 stk.</span><span class="tier__save">−50%</span>
+</button><button type="button" class="tier tier--pick" data-qty-set="50" aria-label="50 stk. til 95 kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>50 stk.</span><span class="tier__save">−50%</span>
   <span class="tier__p num">95 kr <small>/stk.</small></span>
-</div><div class="tier" data-featured>
-  <span class="tier__q">100 stk.</span><span class="tier__save">−58%</span>
+</button><button type="button" class="tier tier--pick" data-qty-set="100" aria-label="100 stk. til 79 kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>100 stk.</span><span class="tier__save">−58%</span>
   <span class="tier__p num">79 kr <small>/stk.</small></span>
-</div><div class="tier">
-  <span class="tier__q">250 stk.</span><span class="tier__save">−69%</span>
+</button><button type="button" class="tier tier--pick" data-qty-set="250" aria-label="250 stk. til 59 kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>250 stk.</span><span class="tier__save">−69%</span>
   <span class="tier__p num">59 kr <small>/stk.</small></span>
-</div><div class="tier">
-  <span class="tier__q">500 stk.</span><span class="tier__save">−74%</span>
+</button><button type="button" class="tier tier--pick" data-qty-set="500" aria-label="500 stk. til 49 kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>500 stk.</span><span class="tier__save">−74%</span>
   <span class="tier__p num">49 kr <small>/stk.</small></span>
-</div></div>
-        </div>
-        <a class="btn btn--lg" href="/bestil">Bestil — 189 kr</a>
-        <p class="tiny">Fri fragt til pakkeshop · Sendes 1–2 hverdage · 14 dages fortrydelsesret · 2 års reklamationsret</p>
+</button></div></div>
+            <label class="small" for="qty" style="display:block;margin-top:var(--s-4)">Eller skriv et antal</label>
+            <input id="qty" name="antal" type="number" min="1" max="5000" value="1" class="inp" data-qty>
+          </fieldset>
+          <fieldset class="ofield">
+            <legend class="eyebrow">2 · Hvem køber?</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="koebertype" value="Til egen virksomhed" checked>
+                <span><strong>Til min egen virksomhed</strong><br><span class="small">Kortene skal ligge i min butik, salon eller klinik.</span></span></label>
+              <label class="opt"><input type="radio" name="koebertype" value="Til videresalg">
+                <span><strong>Jeg vil sælge dem videre</strong><br><span class="small">Jeg køber ind og sælger til butikker i mit område. Du behøver ikke have et CVR for at bestille.</span></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">3 · Programmering</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="programmering" value="Programmeret af jer" checked data-prog>
+                <span><strong>Programmér dem for mig</strong><br><span class="small">Gratis. Jeg sender linket nedenfor.</span></span></label>
+              <label class="opt"><input type="radio" name="programmering" value="Blanke, jeg gør det selv" data-prog>
+                <span><strong>Send dem blanke</strong><br><span class="small">Jeg programmerer selv med en gratis app.</span></span></label>
+            </div>
+            <div data-link-wrap style="margin-top:var(--s-4)">
+              <label class="small" for="glink">Link til din Google-anmeldelsesside</label>
+              <input id="glink" name="google_link" type="url" class="inp" placeholder="https://g.page/r/…/review" data-glink>
+              <p class="tiny" style="margin-top:var(--s-2)">Find det under <em>Anmeldelser → Få flere anmeldelser</em> på din Google-virksomhedsprofil. Er du i tvivl, så lad feltet stå tomt — vi hjælper.</p>
+            </div>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">4 · Levering</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="levering" value="pakkeshop" checked data-ship>
+                <span><strong>Pakkeshop — gratis</strong><br><span class="small">GLS, DAO, PostNord eller Bring. Du vælger den nærmeste ved betaling.</span></span></label>
+              <label class="opt"><input type="radio" name="levering" value="hjem" data-ship>
+                <span><strong>Hjemmelevering — 49 kr</strong><br><span class="small">Leveret til døren på hverdage.</span></span></label>
+            </div>
+            <p class="tiny" style="margin-top:var(--s-3)">Vi sender 1–2 hverdage efter din bestilling. Derfra er der typisk 1–3 hverdage.</p>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">5 · Til fakturaen <span class="tiny">(valgfrit)</span></legend>
+            <p class="tiny" style="margin-top:var(--s-2)">Navn, adresse og betaling udfylder du på næste side. Her er kun det, vi ikke kan spørge om der.</p>
+            <div class="grid grid-2" style="gap:var(--s-4);margin-top:var(--s-3)">
+              <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" autocomplete="organization"></div>
+              <div><label class="small" for="cvrf">CVR</label><input id="cvrf" name="cvr" class="inp" inputmode="numeric" autocomplete="off"></div>
+            </div>
+            <label class="small" for="besked" style="display:block;margin-top:var(--s-4)">Besked til os <span class="tiny">(valgfrit)</span></label>
+            <textarea id="besked" name="besked" rows="3" class="inp" placeholder="Fx ønsket leveringsdato, eller noget vi skal vide om programmeringen."></textarea>
+          </fieldset>
+          <div class="sumbox">
+            <h3>Din ordre</h3>
+            <div class="sumrow"><span><span data-sum-qty>1</span> kort à <span data-sum-unit>189</span> kr</span><span data-sum-goods>189 kr</span></div>
+            <div class="sumrow"><span>Fragt</span><span data-sum-ship>Gratis</span></div>
+            <hr class="hairline">
+            <div class="sumrow sumrow--total"><span>I alt</span><span><span data-sum-total>189</span> kr</span></div>
+            <p class="tiny" data-sum-ex>heraf moms — kr · ekskl. moms — kr</p>
+            <p class="tiny" data-sum-save style="color:var(--green);font-weight:560"></p>
+            <button class="btn btn--lg" type="submit" style="width:100%;margin-top:var(--s-5)">Gå til betaling</button>
+            <p class="tiny" style="margin-top:var(--s-3)">Du sendes til vores sikre betalingsside. Kortoplysninger indtastes aldrig her på sitet.</p>
+            <p class="tiny" style="margin-top:var(--s-4)">14 dages fortrydelsesret · 2 års reklamationsret · Sendes 1–2 hverdage</p>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -310,6 +369,6 @@
     </div>
   </div>
 </footer>
-<script src="assets/app.js?v=17"></script>
+<script src="assets/app.js?v=18"></script>
 </body>
 </html>

@@ -480,6 +480,7 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
     total: form.querySelector('[data-sum-total]'),
     ex:    form.querySelector('[data-sum-ex]'),
     save:  form.querySelector('[data-sum-save]'),
+    goods: form.querySelector('[data-sum-goods]'),
   };
 
   const kr = n => n.toLocaleString('da-DK', { maximumFractionDigits: 2 });
@@ -495,6 +496,7 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
 
     out.qty.textContent = q;
     out.unit.textContent = kr(unit);
+    if (out.goods) out.goods.textContent = kr(goods) + ' kr';
     out.ship.textContent = ship === 0 ? 'Gratis' : kr(ship) + ' kr';
     out.total.textContent = kr(total);
     out.ex.textContent = `heraf moms ${kr(total - total / (1 + VAT))} kr · ekskl. moms ${kr(total / (1 + VAT))} kr`;
@@ -504,6 +506,10 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
 
     presets.forEach(b => b.classList.toggle('is-on', Number(b.dataset.qtySet) === q));
   }
+
+  // ?antal=3 fra knapper andre steder på sitet vælger antallet på forhånd.
+  const pre = Number(new URLSearchParams(location.search).get('antal'));
+  if (pre >= 1) qtyInput.value = Math.min(5000, Math.round(pre));
 
   qtyInput.addEventListener('input', render);
   presets.forEach(b => b.addEventListener('click', () => { qtyInput.value = b.dataset.qtySet; render(); }));

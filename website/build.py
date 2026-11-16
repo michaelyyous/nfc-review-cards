@@ -34,7 +34,7 @@ def kr(n):
 BRAND_NAME = "ReviewPartneren"   # bages ind i titler og synlig tekst ved build
 BRAND_EMAIL = "support@reviewpartneren.dk"  # skal findes som rigtig postkasse
 BRAND_CVR = ""                   # udfyldes naar CVR-nummeret er tildelt
-ORDER = "bestil.html"
+ORDER = "anmeldelseskort.html"  # bestillingen ligger på produktsiden; /bestil viderestiller dertil
 BASE_URL = "https://reviewpartneren.dk"
 
 ORG_LD = {
@@ -202,7 +202,7 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="%sassets/styles.css?v=24">
+<link rel="stylesheet" href="%sassets/styles.css?v=26">
 <link rel="icon" href="%sfavicon.ico" sizes="48x48">
 <link rel="icon" href="%sfavicon-192.png" type="image/png" sizes="192x192">
 <link rel="icon" href="%sfavicon.svg" type="image/svg+xml">
@@ -229,12 +229,12 @@ def topbar(current, depth=0, onhero=False):
     <nav class="nav" aria-label="Hovedmenu">%s</nav>
     <div class="topbar__cta">
       <a class="btn btn--ghost btn--sm" href="%skontakt.html">Kontakt</a>
-      <a class="btn btn--sm" href="%sbestil.html">Bestil</a>
+      <a class="btn btn--sm" href="/anmeldelseskort#bestil">Bestil</a>
       <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
-<main id="indhold">""" % (up, LOGO, links, up, up)
+<main id="indhold">""" % (up, LOGO, links, up)
 
 
 def footer(depth=0):
@@ -286,7 +286,7 @@ def footer(depth=0):
     </div>
   </div>
 </footer>
-<script src="%sassets/app.js?v=17"></script>
+<script src="%sassets/app.js?v=18"></script>
 </body>
 </html>""" % ((up, LOGO) + (up,) * 13 + (PAYMENTS, up))
 
@@ -372,18 +372,24 @@ def acc(items):
     return "".join(out)
 
 
-def tier_rows(featured=100):
+def tier_rows(featured=100, pick=False):
     rows = []
     for q, p in TIERS:
         save = round((1 - p / P1) * 100)
         badge = '<span class="tier__save">−%d%%</span>' % save if save > 0 else "<span></span>"
         feat = " data-featured" if q == featured else ""
         label = "%d stk." % q if q > 1 else "1 stk."
+        if pick:
+            rows.append("""<button type="button" class="tier tier--pick%s" data-qty-set="%d" aria-label="%s til %d kr pr. stk.">
+  <span class="tier__q"><span class="tier__dot" aria-hidden="true"></span>%s</span>%s
+  <span class="tier__p num">%d kr <small>/stk.</small></span>
+</button>""" % (" is-on" if q == 1 else "", q, label, p, label, badge, p))
+            continue
         rows.append("""<div class="tier"%s>
   <span class="tier__q">%s</span>%s
   <span class="tier__p num">%d kr <small>/stk.</small></span>
 </div>""" % (feat, label, badge, p))
-    return '<div class="tiers">' + "".join(rows) + "</div>"
+    return '<div class="tiers%s" %s>' % (" tiers--pick" if pick else "", 'role="group" aria-label="Vælg antal"' if pick else "") + "".join(rows) + "</div>"
 
 
 def hero(eyebrow, h1, lede, buttons="", note="", extra=""):
@@ -447,7 +453,7 @@ home_hero = """
         <p class="lede">Læg kortet på disken. Kunden holder telefonen mod det, og jeres anmeldelsesside åbner af sig selv. Ingen app, intet abonnement, ingen løbende udgift.</p>
         <div class="hero__buy">
           <span class="hero__price"><small>Fra</small> <strong>%d kr.</strong></span>
-          <a class="btn btn--lg" href="bestil.html">Se kort og priser %s</a>
+          <a class="btn btn--lg" href="/anmeldelseskort#bestil">Se kort og priser %s</a>
         </div>
         %s
         <div class="ticks">
@@ -517,7 +523,7 @@ home_paths = """
         <span class="eyebrow">Til din egen forretning</span>
         <h3 style="margin-top:var(--s-3)">Kort til butikken</h3>
         <p class="small" style="margin-top:var(--s-2)">Ét ved kassen, ét ved bordet. Vi programmerer dem til jeres Google-side inden afsendelse, så I bare lægger dem frem.</p>
-        <p class="small" style="margin-top:var(--s-5);font-weight:600"><a href="bestil.html">Bestil fra %d kr %s</a></p>
+        <p class="small" style="margin-top:var(--s-5);font-weight:600"><a href="/anmeldelseskort#bestil">Bestil fra %d kr %s</a></p>
       </div>
       <div class="card" data-reveal="80">
         <span class="eyebrow">Til videresalg</span>
@@ -630,7 +636,7 @@ home_products = """
           <div class="prod__foot stack">
             <div class="row"><span class="badge">På lager</span></div>
             <p><strong style="font-size:1.2rem">Fra %d kr</strong><br><span class="small">ned til %d kr pr. kort</span></p>
-            <a class="btn" href="bestil.html">Bestil — fra %d kr %s</a>
+            <a class="btn" href="/anmeldelseskort#bestil">Bestil — fra %d kr %s</a>
           </div>
         </div>
       </div>
@@ -678,7 +684,7 @@ home_prices = """
           <p class="stat__note" style="margin-top:var(--s-3);color:var(--green);font-weight:560">%d kr lavere pr. kort ved 500 stk.</p>
         </div>
         <p class="small">Fri fragt til pakkeshop. <a href="maengderabat.html" style="text-decoration:underline">Over 500 kort?</a></p>
-        <div><a class="btn btn--lg" href="bestil.html">Bestil 3 kort — %d kr %s</a></div>
+        <div><a class="btn btn--lg" href="/anmeldelseskort?antal=3#bestil">Bestil 3 kort — %d kr %s</a></div>
       </div>
       <div data-reveal="120">
         %s
@@ -809,7 +815,7 @@ home_guides = """
 home_sticky = """
 <div class="stickybar" data-stickybar>
   <p>Flere anmeldelser — fra %d kr · intet abonnement, ingen app</p>
-  <a class="btn btn--sm" href="bestil.html">Bestil</a>
+  <a class="btn btn--sm" href="/anmeldelseskort#bestil">Bestil</a>
 </div>""" % P1
 
 page("index.html",
@@ -831,6 +837,75 @@ spec_rows = [
     ("Kan omprogrammeres", "Ja — beskyttet med kode, ikke låst permanent"),
 ]
 
+ORDER_FORM = """
+        <form class="order stack-8" id="bestil" data-order data-tiers='%(tiers)s' novalidate>
+          <fieldset class="ofield">
+            <legend class="eyebrow">1 · Vælg antal</legend>
+            <p class="tiny">Priser inkl. moms. Jo flere kort, jo lavere pris pr. stk.</p>
+            <div style="margin-top:var(--s-3)">%(tierpick)s</div>
+            <label class="small" for="qty" style="display:block;margin-top:var(--s-4)">Eller skriv et antal</label>
+            <input id="qty" name="antal" type="number" min="1" max="5000" value="1" class="inp" data-qty>
+          </fieldset>
+          <fieldset class="ofield">
+            <legend class="eyebrow">2 · Hvem køber?</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="koebertype" value="Til egen virksomhed" checked>
+                <span><strong>Til min egen virksomhed</strong><br><span class="small">Kortene skal ligge i min butik, salon eller klinik.</span></span></label>
+              <label class="opt"><input type="radio" name="koebertype" value="Til videresalg">
+                <span><strong>Jeg vil sælge dem videre</strong><br><span class="small">Jeg køber ind og sælger til butikker i mit område. Du behøver ikke have et CVR for at bestille.</span></span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">3 · Programmering</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="programmering" value="Programmeret af jer" checked data-prog>
+                <span><strong>Programmér dem for mig</strong><br><span class="small">Gratis. Jeg sender linket nedenfor.</span></span></label>
+              <label class="opt"><input type="radio" name="programmering" value="Blanke, jeg gør det selv" data-prog>
+                <span><strong>Send dem blanke</strong><br><span class="small">Jeg programmerer selv med en gratis app.</span></span></label>
+            </div>
+            <div data-link-wrap style="margin-top:var(--s-4)">
+              <label class="small" for="glink">Link til din Google-anmeldelsesside</label>
+              <input id="glink" name="google_link" type="url" class="inp" placeholder="https://g.page/r/…/review" data-glink>
+              <p class="tiny" style="margin-top:var(--s-2)">Find det under <em>Anmeldelser → Få flere anmeldelser</em> på din Google-virksomhedsprofil. Er du i tvivl, så lad feltet stå tomt — vi hjælper.</p>
+            </div>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">4 · Levering</legend>
+            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
+              <label class="opt"><input type="radio" name="levering" value="pakkeshop" checked data-ship>
+                <span><strong>Pakkeshop — gratis</strong><br><span class="small">GLS, DAO, PostNord eller Bring. Du vælger den nærmeste ved betaling.</span></span></label>
+              <label class="opt"><input type="radio" name="levering" value="hjem" data-ship>
+                <span><strong>Hjemmelevering — %(ship)d kr</strong><br><span class="small">Leveret til døren på hverdage.</span></span></label>
+            </div>
+            <p class="tiny" style="margin-top:var(--s-3)">Vi sender 1–2 hverdage efter din bestilling. Derfra er der typisk 1–3 hverdage.</p>
+          </fieldset>
+
+          <fieldset class="ofield">
+            <legend class="eyebrow">5 · Til fakturaen <span class="tiny">(valgfrit)</span></legend>
+            <p class="tiny" style="margin-top:var(--s-2)">Navn, adresse og betaling udfylder du på næste side. Her er kun det, vi ikke kan spørge om der.</p>
+            <div class="grid grid-2" style="gap:var(--s-4);margin-top:var(--s-3)">
+              <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" autocomplete="organization"></div>
+              <div><label class="small" for="cvrf">CVR</label><input id="cvrf" name="cvr" class="inp" inputmode="numeric" autocomplete="off"></div>
+            </div>
+            <label class="small" for="besked" style="display:block;margin-top:var(--s-4)">Besked til os <span class="tiny">(valgfrit)</span></label>
+            <textarea id="besked" name="besked" rows="3" class="inp" placeholder="Fx ønsket leveringsdato, eller noget vi skal vide om programmeringen."></textarea>
+          </fieldset>
+          <div class="sumbox">
+            <h3>Din ordre</h3>
+            <div class="sumrow"><span><span data-sum-qty>1</span> kort à <span data-sum-unit>189</span> kr</span><span data-sum-goods>189 kr</span></div>
+            <div class="sumrow"><span>Fragt</span><span data-sum-ship>Gratis</span></div>
+            <hr class="hairline">
+            <div class="sumrow sumrow--total"><span>I alt</span><span><span data-sum-total>189</span> kr</span></div>
+            <p class="tiny" data-sum-ex>heraf moms — kr · ekskl. moms — kr</p>
+            <p class="tiny" data-sum-save style="color:var(--green);font-weight:560"></p>
+            <button class="btn btn--lg" type="submit" style="width:100%%;margin-top:var(--s-5)">Gå til betaling</button>
+            <p class="tiny" style="margin-top:var(--s-3)">Du sendes til vores sikre betalingsside. Kortoplysninger indtastes aldrig her på sitet.</p>
+            <p class="tiny" style="margin-top:var(--s-4)">14 dages fortrydelsesret · 2 års reklamationsret · Sendes 1–2 hverdage</p>
+          </div>
+        </form>"""
+
 produkt = """
 <section class="section" style="padding-top:clamp(var(--s-10),5vw,var(--s-16))">
   <div class="wrap">
@@ -847,15 +922,7 @@ produkt = """
           <span class="pill">Ingen app</span><span class="pill">Intet abonnement</span><span class="pill">Gratis programmering</span>
         </div>
         <hr class="hairline">
-        <div class="stack">
-          <div class="row" style="justify-content:space-between">
-            <span class="h3">Pris</span>
-            <span class="small">%s kr ekskl. moms pr. stk.</span>
-          </div>
-          %s
-        </div>
-        <a class="btn btn--lg" href="bestil.html">Bestil — %d kr</a>
-        <p class="tiny">Fri fragt til pakkeshop · Sendes 1–2 hverdage · 14 dages fortrydelsesret · 2 års reklamationsret</p>
+%%(FORM)s
       </div>
     </div>
   </div>
@@ -917,10 +984,12 @@ produkt = """
     </div>
   </div>
 </section>""" % (
-    CARD_3D, star() * 5, ex(P1), tier_rows(), P1, P1, TIERS[-1][1],
+    CARD_3D, star() * 5, P1, TIERS[-1][1],
     "".join("<tr><th>%s</th><td>%s</td></tr>" % r for r in spec_rows),
     acc([FAQ_ALL[0], FAQ_ALL[2], FAQ_ALL[6], FAQ_ALL[11]]),
 )
+
+produkt = produkt.replace("%(FORM)s", ORDER_FORM % {"tiers": TIERS_JSON, "tierpick": tier_rows(pick=True), "ship": SHIP_HOME})
 
 PRODUCT_LD = {
     "@context": "https://schema.org", "@type": "Product",
@@ -1363,7 +1432,7 @@ CTA_BOX = """
 <div class="cta-box stack" data-reveal>
   <h2 class="h3">Gør det til ét tryk for kunden</h2>
   <p class="small" style="max-width:36rem">Anmeldelseskort der virker på alle telefoner. Kunden holder telefonen mod kortet, og anmeldelsesfeltet åbner. Fra %d kr — ned til %d kr pr. stk. ved større antal. Vi programmerer kortet gratis.</p>
-  <div class="row"><a class="btn" href="/bestil">Bestil kort</a><a class="btn btn--ghost" href="/anmeldelseskort">Se kortet</a></div>
+  <div class="row"><a class="btn" href="/anmeldelseskort#bestil">Se kortet og bestil</a></div>
 </div>""" % (P1, TIERS[-1][1])
 
 # Alle guides: de nye søgeguides først, så de gamle.
@@ -1445,7 +1514,7 @@ for b in BRANCHER:
                "offers": {"@type": "AggregateOffer", "priceCurrency": "DKK", "lowPrice": str(TIERS[-1][1]),
                           "highPrice": str(P1), "offerCount": str(len(TIERS)), "availability": "https://schema.org/InStock"}}
     body = with_crumbs(hero("Til " + b["nav"].lower(), b["h1"], b["lede"],
-        '<a class="btn btn--lg" href="/bestil">Bestil — fra %d kr</a><a class="btn btn--ghost btn--lg" href="/anmeldelseskort">Se kortet</a>' % P1,
+        '<a class="btn btn--lg" href="/anmeldelseskort#bestil">Bestil — fra %d kr</a><a class="btn btn--ghost btn--lg" href="/saadan-virker-det">Sådan virker det</a>' % P1,
         "Til " + b["who"].lower().replace("vvs'ere", "VVS'ere")), crumb_html) + """
 <section class="section--tight" style="padding-top:0">
   <div class="wrap">
@@ -1644,110 +1713,6 @@ cookiepol = hero("Cookies", "Cookiepolitik",
 
 page("cookiepolitik.html", "Cookiepolitik — {brand}",
      "Hvilke cookies dette website bruger, hvorfor, og hvordan du ændrer dit samtykke.", cookiepol)
-
-
-# ================================================================ BESTIL
-qty_btns = "".join(
-    '<button type="button" class="qty__preset%s" data-qty-set="%d">%d</button>'
-    % (" is-on" if q == 10 else "", q, q) for q, _ in TIERS)
-
-bestil = """
-<section class="section" style="padding-bottom:clamp(var(--s-6),3vw,var(--s-10))">
-  <div class="wrap">
-    <div class="split">
-      <div class="stack-6" style="max-width:44rem" data-reveal>
-        <span class="eyebrow">Bestil</span><h1 class="display">Bestil anmeldelseskort</h1>
-        <p class="lede">Vælg antal, udfyld felterne, og gå til betaling. Du betaler sikkert med kort, MobilePay eller Klarna, og får ordrebekræftelsen med det samme.</p>
-        <p class="small">Hvid på den ene side, sort på den anden — du vælger selv hvilken side der vender op på disken. Træk i kortet for at se det fra alle sider.</p>
-      </div>
-      <div data-reveal="80">%s</div>
-    </div>
-  </div>
-</section>""" % CARD_3D + """
-<section class="section--tight">
-  <div class="wrap">
-    <form class="order" data-order data-tiers='%s' novalidate>
-      <div class="order__grid">
-
-        <div class="stack-8">
-          <fieldset class="ofield">
-            <legend class="eyebrow">1 · Antal</legend>
-            <div class="qty" role="group" aria-label="Vælg antal">%s</div>
-            <label class="small" for="qty" style="display:block;margin-top:var(--s-4)">Eller skriv et antal</label>
-            <input id="qty" name="antal" type="number" min="1" max="5000" value="10" class="inp" data-qty>
-          </fieldset>
-
-          <fieldset class="ofield">
-            <legend class="eyebrow">2 · Hvem køber?</legend>
-            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
-              <label class="opt"><input type="radio" name="koebertype" value="Til egen virksomhed" checked>
-                <span><strong>Til min egen virksomhed</strong><br><span class="small">Kortene skal ligge i min butik, salon eller klinik.</span></span></label>
-              <label class="opt"><input type="radio" name="koebertype" value="Til videresalg">
-                <span><strong>Jeg vil sælge dem videre</strong><br><span class="small">Jeg køber ind og sælger til butikker i mit område. Du behøver ikke have et CVR for at bestille.</span></span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="ofield">
-            <legend class="eyebrow">3 · Programmering</legend>
-            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
-              <label class="opt"><input type="radio" name="programmering" value="Programmeret af jer" checked data-prog>
-                <span><strong>Programmér dem for mig</strong><br><span class="small">Gratis. Jeg sender linket nedenfor.</span></span></label>
-              <label class="opt"><input type="radio" name="programmering" value="Blanke, jeg gør det selv" data-prog>
-                <span><strong>Send dem blanke</strong><br><span class="small">Jeg programmerer selv med en gratis app.</span></span></label>
-            </div>
-            <div data-link-wrap style="margin-top:var(--s-4)">
-              <label class="small" for="glink">Link til din Google-anmeldelsesside</label>
-              <input id="glink" name="google_link" type="url" class="inp" placeholder="https://g.page/r/…/review" data-glink>
-              <p class="tiny" style="margin-top:var(--s-2)">Find det under <em>Anmeldelser → Få flere anmeldelser</em> på din Google-virksomhedsprofil. Er du i tvivl, så lad feltet stå tomt — vi hjælper.</p>
-            </div>
-          </fieldset>
-
-          <fieldset class="ofield">
-            <legend class="eyebrow">4 · Levering</legend>
-            <div class="stack" style="gap:var(--s-3);margin-top:var(--s-3)">
-              <label class="opt"><input type="radio" name="levering" value="pakkeshop" checked data-ship>
-                <span><strong>Pakkeshop — gratis</strong><br><span class="small">GLS, DAO, PostNord eller Bring. Du vælger den nærmeste ved betaling.</span></span></label>
-              <label class="opt"><input type="radio" name="levering" value="hjem" data-ship>
-                <span><strong>Hjemmelevering — %d kr</strong><br><span class="small">Leveret til døren på hverdage.</span></span></label>
-            </div>
-            <p class="tiny" style="margin-top:var(--s-3)">Vi sender 1–2 hverdage efter din bestilling. Derfra er der typisk 1–3 hverdage.</p>
-          </fieldset>
-
-          <fieldset class="ofield">
-            <legend class="eyebrow">5 · Til fakturaen <span class="tiny">(valgfrit)</span></legend>
-            <p class="tiny" style="margin-top:var(--s-2)">Navn, adresse og betaling udfylder du på næste side. Her er kun det, vi ikke kan spørge om der.</p>
-            <div class="grid grid-2" style="gap:var(--s-4);margin-top:var(--s-3)">
-              <div><label class="small" for="firma">Virksomhed</label><input id="firma" name="virksomhed" class="inp" autocomplete="organization"></div>
-              <div><label class="small" for="cvrf">CVR</label><input id="cvrf" name="cvr" class="inp" inputmode="numeric" autocomplete="off"></div>
-            </div>
-            <label class="small" for="besked" style="display:block;margin-top:var(--s-4)">Besked til os <span class="tiny">(valgfrit)</span></label>
-            <textarea id="besked" name="besked" rows="3" class="inp" placeholder="Fx ønsket leveringsdato, eller noget vi skal vide om programmeringen."></textarea>
-          </fieldset>
-        </div>
-
-        <aside class="order__sum">
-          <div class="sumbox">
-            <h3>Din ordre</h3>
-            <div class="sumrow"><span data-sum-qty>10</span> kort à <span data-sum-unit>129</span> kr</div>
-            <div class="sumrow"><span>Fragt</span><span data-sum-ship>39</span></div>
-            <hr class="hairline">
-            <div class="sumrow sumrow--total"><span>I alt</span><span><span data-sum-total>1.329</span> kr</span></div>
-            <p class="tiny" data-sum-ex>heraf moms — kr · ekskl. moms — kr</p>
-            <p class="tiny" data-sum-save style="color:var(--green);font-weight:560"></p>
-            <button class="btn btn--lg" type="submit" style="width:100%%;margin-top:var(--s-5)">Gå til betaling</button>
-            <p class="tiny" style="margin-top:var(--s-3)">Du sendes til vores sikre betalingsside. Kortoplysninger indtastes aldrig her på sitet.</p>
-            <p class="tiny" style="margin-top:var(--s-4)">14 dages fortrydelsesret · 2 års reklamationsret · Sendes 1–2 hverdage</p>
-          </div>
-        </aside>
-
-      </div>
-    </form>
-  </div>
-</section>""" % (TIERS_JSON, qty_btns, SHIP_HOME)
-
-page(ORDER, "Bestil anmeldelseskort — {brand}",
-     "Bestil anmeldelseskort. Vælg antal, se mængderabatten med det samme, og betal med kort, MobilePay eller Klarna. Fri fragt til pakkeshop.",
-     bestil)
 
 
 print("Byggede %d sider:" % len(PAGES))
