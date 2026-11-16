@@ -1343,7 +1343,10 @@ GUIDE_SEO_TITLES = {
     "regler-for-anmeldelser.html": "Regler for Google-anmeldelser i Danmark",
 }
 
-from seo_content import BRANCHER, GUIDES_SEO
+from seo_content import BRANCHER, GUIDES_SEO, GUIDE_OVERRIDES
+
+GUIDES = [(f, t, GUIDE_OVERRIDES[f][0], GUIDE_OVERRIDES[f][1].replace("{P1}", str(P1)))
+          if f in GUIDE_OVERRIDES else (f, t, d, b) for f, t, d, b in GUIDES]
 
 def fill(t):
     return t.replace("{P1}", str(P1)).replace("{PMIN}", str(TIERS[-1][1]))

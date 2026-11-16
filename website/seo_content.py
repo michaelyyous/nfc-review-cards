@@ -373,3 +373,142 @@ GUIDES_SEO = [
 <h2>Gør det nemt at sige ja</h2>
 <p>Den bedste formulering hjælper ikke, hvis kunden bagefter skal søge dig frem selv. Derfor virker et <a href="../anmeldelseskort.html">Google Review-kort</a> ved disken: kunden holder telefonen mod kortet, og anmeldelsesfeltet er åbent.</p>"""),
 ]
+
+GUIDES_SEO += [
+    ("qr-kode-til-google-anmeldelser.html",
+     "Gratis QR-kode til Google-anmeldelser",
+     "Sådan laver du en gratis QR-kode, der åbner dine Google-anmeldelser — og hvordan du undgår de fejl, der får den til at holde op med at virke.",
+     "Gratis QR-kode til Google-anmeldelser — sådan laver du den",
+     """<h2>Hvad er en QR-kode til Google-anmeldelser?</h2>
+<p>Det er en almindelig QR-kode, der indeholder dit direkte Google-anmeldelseslink. Kunden scanner den med telefonens kamera, trykker på linket, og feltet til stjerner og anmeldelse åbner.</p>
+<p>Koden er kun så god som linket i den. Start derfor med at finde det rigtige link: <a href="find-google-anmeldelseslink.html">Sådan finder du dit Google-anmeldelseslink</a>.</p>
+
+<h2>Sådan laver du QR-koden gratis</h2>
+<h3>1. Fra din Google-virksomhedsprofil</h3>
+<p>Når du åbner <em>Bed om anmeldelser</em> eller <em>Få flere anmeldelser</em> i din profil, tilbyder Google i nogle visninger selv at hente en QR-kode. Er muligheden der, så brug den — så er du sikker på, at linket er rigtigt.</p>
+<h3>2. Med Chrome eller Edge på computeren</h3>
+<ol>
+<li>Åbn dit anmeldelseslink i browseren.</li>
+<li>Højreklik på siden, eller tryk på del-ikonet i adresselinjen.</li>
+<li>Vælg <em>Opret QR-kode</em> (Chrome) eller <em>QR-kode til denne side</em> (Edge), og download billedet.</li>
+</ol>
+<p>Det er gratis, kræver ingen konto, og koden udløber aldrig.</p>
+<h3>3. Med en QR-generator på nettet</h3>
+<p>Der findes mange gratis generatorer. Vælg en, der laver en <strong>statisk</strong> QR-kode, og læs det med småt, før du bruger den.</p>
+
+<h2>Statisk eller dynamisk QR-kode — den fælde du skal undgå</h2>
+<p>En <strong>statisk</strong> QR-kode indeholder selve dit link. Den virker for evigt og kan ikke slukkes af nogen.</p>
+<p>En <strong>dynamisk</strong> QR-kode indeholder et link til generatorens egen server, som så sender kunden videre. Fordelen er, at du kan ændre målet bagefter. Ulempen er, at koden holder op med at virke, hvis prøveperioden udløber, eller du stopper med at betale. Mange gratis generatorer laver dynamiske koder som standard og opkræver betaling senere.</p>
+<p>Til et skilt eller et klistermærke, der skal sidde i årevis, er statisk det sikre valg.</p>
+
+<h2>Hvor stor skal QR-koden være?</h2>
+<p>En god tommelfingerregel: koden skal være mindst en tiendedel så bred som afstanden, den skal scannes fra. Skal kunden scanne fra 30 cm, er 3 × 3 cm nok. Hænger koden på en væg, kunden ser fra to meter, skal den være omkring 20 × 20 cm.</p>
+<p>Under 2 × 2 cm bliver det besværligt for ældre telefoner.</p>
+
+<h2>Det der ødelægger en QR-kode</h2>
+<ul>
+<li><strong>For lidt kontrast.</strong> Mørk kode på lys baggrund. Lys kode på mørk baggrund kan nogle kameraer ikke læse.</li>
+<li><strong>Ingen kant.</strong> Koden skal have en hvid ramme hele vejen rundt — mindst fire af kodens små firkanter bred.</li>
+<li><strong>Logo midt i koden.</strong> Det kan fungere, men jo større logoet er, jo flere telefoner giver op.</li>
+<li><strong>Blank laminering.</strong> Genskin fra loftslys gør koden ulæselig fra visse vinkler. Mat er bedre.</li>
+<li><strong>Bøjede overflader.</strong> En kode på en kop eller en flaske bliver forvrænget.</li>
+</ul>
+
+<h2>Test koden, før du trykker den</h2>
+<p>Scan den med mindst to forskellige telefoner — gerne en iPhone og en Android — og fra den afstand, kunderne vil stå. Tjek at den åbner anmeldelsesfeltet for din virksomhed, ikke bare din profil eller en forkert virksomhed.</p>
+
+<h2>QR-kode eller NFC?</h2>
+<p>En QR-kode er gratis og virker på stort set alle telefoner. Men den kræver tre handlinger af kunden: åbn kamera, sigt, tryk på linket. Ved en travl disk er det ofte dér, folk giver op.</p>
+<p>Med NFC holder kunden bare telefonen mod kortet, og siden åbner. Vores <a href="../anmeldelseskort.html">Google Review-kort</a> har begge dele — NFC på forsiden og QR-kode på bagsiden — så du får det hurtige uden at miste de ældre telefoner. Læs mere i <a href="nfc-eller-qr.html">NFC eller QR-kode?</a></p>"""),
+
+    ("anmeldelseslink-virker-ikke.html",
+     "Google-anmeldelseslinket virker ikke",
+     "Linket åbner den forkerte side, kunden skal logge ind, eller NFC-kortet reagerer ikke? Her er de almindelige fejl, og hvordan du løser dem.",
+     "Google-anmeldelseslink virker ikke? Sådan løser du det",
+     """<h2>Find fejlen hurtigt</h2>
+<p>Åbn linket i et privat browservindue — eller på en telefon, der ikke er logget ind som dig — og se, hvad der sker. Næsten alle problemer falder i en af grupperne herunder.</p>
+
+<h2>Linket åbner din profil, men ikke anmeldelsesfeltet</h2>
+<p>Du har sandsynligvis kopieret adressen fra adresselinjen, mens du kiggede på din profil. Det er et link til profilen, ikke til anmeldelsen. Kunden skal så selv finde knappen, og det gør de færreste.</p>
+<p><strong>Løsning:</strong> Brug knappen <em>Få flere anmeldelser</em> eller <em>Bed om anmeldelser</em> i din virksomhedsprofil, og kopiér det link, Google giver dig der. Se <a href="find-google-anmeldelseslink.html">Find dit Google-anmeldelseslink</a>.</p>
+
+<h2>Linket åbner en forkert virksomhed</h2>
+<p>Det sker, når linket er bygget ud fra et forkert Place ID, eller når der findes to profiler for samme sted — for eksempel en gammel, som ingen har fjernet.</p>
+<p><strong>Løsning:</strong> Hent linket igen fra den profil, du selv administrerer. Findes der en dubletprofil, kan du anmode Google om at fjerne den via <em>Foreslå en ændring</em> på Google Maps.</p>
+
+<h2>Kunden bliver bedt om at logge ind</h2>
+<p>Det er ikke en fejl. Man skal have en Google-konto for at skrive en anmeldelse, og er kunden ikke logget ind på telefonen, beder Google dem gøre det først. De fleste Android-telefoner er logget ind i forvejen. På iPhone sker det oftere, især i Safari.</p>
+<p><strong>Det du kan gøre:</strong> Ingenting ved selve linket. Men det er en god grund til at bede om anmeldelsen ved disken, hvor kunden har tid, frem for i en mail de åbner i farten.</p>
+
+<h2>Der står "Siden findes ikke", eller linket giver en fejl</h2>
+<ul>
+<li><strong>Profilen er ikke verificeret.</strong> Uverificerede profiler kan ikke modtage anmeldelser. Færdiggør verificeringen.</li>
+<li><strong>Profilen er suspenderet.</strong> Så er anmeldelser lukket, indtil sagen er løst. Du kan se status i din virksomhedsprofil.</li>
+<li><strong>Linket er kortet ned med en tjeneste, der er udløbet.</strong> Gælder også dynamiske QR-koder. Brug Googles eget link direkte.</li>
+<li><strong>Linket er skrevet forkert af.</strong> Et enkelt manglende tegn er nok. Kopiér, skriv aldrig af.</li>
+</ul>
+
+<h2>NFC-kortet gør ingenting</h2>
+<ul>
+<li><strong>Telefonen er for gammel.</strong> iPhone 6s og ældre kan ikke læse NFC. iPhone 7, 8 og X kan kun, hvis brugeren selv åbner NFC-læseren i Kontrolcenter. Til dem er der QR-koden på bagsiden af kortet.</li>
+<li><strong>NFC er slået fra (Android).</strong> Det slås til under indstillinger, typisk under <em>Forbindelser</em>.</li>
+<li><strong>Skærmen er slukket eller låst.</strong> Telefonen skal være tændt og låst op.</li>
+<li><strong>Telefonen holdes forkert.</strong> På iPhone sidder antennen i toppen. Hold toppen af telefonen mod kortet. På de fleste Android-telefoner sidder den midt på bagsiden.</li>
+<li><strong>Tykt cover eller metal.</strong> Et cover med metalplade eller magnet kan blokere. Det samme gør et kort, der ligger på metal.</li>
+<li><strong>Linket er skrevet som tekst.</strong> Er kortet programmeret med linket som <em>Tekst</em> i stedet for <em>URL/URI</em>, åbner iPhone ikke siden. Skriv det om — se <a href="../saet-det-op.html">Sæt kortet op selv</a>.</li>
+</ul>
+
+<h2>Anmeldelsen blev skrevet, men den kan ikke ses</h2>
+<p>Google kontrollerer anmeldelser, før og efter de bliver vist. En anmeldelse kan være forsinket eller blive fjernet, hvis Googles systemer vurderer, at den bryder deres regler. Google oplyser sjældent hvorfor.</p>
+<p>Det du kan gøre er at holde dig til reglerne: bed alle kunder — ikke kun de glade — giv aldrig noget for en anmeldelse, og bed aldrig om bestemte ord eller stjerner. Se <a href="regler-for-anmeldelser.html">Regler for Google-anmeldelser i Danmark</a>.</p>
+
+<h2>Har du købt kort hos os?</h2>
+<p>Så skriv til os, hvis kortet ikke virker. Vi har kodet og testet det før afsendelse, så vi finder fejlen sammen med dig — og omprogrammerer eller erstatter kortet, hvis det er os, der har lavet fejlen.</p>"""),
+]
+
+# Udvidet version af den korte NFC/QR-guide (erstatter brødteksten i build.py's GUIDES).
+GUIDE_OVERRIDES = {
+    "nfc-eller-qr.html": (
+        "NFC eller QR-kode til Google-anmeldelser? Hvordan de virker, hvilke telefoner der kan hvad, rækkevidde, sikkerhed — og hvorfor du bør have begge dele.",
+        """<h2>Den korte version</h2>
+<p>NFC er hurtigere for kunden. QR virker på flere telefoner. Har du begge dele, får du det bedste fra hver — derfor har vores kort NFC på forsiden og en QR-kode på bagsiden.</p>
+
+<h2>Sådan virker de to</h2>
+<h3>NFC</h3>
+<p>NFC står for <em>near field communication</em> — den samme teknik, der bruges til at betale med telefonen. Inde i kortet sidder en lille chip og en antenne uden batteri. Når telefonen kommer tæt på, giver telefonens felt chippen strøm nok til at sende det, den indeholder: dit anmeldelseslink. Telefonen viser linket, og kunden trykker én gang.</p>
+<h3>QR-kode</h3>
+<p>En QR-kode er et trykt mønster, som telefonens kamera kan aflæse. Kunden åbner kameraet, sigter, og telefonen viser linket, som kunden trykker på.</p>
+
+<h2>Hvilke telefoner kan hvad?</h2>
+<ul>
+<li><strong>iPhone XS og nyere:</strong> Læser NFC i baggrunden. Kunden holder bare telefonen mod kortet.</li>
+<li><strong>iPhone 7, 8 og X:</strong> Kan læse NFC, men kun hvis brugeren selv åbner NFC-læseren i Kontrolcenter. I praksis: brug QR-koden.</li>
+<li><strong>iPhone 6s og ældre:</strong> Ingen NFC-læsning. QR-koden virker.</li>
+<li><strong>Android:</strong> Langt de fleste har NFC. Det skal være slået til, og skærmen skal være tændt og låst op.</li>
+<li><strong>QR-kode:</strong> Virker på reelt alle telefoner med kamera.</li>
+</ul>
+<p>Selv på nye iPhones læser telefonen ikke NFC i baggrunden, hvis den ikke har været låst op siden den blev tændt, hvis kameraet er i brug, eller hvis flytilstand er slået til.</p>
+
+<h2>Hvor sidder antennen?</h2>
+<p>På iPhone sidder NFC-antennen i toppen af telefonen. Kunden skal holde toppen mod kortet. På de fleste Android-telefoner sidder den midt på bagsiden. Rækkevidden er få centimeter — det er med vilje, så kortet kun reagerer, når kunden vil det.</p>
+
+<h2>Hvornår NFC er bedst</h2>
+<p>Ved disken, i receptionen og ved bordet — alle steder, hvor kunden står med telefonen i hånden og kun har få sekunder. Ét tryk i stedet for tre handlinger er forskellen på, at kunden gør det, og at de mener at ville gøre det senere.</p>
+
+<h2>Hvornår QR-koden redder dig</h2>
+<ul>
+<li>Kunden har en ældre iPhone eller har NFC slået fra.</li>
+<li>Koden skal ses på afstand — på en plakat, et vindue eller et menukort.</li>
+<li>Den skal på tryksager: fakturaer, kvitteringer, flyers og emballage.</li>
+</ul>
+
+<h2>Kræver det internet?</h2>
+<p>Kortet selv bruger hverken strøm eller internet. Men telefonen skal have internet for at åbne anmeldelsessiden, uanset om linket kommer fra NFC eller QR.</p>
+
+<h2>Er det sikkert?</h2>
+<p>Kortet indeholder kun et link. Det kan ikke læse noget fra kundens telefon, og det kan ikke trække penge. Kunden ser linket, før det åbner.</p>
+<p>Kortet kan i princippet omprogrammeres af andre, hvis det ikke er beskyttet. Vores kort er låst med en kode, så kun du kan ændre linket — men du kan stadig selv ændre det, hvis du får brug for det.</p>
+
+<h2>Hvad koster det?</h2>
+<p>En QR-kode kan du lave gratis — se <a href="qr-kode-til-google-anmeldelser.html">Gratis QR-kode til Google-anmeldelser</a>. Et NFC-kort koster lidt mere, men holder i årevis og bliver brugt af hundredvis af kunder. Vores <a href="../anmeldelseskort.html">Google Review-kort</a> koster fra {P1} kr og har begge dele."""),
+}
