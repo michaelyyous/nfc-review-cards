@@ -658,7 +658,7 @@ function consentState() {
 }
 
 /* Meta-pixel. Tomt ID = intet indlæses, heller ikke efter samtykke. */
-const META_PIXEL_ID = '';
+const META_PIXEL_ID = '1143418368274284';
 
 function runTracking() {
   // Loads only after an explicit "accepter".
