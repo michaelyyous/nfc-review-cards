@@ -286,6 +286,8 @@ def footer(depth=0):
     </div>
   </div>
 </footer>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
+<script defer src="/_vercel/insights/script.js"></script>
 <script src="%sassets/app.js?v=18"></script>
 </body>
 </html>""" % ((up, LOGO) + (up,) * 13 + (PAYMENTS, up))
@@ -1673,6 +1675,8 @@ privat = hero("Privatliv", "Privatlivspolitik",
 
     <h2>Cookies</h2>
     <p>Vi bruger de cookies der er nødvendige for at siden og indkøbskurven fungerer. Accepterer du markedsføringscookies, indlæser vi Meta-pixel, som deler oplysninger om dit besøg (fx hvilke sider du så, og om du gik til kassen) med Meta Platforms Ireland Ltd., så vi kan måle vores annoncer. Meta er selvstændig dataansvarlig for den del. Afviser du, sker det ikke, og du kan altid trække samtykket tilbage under <a href="#" data-consent-reopen>Cookieindstillinger</a>. Se <a href="/cookiepolitik">cookiepolitikken</a>.</p>
+    <h2>Besøgsstatistik</h2>
+    <p>For at se hvor mange der besøger siden, og hvilke sider der bliver brugt, bruger vi Vercel Web Analytics fra vores hostingudbyder Vercel Inc. Den sætter ingen cookies og gemmer intet i din browser. Vi får kun samlede tal (fx antal besøg, sider, land, enhedstype og hvilken side du kom fra). Din IP-adresse gemmes ikke, og besøg kan ikke føres tilbage til dig som person. Grundlaget er vores legitime interesse i at forbedre siden (GDPR art. 6, stk. 1, litra f).</p>
 
     <h2>Dine rettigheder</h2>
     <p>Du kan bede om indsigt i de oplysninger vi har om dig, få rettet forkerte oplysninger, få slettet oplysninger, få begrænset behandlingen, gøre indsigelse, og få udleveret dine oplysninger i et almindeligt format.</p>
@@ -1697,6 +1701,7 @@ cookiepol = hero("Cookies", "Cookiepolitik",
     <p><strong>Nødvendigt (altid):</strong> Vi gemmer dit svar på cookiebanneret lokalt i din browser, så vi ikke spørger igen hver gang du åbner en side. Det ligger i browserens <em>localStorage</em> under navnet <code>samtykke-v1</code>, sendes aldrig til os, og kan slettes når som helst.</p>
     <p><strong>Markedsføring (kun hvis du trykker accepter):</strong> Vi bruger Meta-pixel fra Meta Platforms Ireland Ltd. til at måle, om vores annoncer på Facebook og Instagram virker — for eksempel at nogen kom fra en annonce, så produktsiden eller gik videre til kassen. Pixlen sætter cookien <code>_fbp</code> (gemmes i 90 dage) og kan læse Metas egne cookies, hvis du er logget ind hos Meta. Oplysningerne behandles af Meta efter <a href="https://www.facebook.com/privacy/policy" target="_blank" rel="noopener">Metas privatlivspolitik</a> og kan overføres til lande uden for EU.</p>
     <p>Trykker du afvis — eller lader være med at svare — bliver pixlen aldrig indlæst.</p>
+    <p><strong>Besøgsstatistik (uden cookies):</strong> Vi tæller besøg med Vercel Web Analytics. Den sætter ingen cookies og gemmer intet i din browser, så den kræver ikke samtykke. Vi ser kun samlede tal, og din IP-adresse gemmes ikke.</p>
 
     <h2>Dit valg</h2>
     <p>Du kan altid ombestemme dig. Klik <a href="#" data-consent-reopen>Cookieindstillinger</a>, så kommer banneret frem igen, og du kan vælge forfra.</p>
