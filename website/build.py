@@ -202,7 +202,7 @@ def head(title, desc, depth=0, canon="", jsonld="{}"):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="%sassets/styles.css?v=26">
+<link rel="stylesheet" href="%sassets/styles.css?v=27">
 <link rel="icon" href="%sfavicon.ico" sizes="48x48">
 <link rel="icon" href="%sfavicon-192.png" type="image/png" sizes="192x192">
 <link rel="icon" href="%sfavicon.svg" type="image/svg+xml">
@@ -1195,56 +1195,77 @@ page("maengderabat.html", "Mængderabat på anmeldelseskort — fra %d kr pr. st
 
 
 # ================================================================ FORHANDLER
+_tp = dict(TIERS)
+def _pack(q, label, featured=False):
+    unit = _tp[q]
+    return ('<div class="card%s"><span class="eyebrow">%s</span><h3 style="margin-top:var(--s-2)">%d kort</h3>'
+            '<p class="small" style="margin-top:var(--s-2)"><strong>%s kr</strong> · %d kr pr. kort</p>'
+            '<a class="btn%s" style="margin-top:var(--s-4)" href="/anmeldelseskort?antal=%d#bestil">Bestil %d kort</a></div>'
+            % (" card--featured" if featured else "", label, q, f"{q*unit:,}".replace(",", "."), unit,
+               "" if featured else " btn--ghost", q, q))
+
 forhandler = hero(
     "Forhandler",
-    "Køb ind til fast pris og sælg videre",
-    "Fra 250 stk. sælger vi til forhandlerpris. Du sælger videre til butikker i dit område, med din egen pris og din egen aftale.",
+    "Sælg anmeldelseskort til butikker i dit område",
+    "Start med 10 kort og test dit område. Køber du flere, falder prisen af sig selv — helt ned til %d kr pr. kort. Du sætter selv din pris, og der er ingen binding." % TIERS[-1][1],
+    buttons='<a class="btn btn--lg" href="#startpakker">Se startpakkerne</a><a class="btn btn--ghost btn--lg" href="/anmeldelseskort">Se kortet</a>',
+    note="Ingen oprettelse · intet gebyr · ingen binding",
 ) + """
-<section class="section--tight">
+<section class="section--tight" id="startpakker">
   <div class="wrap">
-    <div class="stack-8" style="max-width:46rem">
-      <div class="note" data-reveal>
-        <p class="small"><strong>Læs det her først.</strong> Vi lover dig ikke en indtjening. Hvad du kan sælge for, og hvor mange du kan sælge, afhænger fuldstændigt af dit arbejde og dit område — og der er allerede flere danske udbydere der sælger direkte til de samme butikker. Vi stiller varen og indkøbsprisen til rådighed. Resten er dit.</p>
+    <div class="stack-8">
+      <div class="stack-6" data-reveal>
+        <h2 class="h2">Start småt, skalér når det sælger</h2>
+        <div class="grid grid-3">%(packs)s</div>
+        <p class="small">Klar til at gå stort? Fra 250 stk. er prisen %(p250)d kr pr. kort, og ved 500 stk. %(p500)d kr — med faktura. <a href="/maengderabat">Se hele pristrappen</a>.</p>
       </div>
 
-      <div class="stack-6" data-reveal="60">
-        <h2 class="h2">Sådan er det skruet sammen</h2>
-        <div class="grid grid-2">
-          <div class="card"><h3>Fast pris fra 250 stk.</h3><p class="small" style="margin-top:var(--s-2)">%d kr pr. stk. ved 250, %d kr ved 500. Ingen oprettelse, intet gebyr, ingen binding.</p></div>
-          <div class="card"><h3>Du bestemmer prisen</h3><p class="small" style="margin-top:var(--s-2)">Vi blander os ikke i hvad du sælger for, og vi giver dig ikke et område i eneret. Andre kan sælge samme sted som dig.</p></div>
-          <div class="card"><h3>Vi køber usolgt lager tilbage</h3><p class="small" style="margin-top:var(--s-2)">Går det ikke som håbet, køber vi ubrugte kort i original emballage retur inden for 6 måneder til halv indkøbspris. Så sidder du ikke fast med et lager.</p></div>
-          <div class="card"><h3>Blanke eller programmerede</h3><p class="small" style="margin-top:var(--s-2)">Du kan få dem blanke og selv programmere til hver enkelt butik, eller sende os linkene og få dem kodet på forhånd.</p></div>
-        </div>
+      <div class="note" data-reveal="60" style="max-width:46rem">
+        <p class="small"><strong>Regneeksempel.</strong> Køber du 25 kort til %(p25)d kr og sælger dem for %(p1)d kr — samme pris som en butik betaler hos os for ét kort — er forskellen %(diff)d kr pr. kort. Det er et regnestykke, ikke et løfte: hvad du sælger for, og hvor mange, bestemmer du og dit arbejde.</p>
       </div>
 
       <div class="stack-6" data-reveal="120">
-        <h2 class="h2">Det du bør vide inden</h2>
-        <div class="prose small">
-          <p><strong>Markedet er ikke tomt.</strong> Der er allerede flere danske virksomheder der sælger anmeldelseskort direkte til butikker, med lager i Danmark og levering på 1–3 dage. En butik du besøger kan finde dem på Google på et halvt minut. Din opgave er ikke at være den eneste — det er at være den der står i døren.</p>
-          <p><strong>Det er opsøgende salg.</strong> Der findes ingen genvej. Det er at gå ind i butikker, forklare produktet på tredive sekunder og acceptere at de fleste siger nej. Har du ikke lyst til den del, er det her ikke noget for dig.</p>
-          <p><strong>Du er selv erhvervsdrivende.</strong> Sælger du videre, driver du virksomhed. Det betyder CVR, moms hvis du kommer over 50.000 kr., og at du selv har ansvaret over for dine kunder — også reklamationsretten på de kort du har solgt.</p>
-          <p><strong>Kun for dig over 18.</strong> Vi sælger ikke forhandlerpakker til personer under 18 år. En aftale med en mindreårig er ikke bindende efter dansk ret, og vi giver aldrig kredit.</p>
+        <h2 class="h2">Sådan sælger du dem</h2>
+        <div class="grid grid-3">
+          <div class="stack"><div class="step__n">1</div><h3>Find butikkerne</h3><p class="small">Frisører, caféer, saloner og værksteder med få Google-anmeldelser. Dem finder du på Google Maps på få minutter.</p></div>
+          <div class="stack"><div class="step__n">2</div><h3>Vis det på 10 sekunder</h3><p class="small">Programmér et kort til butikkens egen Google-side og lad ejeren trykke med sin telefon. Når anmeldelsessiden åbner, forstår de det med det samme.</p></div>
+          <div class="stack"><div class="step__n">3</div><h3>Sælg på stedet</h3><p class="small">Kortet virker med det samme. Tag betaling med MobilePay, og læg kortet ved kassen eller på bordet.</p></div>
         </div>
       </div>
 
       <div class="stack-6" data-reveal="180">
-        <h2 class="h2">Hvad vi ikke gør</h2>
-        <div class="prose small">
-          <p>Vi har ikke et henvisningsled. Du tjener ikke på at skaffe andre forhandlere, og vi kommer aldrig til at tilbyde det. Ordninger hvor indtjeningen kommer fra at hverve andre er pyramidespil og forbudt efter markedsføringslovens bilag 1 nr. 14.</p>
-          <p>Vi stiller heller ikke krav om at du køber et bestemt lager for at "komme i gang", og vi sælger ikke kurser eller medlemskaber ved siden af. Der er én ting til salg her: kort.</p>
+        <h2 class="h2">Det får du</h2>
+        <div class="grid grid-2">
+          <div class="card"><h3>Du bestemmer prisen</h3><p class="small" style="margin-top:var(--s-2)">Vi blander os ikke i, hvad du sælger for. Du laver din egen aftale med butikken.</p></div>
+          <div class="card"><h3>Vi køber usolgt lager tilbage</h3><p class="small" style="margin-top:var(--s-2)">Går det ikke som håbet, køber vi ubrugte kort i original emballage retur inden for 6 måneder til halv indkøbspris. Så sidder du ikke fast med et lager.</p></div>
+          <div class="card"><h3>Blanke eller programmerede</h3><p class="small" style="margin-top:var(--s-2)">Få dem blanke og programmér dem selv til hver butik — det tager under et minut — eller send os linkene, så koder vi dem på forhånd.</p></div>
+          <div class="card"><h3>Hurtig levering</h3><p class="small" style="margin-top:var(--s-2)">Fri fragt til pakkeshop. Du kan betale med MobilePay, kort eller Klarna.</p></div>
         </div>
       </div>
 
-      <div class="row" data-reveal="240">
-        <a class="btn btn--lg" href="kontakt.html">Skriv til os</a>
-        <a class="btn btn--ghost btn--lg" href="maengderabat.html">Se pristrappen</a>
+      <div class="stack-6" data-reveal="240" style="max-width:46rem">
+        <h2 class="h2">Godt at vide</h2>
+        <div class="prose small">
+          <p><strong>Det er opsøgende salg.</strong> Du tjener på de butikker, du selv går ind i. Vi lover ikke en indtjening, og du får ikke eneret på et område.</p>
+          <p><strong>Du er selv sælger.</strong> Sælger du videre, driver du virksomhed — med CVR og moms, når du kommer over 50.000 kr., og ansvaret over for dine kunder.</p>
+          <p><strong>Kun over 18 år.</strong> Vi sælger ikke forhandlerpakker til personer under 18 og giver aldrig kredit.</p>
+          <p><strong>Kun kort — intet andet.</strong> Ingen kurser, medlemskaber eller henvisningsbonus. Du tjener på at sælge kort, ikke på at hverve andre.</p>
+        </div>
+      </div>
+
+      <div class="row" data-reveal="300">
+        <a class="btn btn--lg" href="/anmeldelseskort?antal=10#bestil">Bestil 10 kort</a>
+        <a class="btn btn--ghost btn--lg" href="/kontakt">Spørgsmål? Skriv til os</a>
       </div>
     </div>
   </div>
-</section>""" % (TIERS[-2][1], TIERS[-1][1])
+</section>""" % {
+    "packs": _pack(10, "Test dit område") + _pack(25, "Vores anbefaling", True) + _pack(50, "Klar til at sælge"),
+    "p250": _tp[250], "p500": _tp[500], "p25": _tp[25], "p1": _tp[1], "diff": _tp[1] - _tp[25],
+}
 
 page("forhandler.html", "Bliv forhandler af anmeldelseskort — {brand}",
-     "Forhandlerpris fra 250 stk., ingen binding og tilbagekøb af usolgt lager. Ingen løfter om indtjening — læs betingelserne her.",
+     "Sælg anmeldelseskort til butikker i dit område. Start med 10 kort, fri pris, ingen binding og tilbagekøb af usolgt lager. Ned til %d kr pr. kort." % TIERS[-1][1],
      forhandler)
 
 

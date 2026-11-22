@@ -852,3 +852,9 @@ textarea.inp { resize: vertical; min-height: 5rem; }
 .tier--pick.is-on { background: var(--surface-sunk); box-shadow: inset 0 0 0 2px var(--text); }
 .tier--pick.is-on .tier__dot { box-shadow: inset 0 0 0 5px var(--text); }
 .grid--product__info .sumbox { position: static; }
+
+/* Forhandler-startpakker */
+.card--featured{border-color:var(--green);box-shadow:0 0 0 1px var(--green) inset;background:var(--green-tint)}
+#startpakker{scroll-margin-top:96px}
+#startpakker .card{display:flex;flex-direction:column;align-items:flex-start}
+#startpakker .card .btn{margin-top:auto}
