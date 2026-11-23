@@ -288,7 +288,7 @@ def footer(depth=0):
 </footer>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
-<script src="%sassets/app.js?v=19"></script>
+<script src="%sassets/app.js?v=20"></script>
 </body>
 </html>""" % ((up, LOGO) + (up,) * 13 + (PAYMENTS, up))
 
@@ -1209,10 +1209,22 @@ def _pack(q, label, featured=False):
             % (" card--featured" if featured else "", label, q, f"{q*unit:,}".replace(",", "."), unit,
                "" if featured else " btn--ghost", q, q))
 
+# Startpakke: separat Shopify-produkt (3 blanke kort, 299 kr), så mængderabatterne ikke rammer den.
+START_VARIANT = "60671332942169"
+START_PRICE = 299
+START_URL = ("https://shop.reviewpartneren.dk/cart/%s:1?attributes%%5BKundetype%%5D=Til%%20videresalg"
+             "&amp;attributes%%5BProgrammering%%5D=Blanke%%20kort&amp;attributes%%5BKilde%%5D=Startpakke" % START_VARIANT)
+def _startpack():
+    return ('<div class="card card--featured"><span class="eyebrow">Start her</span><h3 style="margin-top:var(--s-2)">Startpakke · 3 kort</h3>'
+            '<p class="small" style="margin-top:var(--s-2)"><strong>%d kr</strong> · ca. %d kr pr. kort · blanke kort</p>'
+            '<p class="small" style="margin-top:var(--s-2)">Sælger du dem for %d kr stykket, er forskellen %d kr på pakken.</p>'
+            '<a class="btn" style="margin-top:var(--s-4)" href="%s" data-startpakke>Køb startpakken</a></div>'
+            % (START_PRICE, round(START_PRICE / 3), _tp[1], 3 * _tp[1] - START_PRICE, START_URL))
+
 forhandler = hero(
     "Forhandler",
     "Sælg anmeldelseskort til butikker i dit område",
-    "Prøv med 3 kort, test dit område, og køb flere når det sælger. Køber du flere, falder prisen af sig selv — helt ned til %d kr pr. kort. Du sætter selv din pris, og der er ingen binding." % TIERS[-1][1],
+    "Start med 3 kort for %d kr, test dit område, og køb flere når det sælger. Køber du flere, falder prisen af sig selv — helt ned til %d kr pr. kort. Du sætter selv din pris, og der er ingen binding." % (START_PRICE, TIERS[-1][1]),
     buttons='<a class="btn btn--lg" href="#startpakker">Se startpakkerne</a><a class="btn btn--ghost btn--lg" href="/anmeldelseskort">Se kortet</a>',
     note="Ingen oprettelse · intet gebyr · ingen binding",
 ) + """
@@ -1259,18 +1271,19 @@ forhandler = hero(
       </div>
 
       <div class="row" data-reveal="300">
-        <a class="btn btn--lg" href="/anmeldelseskort?antal=3&amp;type=forhandler#bestil">Prøv med 3 kort</a>
+        <a class="btn btn--lg" href="%(start_url)s" data-startpakke>Køb startpakken · %(start_price)d kr</a>
         <a class="btn btn--ghost btn--lg" href="/kontakt">Spørgsmål? Skriv til os</a>
       </div>
     </div>
   </div>
 </section>""" % {
-    "packs": _pack(3, "Prøv det selv") + _pack(10, "Vores anbefaling", True) + _pack(25, "Klar til at sælge"),
+    "packs": _startpack() + _pack(10, "Når det sælger") + _pack(25, "Klar til at skalere"),
+    "start_url": START_URL, "start_price": START_PRICE,
     "p50": _tp[50], "p250": _tp[250], "p500": _tp[500], "p25": _tp[25], "p1": _tp[1], "diff": _tp[1] - _tp[25],
 }
 
 page("forhandler.html", "Bliv forhandler af anmeldelseskort — {brand}",
-     "Sælg anmeldelseskort til butikker i dit område. Start med 3 kort, fri pris, ingen binding og tilbagekøb af usolgt lager. Ned til %d kr pr. kort." % TIERS[-1][1],
+     "Sælg anmeldelseskort til butikker i dit område. Startpakke med 3 kort for %d kr, fri pris, ingen binding og tilbagekøb af usolgt lager. Ned til %d kr pr. kort." % (START_PRICE, TIERS[-1][1]),
      forhandler)
 
 
