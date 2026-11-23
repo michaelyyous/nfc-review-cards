@@ -746,5 +746,5 @@ document.querySelectorAll('[data-year]').forEach(el => {
 
 /* Startpakken på /forhandler linker direkte til Shopify-checkout; mål klikket som InitiateCheckout. */
 document.querySelectorAll('[data-startpakke]').forEach(a => a.addEventListener('click', () => {
-  trackEvent('InitiateCheckout', { num_items: 3, value: 299, currency: 'DKK', content_ids: ['60671332942169'] });
+  trackEvent('InitiateCheckout', { num_items: 3, value: 297, currency: 'DKK', content_ids: [SHOPIFY.variantId] });
 }));

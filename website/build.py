@@ -16,8 +16,8 @@ ROOT = pathlib.Path(__file__).parent
 # ---------------------------------------------------------------- pris
 # Priser er INKL. moms (lovkrav ved salg til forbrugere).
 TIERS = [
-    (1, 189), (3, 169), (5, 155), (10, 129), (25, 109),
-    (50, 95), (100, 79), (250, 59), (500, 49),
+    (1, 189), (3, 99), (5, 95), (10, 89), (25, 79),
+    (50, 69), (100, 59), (250, 49), (500, 39),
 ]
 SHIP_HOME = 49          # hjemmelevering; pakkeshop er gratis
 TIERS_JSON = "[" + ",".join('{"min":%d,"price":%d}' % t for t in TIERS) + "]"
@@ -288,7 +288,7 @@ def footer(depth=0):
 </footer>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
-<script src="%sassets/app.js?v=20"></script>
+<script src="%sassets/app.js?v=21"></script>
 </body>
 </html>""" % ((up, LOGO) + (up,) * 13 + (PAYMENTS, up))
 
@@ -1209,17 +1209,17 @@ def _pack(q, label, featured=False):
             % (" card--featured" if featured else "", label, q, f"{q*unit:,}".replace(",", "."), unit,
                "" if featured else " btn--ghost", q, q))
 
-# Startpakke: separat Shopify-produkt (3 blanke kort, 299 kr), så mængderabatterne ikke rammer den.
-START_VARIANT = "60671332942169"
-START_PRICE = 299
-START_URL = ("https://shop.reviewpartneren.dk/cart/%s:1?attributes%%5BKundetype%%5D=Til%%20videresalg"
-             "&amp;attributes%%5BProgrammering%%5D=Blanke%%20kort&amp;attributes%%5BKilde%%5D=Startpakke" % START_VARIANT)
+# Startpakke = 3 af det almindelige kort (mængderabatten giver 99 kr/stk), blanke, til videresalg.
+START_QTY = 3
+START_PRICE = START_QTY * _tp[START_QTY]
+START_URL = ("https://shop.reviewpartneren.dk/cart/%s:%d?attributes%%5BKundetype%%5D=Til%%20videresalg"
+             "&amp;attributes%%5BProgrammering%%5D=Blanke%%20kort&amp;attributes%%5BKilde%%5D=Startpakke" % ("60500735557977", START_QTY))
 def _startpack():
     return ('<div class="card card--featured"><span class="eyebrow">Start her</span><h3 style="margin-top:var(--s-2)">Startpakke · 3 kort</h3>'
-            '<p class="small" style="margin-top:var(--s-2)"><strong>%d kr</strong> · ca. %d kr pr. kort · blanke kort</p>'
+            '<p class="small" style="margin-top:var(--s-2)"><strong>%d kr</strong> · %d kr pr. kort · blanke kort</p>'
             '<p class="small" style="margin-top:var(--s-2)">Sælger du dem for %d kr stykket, er forskellen %d kr på pakken.</p>'
             '<a class="btn" style="margin-top:var(--s-4)" href="%s" data-startpakke>Køb startpakken</a></div>'
-            % (START_PRICE, round(START_PRICE / 3), _tp[1], 3 * _tp[1] - START_PRICE, START_URL))
+            % (START_PRICE, _tp[START_QTY], _tp[1], START_QTY * _tp[1] - START_PRICE, START_URL))
 
 forhandler = hero(
     "Forhandler",
