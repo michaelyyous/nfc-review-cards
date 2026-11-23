@@ -288,7 +288,7 @@ def footer(depth=0):
 </footer>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/insights/script.js"></script>
-<script src="%sassets/app.js?v=18"></script>
+<script src="%sassets/app.js?v=19"></script>
 </body>
 </html>""" % ((up, LOGO) + (up,) * 13 + (PAYMENTS, up))
 
@@ -1205,14 +1205,14 @@ def _pack(q, label, featured=False):
     unit = _tp[q]
     return ('<div class="card%s"><span class="eyebrow">%s</span><h3 style="margin-top:var(--s-2)">%d kort</h3>'
             '<p class="small" style="margin-top:var(--s-2)"><strong>%s kr</strong> · %d kr pr. kort</p>'
-            '<a class="btn%s" style="margin-top:var(--s-4)" href="/anmeldelseskort?antal=%d#bestil">Bestil %d kort</a></div>'
+            '<a class="btn%s" style="margin-top:var(--s-4)" href="/anmeldelseskort?antal=%d&amp;type=forhandler#bestil">Bestil %d kort</a></div>'
             % (" card--featured" if featured else "", label, q, f"{q*unit:,}".replace(",", "."), unit,
                "" if featured else " btn--ghost", q, q))
 
 forhandler = hero(
     "Forhandler",
     "Sælg anmeldelseskort til butikker i dit område",
-    "Start med 10 kort og test dit område. Køber du flere, falder prisen af sig selv — helt ned til %d kr pr. kort. Du sætter selv din pris, og der er ingen binding." % TIERS[-1][1],
+    "Prøv med 3 kort, test dit område, og køb flere når det sælger. Køber du flere, falder prisen af sig selv — helt ned til %d kr pr. kort. Du sætter selv din pris, og der er ingen binding." % TIERS[-1][1],
     buttons='<a class="btn btn--lg" href="#startpakker">Se startpakkerne</a><a class="btn btn--ghost btn--lg" href="/anmeldelseskort">Se kortet</a>',
     note="Ingen oprettelse · intet gebyr · ingen binding",
 ) + """
@@ -1222,7 +1222,7 @@ forhandler = hero(
       <div class="stack-6" data-reveal>
         <h2 class="h2">Start småt, skalér når det sælger</h2>
         <div class="grid grid-3">%(packs)s</div>
-        <p class="small">Klar til at gå stort? Fra 250 stk. er prisen %(p250)d kr pr. kort, og ved 500 stk. %(p500)d kr — med faktura. <a href="/maengderabat">Se hele pristrappen</a>.</p>
+        <p class="small">Skal du bruge flere? Ved 50 kort er prisen %(p50)d kr pr. stk., ved 250 stk. %(p250)d kr og ved 500 stk. %(p500)d kr — med faktura. <a href="/maengderabat">Se hele pristrappen</a>.</p>
       </div>
 
       <div class="note" data-reveal="60" style="max-width:46rem">
@@ -1259,18 +1259,18 @@ forhandler = hero(
       </div>
 
       <div class="row" data-reveal="300">
-        <a class="btn btn--lg" href="/anmeldelseskort?antal=10#bestil">Bestil 10 kort</a>
+        <a class="btn btn--lg" href="/anmeldelseskort?antal=3&amp;type=forhandler#bestil">Prøv med 3 kort</a>
         <a class="btn btn--ghost btn--lg" href="/kontakt">Spørgsmål? Skriv til os</a>
       </div>
     </div>
   </div>
 </section>""" % {
-    "packs": _pack(10, "Test dit område") + _pack(25, "Vores anbefaling", True) + _pack(50, "Klar til at sælge"),
-    "p250": _tp[250], "p500": _tp[500], "p25": _tp[25], "p1": _tp[1], "diff": _tp[1] - _tp[25],
+    "packs": _pack(3, "Prøv det selv") + _pack(10, "Vores anbefaling", True) + _pack(25, "Klar til at sælge"),
+    "p50": _tp[50], "p250": _tp[250], "p500": _tp[500], "p25": _tp[25], "p1": _tp[1], "diff": _tp[1] - _tp[25],
 }
 
 page("forhandler.html", "Bliv forhandler af anmeldelseskort — {brand}",
-     "Sælg anmeldelseskort til butikker i dit område. Start med 10 kort, fri pris, ingen binding og tilbagekøb af usolgt lager. Ned til %d kr pr. kort." % TIERS[-1][1],
+     "Sælg anmeldelseskort til butikker i dit område. Start med 3 kort, fri pris, ingen binding og tilbagekøb af usolgt lager. Ned til %d kr pr. kort." % TIERS[-1][1],
      forhandler)
 
 

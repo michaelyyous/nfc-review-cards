@@ -508,8 +508,17 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
   }
 
   // ?antal=3 fra knapper andre steder på sitet vælger antallet på forhånd.
-  const pre = Number(new URLSearchParams(location.search).get('antal'));
+  const params = new URLSearchParams(location.search);
+  const pre = Number(params.get('antal'));
   if (pre >= 1) qtyInput.value = Math.min(5000, Math.round(pre));
+  // ?type=forhandler (fra forhandlersiden): videresalg + blanke kort er valgt på forhånd.
+  const isReseller = params.get('type') === 'forhandler';
+  if (isReseller) {
+    const r = form.querySelector('input[name="koebertype"][value="Til videresalg"]');
+    const b = form.querySelector('[data-prog][value^="Blanke"]');
+    if (r) r.checked = true;
+    if (b) b.checked = true;
+  }
 
   qtyInput.addEventListener('input', render);
   presets.forEach(b => b.addEventListener('click', () => { qtyInput.value = b.dataset.qtySet; render(); }));
@@ -607,7 +616,7 @@ const ORDER_ENDPOINT = '';   // ← tom = send via mailklient
     note('Din mailklient åbner med bestillingen. Tryk send, så vender vi tilbage med en bekræftelse.');
   });
 
-  linkWrap.hidden = false;
+  linkWrap.hidden = !form.querySelector('[data-prog]:checked').value.startsWith('Programmeret');
   render();
 })();
 
