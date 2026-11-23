@@ -356,6 +356,11 @@ def page(path, title, desc, body, current=None, depth=0, hero=None, jsonld=None)
     html = html.replace(">support@\u2026</a>", ">%s</a>" % BRAND_EMAIL)
     if BRAND_CVR:
         html = html.replace("<span data-cvr>\u2014</span>", "<span data-cvr>%s</span>" % BRAND_CVR)
+    else:
+        # Indtil CVR er tildelt: vis intet i stedet for "CVR \u2014", som ser utrov\u00e6rdigt ud.
+        for pat in (' \u00b7 CVR <span data-cvr>\u2014</span>', '<br>CVR <span data-cvr>\u2014</span>',
+                    ', CVR <span data-cvr>\u2014</span>', '<p class="small">CVR <span data-cvr>\u2014</span></p>'):
+            html = html.replace(pat, "")
     out = ROOT / path
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html, encoding="utf-8")
